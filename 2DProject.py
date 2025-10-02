@@ -1,5 +1,15 @@
 from pico2d import *
 
+class Town:
+    def __init__(self):
+        self.image = load_image('resource/town.jpg')
+
+    def draw(self):
+        self.image.draw(WIDTH // 2, HEIGHT // 2, WIDTH, HEIGHT)
+
+    def update(self):
+        pass
+
 class Player:
     def __init__(self):
         self.right1 = load_image('resource/white_r_1.png')
@@ -34,12 +44,15 @@ class Player:
 def init_world():
     global running; running = True
     global player; player = Player()
+    global town; town = Town()
 
 def update_world():
+    town.update()
     player.update()
 
 def render_world():
     clear_canvas()
+    town.draw()
     player.draw()
     update_canvas()
 
@@ -57,10 +70,10 @@ def handle_events():
             elif event.key == SDLK_UP:    player.dirY += 1;
             elif event.key == SDLK_DOWN:  player.dirY -= 1;
         elif event.type == SDL_KEYUP:
-            if event.key == SDLK_RIGHT:   player.dirX -= 1; 
-            elif event.key == SDLK_LEFT:  player.dirX += 1;
-            elif event.key == SDLK_UP:    player.dirY -= 1;
-            elif event.key == SDLK_DOWN:  player.dirY += 1;
+            if event.key == SDLK_RIGHT:   player.dirX -= 1
+            elif event.key == SDLK_LEFT:  player.dirX += 1
+            elif event.key == SDLK_UP:    player.dirY -= 1
+            elif event.key == SDLK_DOWN:  player.dirY += 1
 
 WIDTH, HEIGHT = 1280, 720
 open_canvas(WIDTH,HEIGHT)
