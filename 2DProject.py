@@ -97,16 +97,16 @@ def handle_events():
             running = False
         elif event.type == SDL_KEYDOWN:
             if event.key == SDLK_ESCAPE: running = False # esc
-            elif event.key == SDLK_RIGHT: player.dirX += 1; player.ifRight = 1
-            elif event.key == SDLK_LEFT:  player.dirX -= 1; player.ifRight = 0
-            elif event.key == SDLK_UP:    player.dirY += 1;
-            elif event.key == SDLK_DOWN:  player.dirY -= 1;
+            elif event.key == SDLK_d: player.dirX += 1; player.ifRight = 1
+            elif event.key == SDLK_a:  player.dirX -= 1; player.ifRight = 0
+            elif event.key == SDLK_w:    player.dirY += 1;
+            elif event.key == SDLK_s:  player.dirY -= 1;
             elif event.key == SDLK_SPACE: player.ifAttack = True
         elif event.type == SDL_KEYUP:
-            if event.key == SDLK_RIGHT:   player.dirX -= 1
-            elif event.key == SDLK_LEFT:  player.dirX += 1
-            elif event.key == SDLK_UP:    player.dirY -= 1
-            elif event.key == SDLK_DOWN:  player.dirY += 1
+            if event.key == SDLK_d:   player.dirX -= 1
+            elif event.key == SDLK_a:  player.dirX += 1
+            elif event.key == SDLK_w:    player.dirY -= 1
+            elif event.key == SDLK_s:  player.dirY += 1
 
 WIDTH, HEIGHT = 1280, 720
 open_canvas(WIDTH,HEIGHT)
