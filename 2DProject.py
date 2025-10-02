@@ -25,17 +25,29 @@ class Player:
         self.rightMove = [self.right1, self.right2, self.right3, self.right4, self.right5]
         self.leftMove = [self.left1, self.left2, self.left3, self.left4, self.left5]
 
+        self.attack_r = load_image('resource/attack_r.png')
+        self.attack_l = load_image('resource/attack_l.png')
+
         self.x, self.y = WIDTH / 2, HEIGHT / 2
         self.dirX,self.dirY = 0, 0
         self.ifRight = 1
+        self.ifAttack = False
+        self.attack_frame = 0
         self.frame = 0
 
     def draw(self):
-        if self.ifRight == 1: self.rightMove[self.frame].draw(self.x, self.y)
-        elif self.ifRight == 0: self.leftMove[self.frame].draw(self.x, self.y)
-
+        if self.ifRight == 1 and self.ifAttack == False: self.rightMove[self.frame].draw(self.x, self.y)
+        elif self.ifRight == 0 and self.ifAttack == False: self.leftMove[self.frame].draw(self.x, self.y)
+        if self.ifRight == 1 and self.ifAttack == True: self.attack_r.clip_draw(self.attack_frame * 32, 0, 32, 32, self.x, self.y)
+        elif self.ifRight == 0 and self.ifAttack == True: self.attack_l.clip_draw(self.attack_frame * 32, 0, 32, 32, self.x, self.y)
     def update(self):
-        self.frame = (self.frame + 1) % 5
+        if self.ifAttack == False: self.frame = (self.frame + 1) % 5
+        elif self.ifAttack == True:
+            self.attack_frame = (self.attack_frame + 1) % 7
+            delay(0.1)
+            if self.attack_frame == 6:
+                self.ifAttack = False
+                self.attack_frame = 0
         self.x += self.dirX * 5
         self.y += self.dirY * 5
 
@@ -74,6 +86,7 @@ def handle_events():
             elif event.key == SDLK_LEFT:  player.dirX -= 1; player.ifRight = 0
             elif event.key == SDLK_UP:    player.dirY += 1;
             elif event.key == SDLK_DOWN:  player.dirY -= 1;
+            elif event.key == SDLK_SPACE: player.ifAttack = True
         elif event.type == SDL_KEYUP:
             if event.key == SDLK_RIGHT:   player.dirX -= 1
             elif event.key == SDLK_LEFT:  player.dirX += 1
