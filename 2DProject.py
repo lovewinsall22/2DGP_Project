@@ -5,12 +5,15 @@ class NPC:
         self.image = load_image('resource/townNPC.png')
         self.x, self.y = 200, 500
         self.frame = 0
-
+        self.ani_count = 0
     def draw(self):
         self.image.clip_draw(self.frame * 32, 0, 32, 32, self.x, self.y)
 
     def update(self):
-        self.frame = (self.frame + 1) % 6
+        self.ani_count +=1
+        if self.ani_count % 5 == 0:
+            self.frame = (self.frame + 1) % 6
+            self.ani_count = 0
 
 
 class Town:
@@ -45,8 +48,10 @@ class Player:
         self.dirX,self.dirY = 0, 0
         self.ifRight = 1
         self.ifAttack = False
+        self.ani_count = 0
         self.attack_frame = 0
         self.frame = 0
+        self.speed = 5
 
     def draw(self):
         if self.ifRight == 1 and self.ifAttack == False: self.rightMove[self.frame].draw(self.x, self.y)
@@ -54,15 +59,19 @@ class Player:
         if self.ifRight == 1 and self.ifAttack == True: self.attack_r.clip_draw(self.attack_frame * 32, 0, 32, 32, self.x, self.y)
         elif self.ifRight == 0 and self.ifAttack == True: self.attack_l.clip_draw(self.attack_frame * 32, 0, 32, 32, self.x, self.y)
     def update(self):
-        if self.ifAttack == False: self.frame = (self.frame + 1) % 5
-        elif self.ifAttack == True:
-            self.attack_frame = (self.attack_frame + 1) % 7
-            delay(0.1)
-            if self.attack_frame == 6:
-                self.ifAttack = False
-                self.attack_frame = 0
-        self.x += self.dirX * 5
-        self.y += self.dirY * 5
+        self.ani_count += 1
+        if self.ani_count % 5 == 0:
+            if self.ifAttack == False: self.frame = (self.frame + 1) % 5
+            elif self.ifAttack == True:
+                self.speed = 2
+                self.attack_frame = (self.attack_frame + 1) % 7
+                if self.attack_frame == 6:
+                    self.ifAttack = False
+                    self.attack_frame = 0
+                    self.speed = 5
+            self.ani_count = 0
+        self.x += self.dirX * self.speed
+        self.y += self.dirY * self.speed
 
 
 
@@ -97,15 +106,15 @@ def handle_events():
             running = False
         elif event.type == SDL_KEYDOWN:
             if event.key == SDLK_ESCAPE: running = False # esc
-            elif event.key == SDLK_d: player.dirX += 1; player.ifRight = 1
+            elif event.key == SDLK_d:  player.dirX += 1; player.ifRight = 1
             elif event.key == SDLK_a:  player.dirX -= 1; player.ifRight = 0
-            elif event.key == SDLK_w:    player.dirY += 1;
+            elif event.key == SDLK_w:  player.dirY += 1;
             elif event.key == SDLK_s:  player.dirY -= 1;
             elif event.key == SDLK_SPACE: player.ifAttack = True
         elif event.type == SDL_KEYUP:
-            if event.key == SDLK_d:   player.dirX -= 1
+            if event.key == SDLK_d:    player.dirX -= 1
             elif event.key == SDLK_a:  player.dirX += 1
-            elif event.key == SDLK_w:    player.dirY -= 1
+            elif event.key == SDLK_w:  player.dirY -= 1
             elif event.key == SDLK_s:  player.dirY += 1
 
 WIDTH, HEIGHT = 1280, 720
@@ -116,7 +125,7 @@ while running:
     handle_events() # 입력처리
     update_world() # 게임 로직 업데이트
     render_world() # 렌더링
-    delay(0.025)
+    delay(0.02)
 
 
 
