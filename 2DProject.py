@@ -1,4 +1,5 @@
 from pico2d import *
+import math
 
 class Dummy:
     def __init__(self):
@@ -58,12 +59,25 @@ class Player:
         self.attack_r = load_image('resource/attack_r.png')
         self.attack_l = load_image('resource/attack_l.png')
 
+        self.sword1 = load_image('resource/1.png')
+        self.sword2 = load_image('resource/2.png')
+        self.sword3 = load_image('resource/3.png')
+        self.sword4 = load_image('resource/4.png')
+        self.sword5 = load_image('resource/5.png')
+        self.sword6 = load_image('resource/6.png')
+        self.sword7 = load_image('resource/7.png')
+        self.sword8 = load_image('resource/8.png')
+        self.swordAni = [self.sword1, self.sword2, self.sword3, self.sword4, self.sword5, self.sword6, self.sword7, self.sword8]
+
         self.x, self.y = WIDTH / 2, HEIGHT / 2
         self.dirX,self.dirY = 0, 0
         self.ifRight = 1
         self.ifAttack = False
         self.ani_count = 0
         self.attack_frame = 0
+        self.sword_active = False
+        self.sword_frame = 0
+        self.sword_angle = 45
         self.frame = 0
         self.speed = 5
 
@@ -72,22 +86,29 @@ class Player:
         elif self.ifRight == 0 and self.ifAttack == False: self.leftMove[self.frame].draw(self.x, self.y, 40, 62)
         if self.ifRight == 1 and self.ifAttack == True: self.attack_r.clip_draw(self.attack_frame * 32, 0, 32, 32, self.x, self.y, character_size, character_size)
         elif self.ifRight == 0 and self.ifAttack == True: self.attack_l.clip_draw(self.attack_frame * 32, 0, 32, 32, self.x, self.y, character_size, character_size)
+        if self.sword_active == True:
+            sx = self.x + 40 * math.cos(self.sword_angle)
+            sy = self.y + 40 * math.sin(self.sword_angle)
+            self.swordAni[self.sword_frame].draw(sx, sy, 32, 32)
     def update(self):
         self.ani_count += 1
         if self.ani_count % 5 == 0:
             if self.ifAttack == False: self.frame = (self.frame + 1) % 5
             elif self.ifAttack == True:
                 self.speed = 2
-                self.attack_frame = (self.attack_frame + 1) % 7
-                if self.attack_frame == 6:
+                self.attack_frame = (self.attack_frame + 1) % 7 # 0-6
+                self.sword_frame = (self.sword_frame + 1) % 8 #0-7
+                self.sword_angle += 2 * math.pi / 8
+                if self.sword_frame == 7:
                     self.ifAttack = False
+                    self.sword_active = False
                     self.attack_frame = 0
+                    self.sword_frame = 0
+                    self.sword_angle = 45
                     self.speed = 5
             self.ani_count = 0
         self.x += self.dirX * self.speed
         self.y += self.dirY * self.speed
-
-
 
 def init_world():
     global running; running = True
@@ -126,7 +147,7 @@ def handle_events():
             elif event.key == SDLK_a:  player.dirX -= 1; player.ifRight = 0
             elif event.key == SDLK_w:  player.dirY += 1;
             elif event.key == SDLK_s:  player.dirY -= 1;
-            elif event.key == SDLK_SPACE: player.ifAttack = True
+            elif event.key == SDLK_SPACE: player.ifAttack = True; player.sword_active = True
         elif event.type == SDL_KEYUP:
             if event.key == SDLK_d:    player.dirX -= 1
             elif event.key == SDLK_a:  player.dirX += 1
@@ -147,4 +168,3 @@ while running:
 
 
 close_canvas()
-
