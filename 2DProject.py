@@ -7,7 +7,7 @@ class NPC:
         self.frame = 0
         self.ani_count = 0
     def draw(self):
-        self.image.clip_draw(self.frame * 32, 0, 32, 32, self.x, self.y)
+        self.image.clip_draw(self.frame * 32, 0, 32, 32, self.x, self.y, character_size, character_size)
 
     def update(self):
         self.ani_count +=1
@@ -54,10 +54,10 @@ class Player:
         self.speed = 5
 
     def draw(self):
-        if self.ifRight == 1 and self.ifAttack == False: self.rightMove[self.frame].draw(self.x, self.y)
-        elif self.ifRight == 0 and self.ifAttack == False: self.leftMove[self.frame].draw(self.x, self.y)
-        if self.ifRight == 1 and self.ifAttack == True: self.attack_r.clip_draw(self.attack_frame * 32, 0, 32, 32, self.x, self.y)
-        elif self.ifRight == 0 and self.ifAttack == True: self.attack_l.clip_draw(self.attack_frame * 32, 0, 32, 32, self.x, self.y)
+        if self.ifRight == 1 and self.ifAttack == False: self.rightMove[self.frame].draw(self.x, self.y, 40, 62)
+        elif self.ifRight == 0 and self.ifAttack == False: self.leftMove[self.frame].draw(self.x, self.y, 40, 62)
+        if self.ifRight == 1 and self.ifAttack == True: self.attack_r.clip_draw(self.attack_frame * 32, 0, 32, 32, self.x, self.y, character_size, character_size)
+        elif self.ifRight == 0 and self.ifAttack == True: self.attack_l.clip_draw(self.attack_frame * 32, 0, 32, 32, self.x, self.y, character_size, character_size)
     def update(self):
         self.ani_count += 1
         if self.ani_count % 5 == 0:
@@ -118,6 +118,7 @@ def handle_events():
             elif event.key == SDLK_s:  player.dirY += 1
 
 WIDTH, HEIGHT = 1280, 720
+character_size = 64
 open_canvas(WIDTH,HEIGHT)
 init_world() # 게임 초기화 후 시작
 
