@@ -16,13 +16,18 @@ class Player:
         self.leftMove = [self.left1, self.left2, self.left3, self.left4, self.left5]
 
         self.x, self.y = WIDTH / 2, HEIGHT / 2
+        self.dirX,self.dirY = 0, 0
+        self.ifRight = 1
         self.frame = 0
 
     def draw(self):
-        self.rightMove[self.frame].draw(self.x, self.y)
+        if self.ifRight == 1: self.rightMove[self.frame].draw(self.x, self.y)
+        elif self.ifRight == 0: self.leftMove[self.frame].draw(self.x, self.y)
 
     def update(self):
         self.frame = (self.frame + 1) % 5
+        self.x += self.dirX * 5
+        self.y += self.dirY * 5
 
 
 
@@ -40,12 +45,22 @@ def render_world():
 
 def handle_events():
     global running
+    global player
     events = get_events() # 이벤트 받아오기
     for event in events:
         if event.type == SDL_QUIT: # 창 닫기 버튼
             running = False
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE: # ESC
-            running = False
+        elif event.type == SDL_KEYDOWN:
+            if event.key == SDLK_ESCAPE: running = False # esc
+            elif event.key == SDLK_RIGHT: player.dirX += 1; player.ifRight = 1
+            elif event.key == SDLK_LEFT:  player.dirX -= 1; player.ifRight = 0
+            elif event.key == SDLK_UP:    player.dirY += 1;
+            elif event.key == SDLK_DOWN:  player.dirY -= 1;
+        elif event.type == SDL_KEYUP:
+            if event.key == SDLK_RIGHT:   player.dirX -= 1; 
+            elif event.key == SDLK_LEFT:  player.dirX += 1;
+            elif event.key == SDLK_UP:    player.dirY -= 1;
+            elif event.key == SDLK_DOWN:  player.dirY += 1;
 
 WIDTH, HEIGHT = 1280, 720
 open_canvas(WIDTH,HEIGHT)
@@ -55,7 +70,7 @@ while running:
     handle_events() # 입력처리
     update_world() # 게임 로직 업데이트
     render_world() # 렌더링
-    delay(0.05)
+    delay(0.025)
 
 
 
