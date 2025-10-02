@@ -1,5 +1,18 @@
 from pico2d import *
 
+class NPC:
+    def __init__(self):
+        self.image = load_image('resource/townNPC.png')
+        self.x, self.y = 200, 500
+        self.frame = 0
+
+    def draw(self):
+        self.image.clip_draw(self.frame * 32, 0, 32, 32, self.x, self.y)
+
+    def update(self):
+        self.frame = (self.frame + 1) % 6
+
+
 class Town:
     def __init__(self):
         self.image = load_image('resource/town.jpg')
@@ -58,10 +71,12 @@ def init_world():
     global worldObject
     global player; player = Player()
     global town; town = Town()
+    global townNpc; townNpc = NPC()
 
     worldObject = []
     worldObject.append(town)
     worldObject.append(player)
+    worldObject.append(townNpc)
 
 def update_world():
     for object in worldObject:
