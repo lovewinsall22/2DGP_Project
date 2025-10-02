@@ -1,13 +1,42 @@
 from pico2d import *
 
+class Player:
+    def __init__(self):
+        self.right1 = load_image('resource/white_r_1.png')
+        self.right2 = load_image('resource/white_r_2.png')
+        self.right3 = load_image('resource/white_r_3.png')
+        self.right4 = load_image('resource/white_r_4.png')
+        self.right5 = load_image('resource/white_r_5.png')
+        self.left1 = load_image('resource/white_l_1.png')
+        self.left2 = load_image('resource/white_l_2.png')
+        self.left3 = load_image('resource/white_l_3.png')
+        self.left4 = load_image('resource/white_l_4.png')
+        self.left5 = load_image('resource/white_l_5.png')
+        self.rightMove = [self.right1, self.right2, self.right3, self.right4, self.right5]
+        self.leftMove = [self.left1, self.left2, self.left3, self.left4, self.left5]
+
+        self.x, self.y = WIDTH / 2, HEIGHT / 2
+        self.frame = 0
+
+    def draw(self):
+        self.rightMove[self.frame].draw(self.x, self.y)
+
+    def update(self):
+        self.frame = (self.frame + 1) % 5
+
+
+
 def init_world():
-    pass
+    global running; running = True
+    global player; player = Player()
 
 def update_world():
-    pass
+    player.update()
 
 def render_world():
-    pass
+    clear_canvas()
+    player.draw()
+    update_canvas()
 
 def handle_events():
     global running
@@ -18,8 +47,8 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE: # ESC
             running = False
 
-
-open_canvas()
+WIDTH, HEIGHT = 1280, 720
+open_canvas(WIDTH,HEIGHT)
 init_world() # 게임 초기화 후 시작
 
 while running:
