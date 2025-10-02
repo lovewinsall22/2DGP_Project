@@ -43,17 +43,22 @@ class Player:
 
 def init_world():
     global running; running = True
+    global worldObject
     global player; player = Player()
     global town; town = Town()
 
+    worldObject = []
+    worldObject.append(town)
+    worldObject.append(player)
+
 def update_world():
-    town.update()
-    player.update()
+    for object in worldObject:
+        object.update()
 
 def render_world():
     clear_canvas()
-    town.draw()
-    player.draw()
+    for object in worldObject:
+        object.draw()
     update_canvas()
 
 def handle_events():
