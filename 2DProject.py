@@ -1,5 +1,20 @@
 from pico2d import *
 
+class Dummy:
+    def __init__(self):
+        self.image = load_image('resource/snowmanDummy.png')
+        self.x, self.y = 264, 123
+        self.frame = 0
+        self.ani_count = 0
+    def draw(self):
+        self.image.clip_draw(self.frame * 32, 0, 32, 32, self.x, self.y, character_size + 10, character_size + 10)
+
+    def update(self):
+        self.ani_count +=1
+        if self.ani_count % 5 == 0:
+            self.frame = (self.frame + 1) % 5
+            self.ani_count = 0
+
 class NPC:
     def __init__(self):
         self.image = load_image('resource/townNPC.png')
@@ -14,7 +29,6 @@ class NPC:
         if self.ani_count % 5 == 0:
             self.frame = (self.frame + 1) % 6
             self.ani_count = 0
-
 
 class Town:
     def __init__(self):
@@ -81,11 +95,13 @@ def init_world():
     global player; player = Player()
     global town; town = Town()
     global townNpc; townNpc = NPC()
+    global dummy; dummy = Dummy()
 
     worldObject = []
     worldObject.append(town)
     worldObject.append(player)
     worldObject.append(townNpc)
+    worldObject.append(dummy)
 
 def update_world():
     for object in worldObject:
