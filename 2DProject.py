@@ -154,7 +154,7 @@ def handle_events():
             elif event.key == SDLK_a:  player.dirX -= 1; player.ifRight = 0
             elif event.key == SDLK_w:  player.dirY += 1;
             elif event.key == SDLK_s:  player.dirY -= 1;
-            elif event.key == SDLK_SPACE:
+            elif event.key == SDLK_SPACE and player.ifAttack == False:
                 player.ifAttack = True
                 player.sword_active = True
                 if player.ifRight == 0: player.sword_angle = 90
