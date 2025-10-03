@@ -84,8 +84,12 @@ class Player:
         if self.sword_active == True:
             sx = self.x + 40 * math.cos(self.sword_angle)
             sy = self.y + 40 * math.sin(self.sword_angle)
-            if self.sword_frame == 1: self.swordAni[self.sword_frame].draw(sx, sy, 40, 10)
-            else: self.swordAni[self.sword_frame].draw(sx, sy, 32, 32)
+            if self.sword_frame == 1:
+                self.swordAni[self.sword_frame].draw(sx, sy, 40, 10)
+                draw_rectangle(sx-20, sy-5, sx+20, sy+5)
+            else:
+                self.swordAni[self.sword_frame].draw(sx, sy, 32, 32)
+                draw_rectangle(sx-16, sy-16, sx+16, sy+16)
     def update(self):
         self.ani_count += 1
         if self.ani_count % 5 == 0:
