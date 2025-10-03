@@ -127,9 +127,9 @@ def init_world():
 
     worldObject = []
     worldObject.append(town)
-    worldObject.append(player)
     worldObject.append(townNpc)
     worldObject.append(dummy)
+    worldObject.append(player)
 
 def update_world():
     for object in worldObject:
