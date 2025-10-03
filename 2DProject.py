@@ -62,12 +62,7 @@ class Player:
         self.sword1 = load_image('resource/1.png')
         self.sword2 = load_image('resource/2.png')
         self.sword3 = load_image('resource/3.png')
-        self.sword4 = load_image('resource/4.png')
-        self.sword5 = load_image('resource/5.png')
-        self.sword6 = load_image('resource/6.png')
-        self.sword7 = load_image('resource/7.png')
-        self.sword8 = load_image('resource/8.png')
-        self.swordAni = [self.sword1, self.sword2, self.sword3, self.sword4, self.sword5, self.sword6, self.sword7, self.sword8]
+        self.swordAni = [self.sword1, self.sword2, self.sword3]
 
         self.x, self.y = WIDTH / 2, HEIGHT / 2
         self.dirX,self.dirY = 0, 0
@@ -76,8 +71,8 @@ class Player:
         self.ani_count = 0
         self.attack_frame = 0
         self.sword_active = False
+        self.sword_angle = 90
         self.sword_frame = 0
-        self.sword_angle = 45
         self.frame = 0
         self.speed = 5
 
@@ -89,7 +84,8 @@ class Player:
         if self.sword_active == True:
             sx = self.x + 40 * math.cos(self.sword_angle)
             sy = self.y + 40 * math.sin(self.sword_angle)
-            self.swordAni[self.sword_frame].draw(sx, sy, 32, 32)
+            if self.sword_frame == 1: self.swordAni[self.sword_frame].draw(sx, sy, 40, 10)
+            else: self.swordAni[self.sword_frame].draw(sx, sy, 32, 32)
     def update(self):
         self.ani_count += 1
         if self.ani_count % 5 == 0:
@@ -97,14 +93,12 @@ class Player:
             elif self.ifAttack == True:
                 self.speed = 2
                 self.attack_frame = (self.attack_frame + 1) % 7 # 0-6
-                self.sword_frame = (self.sword_frame + 1) % 8 #0-7
-                self.sword_angle += 2 * math.pi / 8
-                if self.sword_frame == 7:
+                if self.attack_frame % 2 == 0: self.sword_angle += 45; self.sword_frame = (self.sword_frame + 1) % 3
+                if self.attack_frame == 6:
                     self.ifAttack = False
                     self.sword_active = False
                     self.attack_frame = 0
-                    self.sword_frame = 0
-                    self.sword_angle = 45
+                    self.sword_angle = 90
                     self.speed = 5
             self.ani_count = 0
         self.x += self.dirX * self.speed
