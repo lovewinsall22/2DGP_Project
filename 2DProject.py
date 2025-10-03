@@ -59,10 +59,14 @@ class Player:
         self.attack_r = load_image('resource/attack_r.png')
         self.attack_l = load_image('resource/attack_l.png')
 
-        self.sword1 = load_image('resource/1.png')
-        self.sword2 = load_image('resource/2.png')
-        self.sword3 = load_image('resource/3.png')
-        self.swordAni = [self.sword1, self.sword2, self.sword3]
+        self.L_sword1 = load_image('resource/L_1.png')
+        self.L_sword2 = load_image('resource/L_2.png')
+        self.L_sword3 = load_image('resource/L_3.png')
+        self.R_sword1 = load_image('resource/R_1.png')
+        self.R_sword2 = load_image('resource/R_2.png')
+        self.R_sword3 = load_image('resource/R_3.png')
+        self.L_swordAni = [self.L_sword1, self.L_sword2, self.L_sword3]
+        self.R_swordAni = [self.R_sword1, self.R_sword2, self.R_sword3]
 
         self.x, self.y = WIDTH / 2, HEIGHT / 2
         self.dirX,self.dirY = 0, 0
@@ -71,7 +75,7 @@ class Player:
         self.ani_count = 0
         self.attack_frame = 0
         self.sword_active = False
-        self.sword_angle = 90
+        self.sword_angle = -1
         self.sword_frame = 0
         self.frame = 0
         self.speed = 5
@@ -85,10 +89,12 @@ class Player:
             sx = self.x + 40 * math.cos(self.sword_angle)
             sy = self.y + 40 * math.sin(self.sword_angle)
             if self.sword_frame == 1:
-                self.swordAni[self.sword_frame].draw(sx, sy, 40, 10)
+                if self.ifRight == 0: self.L_swordAni[self.sword_frame].draw(sx, sy, 40, 10)
+                else: self.R_swordAni[self.sword_frame].draw(sx, sy, 40, 10)
                 draw_rectangle(sx-20, sy-5, sx+20, sy+5)
             else:
-                self.swordAni[self.sword_frame].draw(sx, sy, 32, 32)
+                if self.ifRight == 0: self.L_swordAni[self.sword_frame].draw(sx, sy, 32, 32)
+                else: self.R_swordAni[self.sword_frame].draw(sx, sy, 32, 32)
                 draw_rectangle(sx-16, sy-16, sx+16, sy+16)
     def update(self):
         self.ani_count += 1
@@ -97,7 +103,10 @@ class Player:
             elif self.ifAttack == True:
                 self.speed = 2
                 self.attack_frame = (self.attack_frame + 1) % 7 # 0-6
-                if self.attack_frame % 2 == 0: self.sword_angle += 45; self.sword_frame = (self.sword_frame + 1) % 3
+                if self.attack_frame % 2 == 0 and self.ifRight == 0:
+                    self.sword_angle += 45; self.sword_frame = (self.sword_frame + 1) % 3
+                elif self.attack_frame % 2 == 0 and self.ifRight == 1:
+                    self.sword_angle -= 45; self.sword_frame = (self.sword_frame + 1) % 3
                 if self.attack_frame == 6:
                     self.ifAttack = False
                     self.sword_active = False
@@ -145,7 +154,11 @@ def handle_events():
             elif event.key == SDLK_a:  player.dirX -= 1; player.ifRight = 0
             elif event.key == SDLK_w:  player.dirY += 1;
             elif event.key == SDLK_s:  player.dirY -= 1;
-            elif event.key == SDLK_SPACE: player.ifAttack = True; player.sword_active = True
+            elif event.key == SDLK_SPACE:
+                player.ifAttack = True
+                player.sword_active = True
+                if player.ifRight == 0: player.sword_angle = 90
+                else: player.sword_angle = 45 # ??
         elif event.type == SDL_KEYUP:
             if event.key == SDLK_d:    player.dirX -= 1
             elif event.key == SDLK_a:  player.dirX += 1
