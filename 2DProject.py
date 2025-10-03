@@ -8,13 +8,17 @@ class Dummy:
         self.frame = 0
         self.ani_count = 0
     def draw(self):
-        self.image.clip_draw(self.frame * 32, 0, 32, 32, self.x, self.y, character_size + 10, character_size + 10)
+        self.image.clip_draw(self.frame * 32, 0, 32, 32, self.x, self.y, character_size, character_size)
+        draw_rectangle(self.x - 32, self.y - 32, self.x + 32, self.y + 32)
 
     def update(self):
         self.ani_count +=1
         if self.ani_count % 5 == 0:
             self.frame = (self.frame + 1) % 5
             self.ani_count = 0
+
+    def get_bb(self):
+        return self.x - 32, self.y - 32, self.x + 32, self.y + 32
 
 class NPC:
     def __init__(self):
@@ -117,6 +121,18 @@ class Player:
         self.x += self.dirX * self.speed
         self.y += self.dirY * self.speed
 
+    def get_sword_bb(self):
+        if self.sword_active:
+            sx = self.x + 40 * math.cos(self.sword_angle)
+            sy = self.y + 40 * math.sin(self.sword_angle)
+
+            if self.sword_frame == 1:
+                return sx - 20, sy - 5, sx + 20, sy + 5
+            else:
+                return sx - 16, sy - 16, sx + 16, sy + 16
+        return None
+
+
 def init_world():
     global running; running = True
     global worldObject
@@ -134,6 +150,7 @@ def init_world():
 def update_world():
     for object in worldObject:
         object.update()
+    check_collision()
 
 def render_world():
     clear_canvas()
@@ -164,6 +181,21 @@ def handle_events():
             elif event.key == SDLK_a:  player.dirX += 1
             elif event.key == SDLK_w:  player.dirY -= 1
             elif event.key == SDLK_s:  player.dirY += 1
+
+def check_collision():
+    sword_bb = player.get_sword_bb()
+    if sword_bb:
+        left_a, bottom_a, right_a, top_a = sword_bb
+        left_b, bottom_b, right_b, top_b = dummy.get_bb()
+
+        if left_a > right_b: return False
+        if right_a < left_b: return False
+        if top_a < bottom_b: return False
+        if bottom_a > top_b: return False
+
+        print("Collision with Dummy!")
+        return True
+
 
 WIDTH, HEIGHT = 1280, 720
 character_size = 64
