@@ -119,7 +119,7 @@ class Player:
         self.frame = 0
 
         self.max_hp = 100
-        self.cur_hp = 100
+        self.hp = 100
         self.max_exp = 100
         self.exp = 0
         self.level = 1
@@ -184,13 +184,22 @@ class Player:
 
 class PlayerUI:
     def __init__(self,player):
-        self.hp_image = load_image('resource/play_hp.png')
-        self.exp_image = load_image('resource/play_exp.png')
         self.player = player
+        self.font = load_font('DNFBitBitTTF.ttf', 20)
 
     def draw(self):
-        draw_rectangle(WIDTH - 500, 20, WIDTH - 20, 50)
-        draw_rectangle(WIDTH - 500, 60, WIDTH - 20, 90)
+        x1, y1 = WIDTH - 500, 20
+        bar_width = 480
+        bar_height = 30
+
+        hp_ratio = self.player.hp / self.player.max_hp
+        draw_rectangle(x1, y1, x1 + bar_width, y1 + bar_height)  # 테두리
+
+        fill_w = int(bar_width * hp_ratio)
+        for i in range(0, fill_w, 5):  # 5픽셀 단위로 채움
+            draw_rectangle(x1 + i, y1, x1 + i + 5, y1 + bar_height)
+
+        self.font.draw(WIDTH - 500, y1 + 50, f'HP: {int(self.player.hp)}/{self.player.max_hp}', (255, 255, 255))
 
     def update(self):
         pass
