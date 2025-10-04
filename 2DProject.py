@@ -49,6 +49,7 @@ class NPC:
         self.ani_count = 0
     def draw(self):
         self.image.clip_draw(self.frame * 32, 0, 32, 32, self.x, self.y, character_size, character_size)
+        draw_rectangle(self.x - 32, self.y - 32, self.x + 32, self.y + 32)
 
     def update(self):
         self.ani_count +=1
@@ -114,6 +115,7 @@ class Player:
         elif self.ifRight == 0 and self.ifAttack == False: self.leftMove[self.frame].draw(self.x, self.y, 40, 62)
         if self.ifRight == 1 and self.ifAttack == True: self.attack_r.clip_draw(self.attack_frame * 32, 0, 32, 32, self.x, self.y, character_size, character_size)
         elif self.ifRight == 0 and self.ifAttack == True: self.attack_l.clip_draw(self.attack_frame * 32, 0, 32, 32, self.x, self.y, character_size, character_size)
+        draw_rectangle(self.x - 20, self.y - 31, self.x + 20, self.y + 31)
         if self.sword_active == True:
             sx = self.x + 40 * math.cos(self.sword_angle)
             sy = self.y + 40 * math.sin(self.sword_angle)
