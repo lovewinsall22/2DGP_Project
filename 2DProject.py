@@ -1,6 +1,20 @@
 from pico2d import *
 import math
 
+class DmgText:
+    def __init__(self,x,y,damage):
+        self.font = load_font('K_Damage.ttf', 25)
+        self.x, self.y = x,y
+        self.damage = damage
+        self.timer = 60
+
+    def update(self):
+        self.timer -= 1
+        return self.timer > 0
+
+    def draw(self):
+        self.font.draw(self.x, self.y, f'{self.damage}', (255, 0, 0))
+
 class Dummy:
     def __init__(self):
         self.image = load_image('resource/snowmanDummy.png')
@@ -151,6 +165,8 @@ def init_world():
     global townNpc; townNpc = NPC()
     global dummy; dummy = Dummy()
 
+    global damage_texts; damage_texts = []
+
     worldObject = []
     worldObject.append(town)
     worldObject.append(townNpc)
@@ -162,11 +178,21 @@ def update_world():
         object.update()
     if check_collision():
         dummy.hitted(player.damage)
+        damage_texts.append(DmgText(dummy.x, dummy.y + 30, player.damage))
+
+    # 데미지 텍스트 갱신
+    for t in damage_texts[:]:
+        if not t.update():
+            damage_texts.remove(t)
+
+
 
 def render_world():
     clear_canvas()
     for object in worldObject:
         object.draw()
+    for t in damage_texts:
+        t.draw()
     update_canvas()
 
 def handle_events():
