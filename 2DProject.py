@@ -1,9 +1,26 @@
 from pico2d import *
 import math
 
+class Store:
+    def __init__(self):
+        self.IsOpen = False
+        self.font = load_font('DNFBitBitTTF.ttf',20)
+
+    def draw(self):
+        if self.IsOpen:
+            draw_rectangle(WIDTH // 2 - 200, HEIGHT // 2 - 150, WIDTH // 2 + 200, HEIGHT // 2 + 150)
+            self.font.draw(WIDTH // 2 - 20, HEIGHT // 2 + 100, '상점', (255, 255, 0))
+            self.font.draw(WIDTH // 2 - 120, HEIGHT // 2 + 50, '1. 체력포션 - 100G', (255, 255, 255))
+            self.font.draw(WIDTH // 2 - 120, HEIGHT // 2 + 20, '2. 공격력 강화 - 200G', (255, 255, 255))
+            self.font.draw(WIDTH // 2 - 120, HEIGHT // 2 - 10, '3. 이동속도 증가 - 200G', (255, 255, 255))
+            self.font.draw(WIDTH // 2 - 40, HEIGHT // 2 - 100, 'L키로 닫기', (255, 255, 0))
+
+    def update(self):
+        pass
+
 class DmgText:
     def __init__(self,x,y,damage):
-        self.font = load_font('K_Damage.ttf', 20)
+        self.font = load_font('DNFBitBitTTF.ttf', 20)
         self.x, self.y = x,y
         self.damage = damage
         self.timer = 60
@@ -167,6 +184,7 @@ def init_world():
     global town; town = Town()
     global townNpc; townNpc = NPC()
     global dummy; dummy = Dummy()
+    global store; store = Store()
 
     global damage_texts; damage_texts = []
 
@@ -175,6 +193,7 @@ def init_world():
     worldObject.append(townNpc)
     worldObject.append(dummy)
     worldObject.append(player)
+    worldObject.append(store)
 
 def update_world():
     for object in worldObject:
@@ -188,12 +207,11 @@ def update_world():
         if not t.update():
             damage_texts.remove(t)
 
-
-
 def render_world():
     clear_canvas()
     for object in worldObject:
         object.draw()
+
     for t in damage_texts:
         t.draw()
     update_canvas()
@@ -220,6 +238,9 @@ def handle_events():
                 player.sword_active = True
                 if player.ifRight == 0: player.sword_angle = 90
                 else: player.sword_angle = 45 # ??
+            elif event.key == SDLK_l: # 상점 열기ㄴ
+                if check_npc_collision():
+                    store.IsOpen = not store.IsOpen
         elif event.type == SDL_KEYUP:
             if event.key == SDLK_d:    player.dirX -= 1
             elif event.key == SDLK_a:  player.dirX += 1
@@ -240,6 +261,16 @@ def check_collision():
         print("Collision with Dummy!")
         return True
 
+def check_npc_collision():
+    left_a, bottom_a, right_a, top_a = player.x - 20, player.y - 31, player.x + 20, player.y + 31
+    left_b, bottom_b, right_b, top_b = townNpc.x - 32, townNpc.y - 32, townNpc.x + 32, townNpc.y + 32
+
+    if left_a > right_b: return False
+    if right_a < left_b: return False
+    if top_a < bottom_b: return False
+    if bottom_a > top_b: return False
+
+    return True
 
 WIDTH, HEIGHT = 1280, 720
 character_size = 64
