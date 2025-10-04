@@ -7,6 +7,7 @@ class Dummy:
         self.x, self.y = 264, 123
         self.frame = 0
         self.ani_count = 0
+        self.hp = 9999
     def draw(self):
         self.image.clip_draw(self.frame * 32, 0, 32, 32, self.x, self.y, character_size, character_size)
         draw_rectangle(self.x - 32, self.y - 32, self.x + 32, self.y + 32)
@@ -19,6 +20,11 @@ class Dummy:
 
     def get_bb(self):
         return self.x - 32, self.y - 32, self.x + 32, self.y + 32
+
+    def hitted(self, damage):
+        self.hp -= damage
+        print(f"Dummy Hp : {self.hp}")
+
 
 class NPC:
     def __init__(self):
@@ -75,14 +81,18 @@ class Player:
         self.x, self.y = WIDTH / 2, HEIGHT / 2
         self.dirX,self.dirY = 0, 0
         self.ifRight = 1
-        self.ifAttack = False
+
         self.ani_count = 0
+        self.frame = 0
+        self.speed = 5
+        self.damage = 10
+
+        self.ifAttack = False
         self.attack_frame = 0
         self.sword_active = False
         self.sword_angle = -1
         self.sword_frame = 0
-        self.frame = 0
-        self.speed = 5
+
 
     def draw(self):
         if self.ifRight == 1 and self.ifAttack == False: self.rightMove[self.frame].draw(self.x, self.y, 40, 62)
@@ -150,7 +160,8 @@ def init_world():
 def update_world():
     for object in worldObject:
         object.update()
-    check_collision()
+    if check_collision():
+        dummy.hitted(player.damage)
 
 def render_world():
     clear_canvas()
