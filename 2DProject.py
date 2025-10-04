@@ -23,7 +23,7 @@ class DmgText:
         self.font = load_font('DNFBitBitTTF.ttf', 20)
         self.x, self.y = x,y
         self.damage = damage
-        self.timer = 60
+        self.timer = 30
 
     def update(self):
         self.y += 5
@@ -39,7 +39,7 @@ class Dummy:
         self.x, self.y = 264, 123
         self.frame = 0
         self.ani_count = 0
-        self.hp = 9999
+        self.hp = 99999999
     def draw(self):
         self.image.clip_draw(self.frame * 32, 0, 32, 32, self.x, self.y, character_size, character_size)
         draw_rectangle(self.x - 32, self.y - 32, self.x + 32, self.y + 32)
@@ -117,8 +117,14 @@ class Player:
 
         self.ani_count = 0
         self.frame = 0
+
+        self.max_hp = 100
+        self.cur_hp = 100
+        self.max_exp = 100
+        self.exp = 0
+        self.level = 1
         self.speed = 5
-        self.damage = 10
+        self.damage = 1000
 
         self.ifAttack = False
         self.attack_frame = 0
@@ -176,6 +182,18 @@ class Player:
                 return sx - 16, sy - 16, sx + 16, sy + 16
         return None
 
+class PlayerUI:
+    def __init__(self,player):
+        self.hp_image = load_image('resource/play_hp.png')
+        self.exp_image = load_image('resource/play_exp.png')
+        self.player = player
+
+    def draw(self):
+        draw_rectangle(WIDTH - 500, 20, WIDTH - 20, 50)
+        draw_rectangle(WIDTH - 500, 60, WIDTH - 20, 90)
+
+    def update(self):
+        pass
 
 def init_world():
     global running; running = True
@@ -185,6 +203,7 @@ def init_world():
     global townNpc; townNpc = NPC()
     global dummy; dummy = Dummy()
     global store; store = Store()
+    global playerUI; playerUI = PlayerUI(player)
 
     global damage_texts; damage_texts = []
 
@@ -194,6 +213,7 @@ def init_world():
     worldObject.append(dummy)
     worldObject.append(player)
     worldObject.append(store)
+    worldObject.append(playerUI)
 
 def update_world():
     for object in worldObject:
