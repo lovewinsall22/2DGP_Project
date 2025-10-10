@@ -1,6 +1,20 @@
 from pico2d import *
 import math
 
+class Monster:
+    def __init__(self, x, y, hp, damage):
+        self.x, self.y = x, y
+        self.hp = hp
+        self.damage = damage
+        self.alive = True
+        #self.image = load_image('resource/monster.png')
+
+    def draw(self):
+        pass
+
+    def update(self):
+        pass
+
 class Store:
     def __init__(self):
         self.IsOpen = False
@@ -33,13 +47,13 @@ class DmgText:
     def draw(self):
         self.font.draw(self.x, self.y, f'{self.damage}', (255, 0, 0))
 
-class Dummy:
+class Dummy(Monster):
     def __init__(self):
+        super().__init__(264,123,99999999,0)
         self.image = load_image('resource/snowmanDummy.png')
-        self.x, self.y = 264, 123
         self.frame = 0
         self.ani_count = 0
-        self.hp = 99999999
+
     def draw(self):
         self.image.clip_draw(self.frame * 32, 0, 32, 32, self.x, self.y, character_size, character_size)
         draw_rectangle(self.x - 32, self.y - 32, self.x + 32, self.y + 32)
@@ -129,7 +143,7 @@ class Player:
         self.ifAttack = False # 공격 모션 중
         self.attack_hit = False # 충돌처리 한번
         self.attack_frame = 0
-        self.sword_active = False 
+        self.sword_active = False
         self.sword_angle = -1
         self.sword_frame = 0
 
