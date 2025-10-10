@@ -126,9 +126,10 @@ class Player:
         self.speed = 5
         self.damage = 1000
 
-        self.ifAttack = False
+        self.ifAttack = False # 공격 모션 중
+        self.attack_hit = False # 충돌처리 한번
         self.attack_frame = 0
-        self.sword_active = False
+        self.sword_active = False 
         self.sword_angle = -1
         self.sword_frame = 0
 
@@ -227,8 +228,9 @@ def init_world():
 def update_world():
     for object in worldObject:
         object.update()
-    if check_collision():
+    if check_collision() and not player.attack_hit:
         dummy.hitted(player.damage)
+        player.attack_hit = True
         damage_texts.append(DmgText(dummy.x, dummy.y + 30, player.damage))
 
     # 데미지 텍스트 갱신
@@ -265,6 +267,7 @@ def handle_events():
             elif event.key == SDLK_SPACE and player.ifAttack == False:
                 player.ifAttack = True
                 player.sword_active = True
+                player.attack_hit = False
                 if player.ifRight == 0: player.sword_angle = 90
                 else: player.sword_angle = 45 # ??
             elif event.key == SDLK_l: # 상점 열기ㄴ
