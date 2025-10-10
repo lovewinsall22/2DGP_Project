@@ -230,13 +230,17 @@ def init_world():
     global store; store = Store()
     global playerUI; playerUI = PlayerUI(player)
 
+    global monsters; monsters = []
+    monsters.append(dummy)
     global damage_texts; damage_texts = []
+
 
     worldObject = []
     worldObject.append(town)
     worldObject.append(townNpc)
-    worldObject.append(dummy)
     worldObject.append(player)
+    for m in monsters:
+        worldObject.append(m)
     worldObject.append(store)
     worldObject.append(playerUI)
 
