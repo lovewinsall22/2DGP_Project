@@ -139,6 +139,7 @@ class Player:
         self.level = 1
         self.speed = 5
         self.damage = 1000
+        self.already_hit = set()
 
         self.ifAttack = False # 공격 모션 중
         self.attack_hit = False # 충돌처리 한번
@@ -186,7 +187,7 @@ class Player:
         self.x += self.dirX * self.speed
         self.y += self.dirY * self.speed
 
-    def get_sword_bb(self):
+    def get_sword_bb(self): # 검 히트박스 얻기
         if self.sword_active:
             sx = self.x + 40 * math.cos(self.sword_angle)
             sy = self.y + 40 * math.sin(self.sword_angle)
@@ -242,11 +243,18 @@ def init_world():
 def update_world():
     for object in worldObject:
         object.update()
-    if check_collision() and not player.attack_hit:
-        dummy.hitted(player.damage)
-        player.attack_hit = True
-        damage_texts.append(DmgText(dummy.x, dummy.y + 30, player.damage))
 
+    if player.ifAttack: # 충돌처리 코드
+        sword_bb = player.get_sword_bb()
+        if sword_bb:
+            left_a, bottom_a, right_a, top_a = sword_bb
+            left_b, bottom_b, right_b, top_b = dummy.get_bb()
+
+            if not dummy in player.already_hit:
+                if not (left_a > right_b or right_a < left_b or top_a < bottom_b or bottom_a > top_b):
+                    dummy.hitted(player.damage)
+                    player.already_hit.add(dummy)  # 이번 공격에서 맞은 적 기록
+                    damage_texts.append(DmgText(dummy.x, dummy.y + 30, player.damage))
     # 데미지 텍스트 갱신
     for t in damage_texts[:]:
         if not t.update():
@@ -281,7 +289,8 @@ def handle_events():
             elif event.key == SDLK_SPACE and player.ifAttack == False:
                 player.ifAttack = True
                 player.sword_active = True
-                player.attack_hit = False
+                player.already_hit.clear()
+
                 if player.ifRight == 0: player.sword_angle = 90
                 else: player.sword_angle = 45 # ??
             elif event.key == SDLK_l: # 상점 열기ㄴ
@@ -292,20 +301,6 @@ def handle_events():
             elif event.key == SDLK_a:  player.dirX += 1
             elif event.key == SDLK_w:  player.dirY -= 1
             elif event.key == SDLK_s:  player.dirY += 1
-
-def check_collision():
-    sword_bb = player.get_sword_bb()
-    if sword_bb:
-        left_a, bottom_a, right_a, top_a = sword_bb
-        left_b, bottom_b, right_b, top_b = dummy.get_bb()
-
-        if left_a > right_b: return False
-        if right_a < left_b: return False
-        if top_a < bottom_b: return False
-        if bottom_a > top_b: return False
-
-        print("Collision with Dummy!")
-        return True
 
 def check_npc_collision():
     left_a, bottom_a, right_a, top_a = player.x - 20, player.y - 31, player.x + 20, player.y + 31
