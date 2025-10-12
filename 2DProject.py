@@ -113,8 +113,8 @@ class Player:
         self.rightMove = [self.right1, self.right2, self.right3, self.right4, self.right5]
         self.leftMove = [self.left1, self.left2, self.left3, self.left4, self.left5]
 
-        self.attack_r = load_image('resource/attack_r.png')
-        self.attack_l = load_image('resource/attack_l.png')
+        #self.attack_r = load_image('resource/attack_r.png')
+        #self.attack_l = load_image('resource/attack_l.png')
 
         self.L_sword1 = load_image('resource/L_1.png')
         self.L_sword2 = load_image('resource/L_2.png')
@@ -150,10 +150,8 @@ class Player:
 
 
     def draw(self):
-        if self.ifRight == 1 and self.ifAttack == False: self.rightMove[self.frame].draw(self.x, self.y, 40, 62)
-        elif self.ifRight == 0 and self.ifAttack == False: self.leftMove[self.frame].draw(self.x, self.y, 40, 62)
-        if self.ifRight == 1 and self.ifAttack == True: self.attack_r.clip_draw(self.attack_frame * 32, 0, 32, 32, self.x, self.y, character_size, character_size)
-        elif self.ifRight == 0 and self.ifAttack == True: self.attack_l.clip_draw(self.attack_frame * 32, 0, 32, 32, self.x, self.y, character_size, character_size)
+        if self.ifRight == 1 : self.rightMove[self.frame].draw(self.x, self.y, 40, 62)
+        elif self.ifRight == 0 : self.leftMove[self.frame].draw(self.x, self.y, 40, 62)
         draw_rectangle(self.x - 20, self.y - 31, self.x + 20, self.y + 31)
         if self.sword_active == True:
             sx = self.x + 40 * math.cos(self.sword_angle)
@@ -169,8 +167,8 @@ class Player:
     def update(self):
         self.ani_count += 1
         if self.ani_count % 5 == 0:
-            if self.ifAttack == False: self.frame = (self.frame + 1) % 5
-            elif self.ifAttack == True:
+            self.frame = (self.frame + 1) % 5
+            if self.ifAttack == True:
                 self.speed = 2
                 self.attack_frame = (self.attack_frame + 1) % 7 # 0-6
                 if self.attack_frame % 2 == 0 and self.ifRight == 0:
