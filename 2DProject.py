@@ -57,6 +57,74 @@ class Town:
     def update(self):
         pass
 
+class Sword:
+    def __init__(self, player):
+        self.L_sword1 = load_image('resource/L_1.png')
+        self.L_sword2 = load_image('resource/L_2.png')
+        self.L_sword3 = load_image('resource/L_3.png')
+        self.R_sword1 = load_image('resource/R_1.png')
+        self.R_sword2 = load_image('resource/R_2.png')
+        self.R_sword3 = load_image('resource/R_3.png')
+        self.L_swordAni = [self.L_sword1, self.L_sword2, self.L_sword3]
+        self.R_swordAni = [self.R_sword1, self.R_sword2, self.R_sword3]
+
+        self.player = player
+        self.already_hit = set() # 충돌처리된 몬스터 기록
+        self.attack_hit = False  # 충돌처리 한번
+        self.sword_active = False # 공격중 처리 => 공격중일시 다시 입력 불가
+        self.sword_angle = 90
+        self.sword_frame = 0 # 검 애니메이션 프레임
+
+    def draw(self):
+        if self.sword_active:
+            sx = self.player.x + 40 * math.cos(self.sword_angle)
+            sy = self.player.y + 40 * math.sin(self.sword_angle)
+            if self.sword_frame == 1:
+                if self.player.ifRight == 0: self.L_swordAni[self.sword_frame].draw(sx, sy, 40, 10)
+                else: self.R_swordAni[self.sword_frame].draw(sx, sy, 40, 10)
+                draw_rectangle(sx-20, sy-5, sx+20, sy+5)
+            else:
+                if self.player.ifRight == 0: self.L_swordAni[self.sword_frame].draw(sx, sy, 32, 32)
+                else: self.R_swordAni[self.sword_frame].draw(sx, sy, 32, 32)
+                draw_rectangle(sx-16, sy-16, sx+16, sy+16)
+
+    def update(self):
+        if self.sword_active == True:
+            self.player.speed = 2
+            if self.player.ifRight == 0:
+                self.sword_angle += 45
+                self.sword_frame = (self.sword_frame + 1) % 3
+            elif self.player.ifRight == 1:
+                self.sword_angle -= 45
+                self.sword_frame = (self.sword_frame + 1) % 3
+
+            if self.sword_frame == 0:
+                self.sword_active = False
+                self.sword_angle = 90
+                self.player.speed = 5
+
+    def get_sword_bb(self): # 검 히트박스 얻기
+        if self.sword_active:
+            sx = self.player.x + 40 * math.cos(self.sword_angle)
+            sy = self.player.y + 40 * math.sin(self.sword_angle)
+
+            if self.sword_frame == 1:
+                return sx - 20, sy - 5, sx + 20, sy + 5
+            else:
+                return sx - 16, sy - 16, sx + 16, sy + 16
+        return None
+
+    def attack_check(self,monsters,dmg_text):
+        if not self.sword_active:
+            return
+        sword_bb = self.get_sword_bb()
+        if sword_bb:
+            for m in monsters:
+                if m not in self.already_hit and check_collision(sword_bb, m.get_bb()):
+                    m.hitted(self.player.damage)
+                    self.already_hit.add(m)
+                    damage_texts.append(DmgText(m.x, m.y + 30, self.player.damage))
+
 class Player:
     def __init__(self):
         self.right1 = load_image('resource/white_r_1.png')
@@ -75,99 +143,40 @@ class Player:
         #self.attack_r = load_image('resource/attack_r.png')
         #self.attack_l = load_image('resource/attack_l.png')
 
-        self.L_sword1 = load_image('resource/L_1.png')
-        self.L_sword2 = load_image('resource/L_2.png')
-        self.L_sword3 = load_image('resource/L_3.png')
-        self.R_sword1 = load_image('resource/R_1.png')
-        self.R_sword2 = load_image('resource/R_2.png')
-        self.R_sword3 = load_image('resource/R_3.png')
-        self.L_swordAni = [self.L_sword1, self.L_sword2, self.L_sword3]
-        self.R_swordAni = [self.R_sword1, self.R_sword2, self.R_sword3]
+        self.x, self.y = WIDTH / 2, HEIGHT / 2 # 플레이어 초기 좌표
+        self.dirX,self.dirY = 0, 0 # 이동 방향
+        self.ifRight = 1 # 1: 오른쪽, 0: 왼쪽
 
-        self.x, self.y = WIDTH / 2, HEIGHT / 2
-        self.dirX,self.dirY = 0, 0
-        self.ifRight = 1
+        self.ani_count = 0 # 기본 애니메이션 프레임 조절을 위해 ,, 카운트
+        self.frame = 0 # 기본 애니메이션 프레임
 
-        self.ani_count = 0
-        self.frame = 0
-
-        self.max_hp = 100
-        self.hp = 100
-        self.max_exp = 100
-        self.exp = 0
-        self.level = 1
-        self.speed = 5
-        self.damage = 1000
-        self.already_hit = set()
-
-        self.attack_hit = False # 충돌처리 한번
-        self.sword_active = False
-        self.sword_angle = 90
-        self.sword_frame = 0
+        self.max_hp = 100 # 최대 체력
+        self.hp = 100 # 현재 체력
+        self.level = 1 # 현재 레벨
+        self.speed = 5 # 이동 속도
+        self.damage = 1000 # 공격력
 
         self.playerUI = PlayerUI(self)
-
+        self.sword = Sword(self)
 
     def draw(self):
-        self.playerUI.draw()
+
         if self.ifRight == 1 : self.rightMove[self.frame].draw(self.x, self.y, 40, 62)
         elif self.ifRight == 0 : self.leftMove[self.frame].draw(self.x, self.y, 40, 62)
         draw_rectangle(self.x - 20, self.y - 31, self.x + 20, self.y + 31)
-
-        if self.sword_active == True:
-            sx = self.x + 40 * math.cos(self.sword_angle)
-            sy = self.y + 40 * math.sin(self.sword_angle)
-            if self.sword_frame == 1:
-                if self.ifRight == 0: self.L_swordAni[self.sword_frame].draw(sx, sy, 40, 10)
-                else: self.R_swordAni[self.sword_frame].draw(sx, sy, 40, 10)
-                draw_rectangle(sx-20, sy-5, sx+20, sy+5)
-            else:
-                if self.ifRight == 0: self.L_swordAni[self.sword_frame].draw(sx, sy, 32, 32)
-                else: self.R_swordAni[self.sword_frame].draw(sx, sy, 32, 32)
-                draw_rectangle(sx-16, sy-16, sx+16, sy+16)
+        self.playerUI.draw()
+        self.sword.draw()
 
     def update(self):
         self.ani_count += 1
         if self.ani_count % 10 == 0:
+            self.sword.update()
             self.frame = (self.frame + 1) % 5
-            if self.sword_active == True:
-                self.speed = 2
-                if self.ifRight == 0:
-                    self.sword_angle += 45
-                    self.sword_frame = (self.sword_frame + 1) % 3
-                elif self.ifRight == 1:
-                    self.sword_angle -= 45
-                    self.sword_frame = (self.sword_frame + 1) % 3
-
-                if self.sword_frame == 0:
-                    self.sword_active = False
-                    self.sword_angle = 90
-                    self.speed = 5
             self.ani_count = 0
         self.x += self.dirX * self.speed
         self.y += self.dirY * self.speed
+        self.playerUI.update()
 
-    def get_sword_bb(self): # 검 히트박스 얻기
-        if self.sword_active:
-            sx = self.x + 40 * math.cos(self.sword_angle)
-            sy = self.y + 40 * math.sin(self.sword_angle)
-
-            if self.sword_frame == 1:
-                return sx - 20, sy - 5, sx + 20, sy + 5
-            else:
-                return sx - 16, sy - 16, sx + 16, sy + 16
-        return None
-
-    def attack_check(self,monsters,dmg_text):
-        if not self.sword_active:
-            return
-        sword_bb = self.get_sword_bb()
-        if sword_bb:
-            for m in monsters:
-                if m not in self.already_hit and check_collision(sword_bb, m.get_bb()):
-                    m.hitted(self.damage)
-                    self.already_hit.add(m)
-                    damage_texts.append(DmgText(m.x, m.y + 30, self.damage))
 
 
 def init_world():
@@ -195,7 +204,8 @@ def init_world():
 def update_world():
     for object in worldObject:
         object.update()
-    player.attack_check(monsters, damage_texts)
+
+    player.sword.attack_check(monsters, damage_texts)
 
     # 데미지 텍스트 갱신
     for t in damage_texts[:]:
@@ -222,18 +232,18 @@ def handle_events():
             if event.key == SDLK_ESCAPE: running = False # esc
             elif event.key == SDLK_d:
                 player.dirX += 1
-                if not player.sword_active: player.ifRight = 1 # 공격중엔 방향전환 X
+                if not player.sword.sword_active: player.ifRight = 1 # 공격중엔 방향전환 X
             elif event.key == SDLK_a:
                 player.dirX -= 1
-                if not player.sword_active: player.ifRight = 0 # 공격중엔 방향전환 X
+                if not player.sword.sword_active: player.ifRight = 0 # 공격중엔 방향전환 X
             elif event.key == SDLK_w:  player.dirY += 1;
             elif event.key == SDLK_s:  player.dirY -= 1;
-            elif event.key == SDLK_SPACE and player.sword_active == False:
-                player.sword_active = True
-                player.already_hit.clear() # 충돌 기록 초기화
-                player.sword_frame = 0
-                if player.ifRight == 0: player.sword_angle = 90
-                else: player.sword_angle = 45 # ??
+            elif event.key == SDLK_SPACE and player.sword.sword_active == False:
+                player.sword.sword_active = True
+                player.sword.already_hit.clear() # 충돌 기록 초기화
+                player.sword.sword_frame = 0
+                if player.ifRight == 0: player.sword.sword_angle = 90
+                else: player.sword.sword_angle = 45 # ??
             elif event.key == SDLK_l: # 상점 열기
                 if check_npc_collision():
                     store.IsOpen = not store.IsOpen
