@@ -1,6 +1,11 @@
 from pico2d import *
 import math
 
+from dmg_font import DmgText
+from npc import NPC
+from store import Store
+
+
 class Monster:
     def __init__(self, x, y, hp, damage):
         self.x, self.y = x, y
@@ -15,37 +20,6 @@ class Monster:
     def update(self):
         pass
 
-class Store:
-    def __init__(self):
-        self.IsOpen = False
-        self.font = load_font('DNFBitBitTTF.ttf',20)
-
-    def draw(self):
-        if self.IsOpen:
-            draw_rectangle(WIDTH // 2 - 200, HEIGHT // 2 - 150, WIDTH // 2 + 200, HEIGHT // 2 + 150)
-            self.font.draw(WIDTH // 2 - 20, HEIGHT // 2 + 100, '상점', (255, 255, 0))
-            self.font.draw(WIDTH // 2 - 120, HEIGHT // 2 + 50, '1. 체력포션 - 100G', (255, 255, 255))
-            self.font.draw(WIDTH // 2 - 120, HEIGHT // 2 + 20, '2. 공격력 강화 - 200G', (255, 255, 255))
-            self.font.draw(WIDTH // 2 - 120, HEIGHT // 2 - 10, '3. 이동속도 증가 - 200G', (255, 255, 255))
-            self.font.draw(WIDTH // 2 - 40, HEIGHT // 2 - 100, 'L키로 닫기', (255, 255, 0))
-
-    def update(self):
-        pass
-
-class DmgText:
-    def __init__(self,x,y,damage):
-        self.font = load_font('DNFBitBitTTF.ttf', 20)
-        self.x, self.y = x,y
-        self.damage = damage
-        self.timer = 30
-
-    def update(self):
-        self.y += 5
-        self.timer -= 1
-        return self.timer > 0
-
-    def draw(self):
-        self.font.draw(self.x, self.y, f'{self.damage}', (255, 0, 0))
 
 class Dummy(Monster):
     def __init__(self):
@@ -71,22 +45,6 @@ class Dummy(Monster):
         self.hp -= damage
         print(f"Dummy Hp : {self.hp}")
 
-
-class NPC:
-    def __init__(self):
-        self.image = load_image('resource/townNPC.png')
-        self.x, self.y = 200, 500
-        self.frame = 0
-        self.ani_count = 0
-    def draw(self):
-        self.image.clip_draw(self.frame * 32, 0, 32, 32, self.x, self.y, character_size, character_size)
-        draw_rectangle(self.x - 32, self.y - 32, self.x + 32, self.y + 32)
-
-    def update(self):
-        self.ani_count +=1
-        if self.ani_count % 5 == 0:
-            self.frame = (self.frame + 1) % 6
-            self.ani_count = 0
 
 class Town:
     def __init__(self):
