@@ -104,8 +104,11 @@ class Player:
         self.sword_angle = 90
         self.sword_frame = 0
 
+        self.playerUI = PlayerUI(self)
+
 
     def draw(self):
+        self.playerUI.draw()
         if self.ifRight == 1 : self.rightMove[self.frame].draw(self.x, self.y, 40, 62)
         elif self.ifRight == 0 : self.leftMove[self.frame].draw(self.x, self.y, 40, 62)
         draw_rectangle(self.x - 20, self.y - 31, self.x + 20, self.y + 31)
@@ -195,7 +198,6 @@ def init_world():
     global townNpc; townNpc = NPC()
     global dummy; dummy = Dummy()
     global store; store = Store()
-    global playerUI; playerUI = PlayerUI(player)
 
     global monsters; monsters = []
     monsters.append(dummy)
@@ -209,7 +211,6 @@ def init_world():
     for m in monsters:
         worldObject.append(m)
     worldObject.append(store)
-    worldObject.append(playerUI)
 
 def update_world():
     for object in worldObject:
