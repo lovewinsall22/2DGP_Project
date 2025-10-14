@@ -4,6 +4,10 @@ from pico2d import load_image, draw_rectangle
 
 from dmg_font import DmgText
 
+def check_collision(bb1, bb2):
+    left_a, bottom_a, right_a, top_a = bb1
+    left_b, bottom_b, right_b, top_b = bb2
+    return not (left_a > right_b or right_a < left_b or top_a < bottom_b or bottom_a > top_b)
 
 class Sword:
     def __init__(self, player):
@@ -71,4 +75,4 @@ class Sword:
                 if m not in self.already_hit and check_collision(sword_bb, m.get_bb()):
                     m.hitted(self.player.damage)
                     self.already_hit.add(m)
-                    damage_texts.append(DmgText(m.x, m.y + 30, self.player.damage))
+                    dmg_text.append(DmgText(m.x, m.y + 30, self.player.damage))

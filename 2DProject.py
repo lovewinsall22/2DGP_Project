@@ -185,10 +185,6 @@ def handle_events():
             elif event.key == SDLK_s:  player.dirY += 1
 
 
-def check_collision(bb1, bb2):
-    left_a, bottom_a, right_a, top_a = bb1
-    left_b, bottom_b, right_b, top_b = bb2
-    return not (left_a > right_b or right_a < left_b or top_a < bottom_b or bottom_a > top_b)
 def check_npc_collision():
     left_a, bottom_a, right_a, top_a = player.x - 20, player.y - 31, player.x + 20, player.y + 31
     left_b, bottom_b, right_b, top_b = townNpc.x - 32, townNpc.y - 32, townNpc.x + 32, townNpc.y + 32
