@@ -100,7 +100,7 @@ class Player:
 
     def update(self):
         self.ani_count += 1
-        if self.ani_count % 10 == 0:
+        if self.ani_count % 12 == 0:
             self.sword.update()
             self.frame = (self.frame + 1) % 5
             self.ani_count = 0
