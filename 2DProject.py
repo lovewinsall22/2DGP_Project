@@ -47,6 +47,7 @@ class Player:
         self.level = 1 # 현재 레벨
         self.speed = 5 # 이동 속도
         self.damage = 1000 # 공격력
+        self.gold = 1000 # 골드
 
         self.playerUI = PlayerUI(self)
         self.sword = Sword(self)
@@ -128,8 +129,14 @@ def handle_events():
             elif event.key == SDLK_a:
                 player.dirX -= 1
                 if not player.sword.sword_active: player.ifRight = 0 # 공격중엔 방향전환 X
-            elif event.key == SDLK_w:  player.dirY += 1;
-            elif event.key == SDLK_s:  player.dirY -= 1;
+            elif event.key == SDLK_w:  player.dirY += 1
+            elif event.key == SDLK_s:  player.dirY -= 1
+            elif event.key == SDLK_1 and store.IsOpen:  # 체력포션
+                pass
+            elif event.key == SDLK_2 and store.IsOpen:  # 공격력 강화
+                pass
+            elif event.key == SDLK_3 and store.IsOpen:  # 이동속도 증가
+                pass
             elif event.key == SDLK_SPACE and player.sword.sword_active == False:
                 player.sword.sword_active = True
                 player.sword.already_hit.clear() # 충돌 기록 초기화
