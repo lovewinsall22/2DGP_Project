@@ -20,5 +20,9 @@ class PlayerUI:
 
         self.font.draw(WIDTH - 500, y1 + 50, f'HP: {int(self.player.hp)}/{self.player.max_hp}', (255, 255, 255))
 
+        self.font.draw(WIDTH - 500, y1 + 80,
+                       f'GOLD: {int(self.player.gold)}G',
+                       (255, 215, 0))  # 노란색
+
     def update(self):
         pass
