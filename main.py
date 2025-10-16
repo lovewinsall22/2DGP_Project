@@ -3,38 +3,11 @@ from pico2d import *
 from hit_objects.dummy import Dummy
 from npc import NPC
 from player_ui import PlayerUI
+from portal import Portal
 from store import Store
 from sword import Sword
+from town import Town
 
-class Portal:
-    def __init__(self,stage,x,y):
-        self.image = load_image('resource/portal.png')
-        self.stage = stage
-        self.x , self.y = x, y
-
-    def update(self):
-        pass
-
-    def draw(self):
-        self.image.draw(self.x,self.y,64,64)
-        draw_rectangle(self.x - 32, self.y - 32, self.x + 32, self.y + 32)
-
-    def goto_dungeon1(self,world_object, player):
-        world_object.remove(town)
-        world_object.remove(townNpc)
-        world_object.remove(dummy)
-        world_object.remove(self)
-        player.x, player.y = WIDTH // 2, 100
-
-class Town:
-    def __init__(self):
-        self.image = load_image('resource/town.jpg')
-
-    def draw(self):
-        self.image.draw(WIDTH // 2, HEIGHT // 2, WIDTH, HEIGHT)
-
-    def update(self):
-        pass
 
 class Player:
     def __init__(self):
@@ -100,7 +73,7 @@ def init_world():
     global townNpc; townNpc = NPC()
     global dummy; dummy = Dummy()
     global store; store = Store()
-    global portal; portal = Portal(1,WIDTH // 2 + 15, HEIGHT - 60)
+    global portal; portal = Portal(1, WIDTH // 2 + 15, HEIGHT - 60)
 
     global monsters; monsters = []
     monsters.append(dummy)
