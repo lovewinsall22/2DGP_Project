@@ -48,6 +48,7 @@ class Player:
         self.speed = 5 # 이동 속도
         self.damage = 1000 # 공격력
         self.gold = 1000 # 골드
+        self.hp_potion_count = 0 # 체력포션 개수
 
         self.playerUI = PlayerUI(self)
         self.sword = Sword(self)
@@ -131,19 +132,26 @@ def handle_events():
                 if not player.sword.sword_active: player.ifRight = 0 # 공격중엔 방향전환 X
             elif event.key == SDLK_w:  player.dirY += 1
             elif event.key == SDLK_s:  player.dirY -= 1
-            elif event.key == SDLK_1 and store.IsOpen:  # 체력포션
-                pass
-            elif event.key == SDLK_2 and store.IsOpen:  # 공격력 강화
-                pass
-            elif event.key == SDLK_3 and store.IsOpen:  # 이동속도 증가
-                pass
+            elif store.IsOpen:
+                if event.key == SDLK_1:  # 체력포션
+                    if player.gold < 100: store.player_no_money = True; return
+                    player.gold -= 100
+                    player.hp_potion_count += 1
+                elif event.key == SDLK_2:  # 공격력 강화
+                    if player.gold < 100: store.player_no_money = True; return
+                    player.gold -= 100
+                    player.damage += 100
+                elif event.key == SDLK_3:  # 이동속도 증가
+                    if player.gold < 100: store.player_no_money = True; return
+                    player.gold -= 100
+                    player.speed += 1
             elif event.key == SDLK_SPACE and player.sword.sword_active == False:
                 player.sword.sword_active = True
                 player.sword.already_hit.clear() # 충돌 기록 초기화
                 player.sword.sword_frame = 0
                 if player.ifRight == 0: player.sword.sword_angle = 90
                 else: player.sword.sword_angle = 45 # ??
-            elif event.key == SDLK_l: # 상점 열기
+            if event.key == SDLK_l: # 상점 열기
                 if check_npc_collision():
                     store.IsOpen = not store.IsOpen
         elif event.type == SDL_KEYUP:
