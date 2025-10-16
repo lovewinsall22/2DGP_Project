@@ -16,7 +16,15 @@ class Portal:
         pass
 
     def draw(self):
-        self.image.draw(self.x,self.y,70,70)
+        self.image.draw(self.x,self.y,64,64)
+        draw_rectangle(self.x - 32, self.y - 32, self.x + 32, self.y + 32)
+
+    def goto_dungeon1(self,world_object, player):
+        world_object.remove(town)
+        world_object.remove(townNpc)
+        world_object.remove(dummy)
+        world_object.remove(self)
+        player.x, player.y = WIDTH // 2, 100
 
 class Town:
     def __init__(self):
@@ -165,8 +173,11 @@ def handle_events():
                 if player.ifRight == 0: player.sword.sword_angle = 90
                 else: player.sword.sword_angle = 45 # ??
             if event.key == SDLK_l: # 상점 열기
-                if check_npc_collision():
+                if check_collision(townNpc):
                     store.IsOpen = not store.IsOpen
+                elif check_collision(portal):
+                    portal.goto_dungeon1(worldObject, player)
+
         elif event.type == SDL_KEYUP:
             if event.key == SDLK_d:    player.dirX -= 1
             elif event.key == SDLK_a:  player.dirX += 1
@@ -174,9 +185,9 @@ def handle_events():
             elif event.key == SDLK_s:  player.dirY += 1
 
 
-def check_npc_collision():
+def check_collision(object):
     left_a, bottom_a, right_a, top_a = player.x - 20, player.y - 31, player.x + 20, player.y + 31
-    left_b, bottom_b, right_b, top_b = townNpc.x - 32, townNpc.y - 32, townNpc.x + 32, townNpc.y + 32
+    left_b, bottom_b, right_b, top_b = object.x - 32, object.y - 32, object.x + 32, object.y + 32
 
     if left_a > right_b: return False
     if right_a < left_b: return False
