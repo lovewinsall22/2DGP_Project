@@ -6,6 +6,17 @@ from player_ui import PlayerUI
 from store import Store
 from sword import Sword
 
+class Portal:
+    def __init__(self,stage,x,y):
+        self.image = load_image('resource/portal.png')
+        self.stage = stage
+        self.x , self.y = x, y
+
+    def update(self):
+        pass
+
+    def draw(self):
+        self.image.draw(self.x,self.y,70,70)
 
 class Town:
     def __init__(self):
@@ -81,6 +92,7 @@ def init_world():
     global townNpc; townNpc = NPC()
     global dummy; dummy = Dummy()
     global store; store = Store()
+    global portal; portal = Portal(1,WIDTH // 2 + 15, HEIGHT - 60)
 
     global monsters; monsters = []
     monsters.append(dummy)
@@ -94,6 +106,7 @@ def init_world():
     for m in monsters:
         worldObject.append(m)
     worldObject.append(store)
+    worldObject.append(portal)
 
 def update_world():
     for object in worldObject:
