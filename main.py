@@ -8,8 +8,7 @@ from portal import Portal
 from store import Store
 from sword import Sword
 from town import Town
-
-
+from world import World
 
 
 class Player:
@@ -70,37 +69,36 @@ class Player:
 
 def init_world():
     global running; running = True
-    global worldObject
-    global player; player = Player()
-    global town; town = Town()
-    global dungeon; dungeon = Dungeon()
-    global townNpc; townNpc = NPC()
-    global dummy; dummy = Dummy()
-    global store; store = Store()
-    global portals; portals = []
+    global world, player, town, dungeon, townNpc, dummy, store, portals, monsters, damage_texts
+    world = World()
+    player = Player()
+    town = Town()
+    dungeon = Dungeon()
+    townNpc = NPC()
+    dummy = Dummy()
+    store = Store()
+    portals = []
     portals.append(Portal(99,1, WIDTH // 2 + 15, HEIGHT - 60,dungeon))
     portals.append(Portal(99,2, WIDTH - 80, HEIGHT - 60,dungeon))
     portals.append(Portal(0,3, WIDTH // 2, 100,dungeon))
 
-    global monsters; monsters = []
+    monsters = []
     monsters.append(dummy)
-    global damage_texts; damage_texts = []
+    damage_texts = []
 
 
-    worldObject = []
-    worldObject.append(town)
-    worldObject.append(dungeon)
-    worldObject.append(townNpc)
-    worldObject.append(player)
+    world.add(town, 'background')
+    world.add(dungeon, 'background')
+    world.add(townNpc)
     for m in monsters:
-        worldObject.append(m)
-    worldObject.append(store)
+        world.add(m)
     for p in portals:
-        worldObject.append(p)
+        world.add(p)
+    world.add(store, 'ui')
+    world.add(player)
 
 def update_world():
-    for object in worldObject:
-        object.update()
+    world.update()
 
     player.sword.attack_check(monsters, damage_texts)
 
@@ -111,8 +109,7 @@ def update_world():
 
 def render_world():
     clear_canvas()
-    for object in worldObject:
-        object.draw()
+    world.draw()
 
     for t in damage_texts:
         t.draw()
@@ -159,9 +156,9 @@ def handle_events():
                     store.IsOpen = not store.IsOpen
                 else:
                     for p in portals:
-                        check_collision(p)
-                        p.goto_dungeon1(worldObject, player, dungeon)
-                        return
+                        if check_collision(p):
+                            p.goto_dungeon1(world, player, dungeon)
+                            return
 
         elif event.type == SDL_KEYUP:
             if event.key == SDLK_d:    player.dirX -= 1
