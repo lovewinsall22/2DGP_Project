@@ -77,7 +77,10 @@ def init_world():
     global townNpc; townNpc = NPC()
     global dummy; dummy = Dummy()
     global store; store = Store()
-    global portal; portal = Portal(1, WIDTH // 2 + 15, HEIGHT - 60)
+    global portals; portals = []
+    portals.append(Portal(99,1, WIDTH // 2 + 15, HEIGHT - 60,dungeon))
+    portals.append(Portal(99,2, WIDTH - 80, HEIGHT - 60,dungeon))
+    portals.append(Portal(0,3, WIDTH // 2, 100,dungeon))
 
     global monsters; monsters = []
     monsters.append(dummy)
@@ -92,7 +95,8 @@ def init_world():
     for m in monsters:
         worldObject.append(m)
     worldObject.append(store)
-    worldObject.append(portal)
+    for p in portals:
+        worldObject.append(p)
 
 def update_world():
     for object in worldObject:
@@ -153,8 +157,11 @@ def handle_events():
             if event.key == SDLK_l: # 상점 열기
                 if check_collision(townNpc):
                     store.IsOpen = not store.IsOpen
-                elif check_collision(portal):
-                    portal.goto_dungeon1(worldObject, player, dungeon)
+                else:
+                    for p in portals:
+                        check_collision(p)
+                        p.goto_dungeon1(worldObject, player, dungeon)
+                        return
 
         elif event.type == SDL_KEYUP:
             if event.key == SDLK_d:    player.dirX -= 1
