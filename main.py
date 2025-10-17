@@ -8,6 +8,19 @@ from store import Store
 from sword import Sword
 from town import Town
 
+class Dungeon:
+    def __init__(self,stage_num):
+        self.stage_num = stage_num
+        self.image0 = load_image('resource/dungeon1.jpg')
+        #self.image2 = load_image('resource/dungeon2.jpg')
+        self.dungeon_list = [ self.image0 ]
+
+    def draw(self):
+        #self.dungeon_list[self.stage_num].draw(WIDTH // 2, HEIGHT // 2, WIDTH, HEIGHT)
+        pass
+
+    def update(self):
+        pass
 
 class Player:
     def __init__(self):
@@ -70,6 +83,7 @@ def init_world():
     global worldObject
     global player; player = Player()
     global town; town = Town()
+    global dungeon; dungeon = Dungeon(0)
     global townNpc; townNpc = NPC()
     global dummy; dummy = Dummy()
     global store; store = Store()
@@ -82,6 +96,7 @@ def init_world():
 
     worldObject = []
     worldObject.append(town)
+    worldObject.append(dungeon)
     worldObject.append(townNpc)
     worldObject.append(player)
     for m in monsters:
