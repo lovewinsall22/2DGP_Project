@@ -1,5 +1,6 @@
 from pico2d import *
 
+from dungeon import Dungeon
 from hit_objects.dummy import Dummy
 from npc import NPC
 from player_ui import PlayerUI
@@ -8,19 +9,8 @@ from store import Store
 from sword import Sword
 from town import Town
 
-class Dungeon:
-    def __init__(self,stage_num):
-        self.stage_num = stage_num
-        self.image0 = load_image('resource/dungeon1.jpg')
-        #self.image2 = load_image('resource/dungeon2.jpg')
-        self.dungeon_list = [ self.image0 ]
 
-    def draw(self):
-        #self.dungeon_list[self.stage_num].draw(WIDTH // 2, HEIGHT // 2, WIDTH, HEIGHT)
-        pass
 
-    def update(self):
-        pass
 
 class Player:
     def __init__(self):
@@ -83,7 +73,7 @@ def init_world():
     global worldObject
     global player; player = Player()
     global town; town = Town()
-    global dungeon; dungeon = Dungeon(0)
+    global dungeon; dungeon = Dungeon()
     global townNpc; townNpc = NPC()
     global dummy; dummy = Dummy()
     global store; store = Store()
@@ -164,7 +154,7 @@ def handle_events():
                 if check_collision(townNpc):
                     store.IsOpen = not store.IsOpen
                 elif check_collision(portal):
-                    portal.goto_dungeon1(worldObject, player)
+                    portal.goto_dungeon1(worldObject, player, dungeon)
 
         elif event.type == SDL_KEYUP:
             if event.key == SDLK_d:    player.dirX -= 1
