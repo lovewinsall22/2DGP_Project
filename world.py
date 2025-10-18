@@ -6,6 +6,7 @@ class World:
         self.layers = {
             'background' : [],
             'object' : [],
+            'player' : [],
             'ui' : []
         }
 
@@ -35,6 +36,7 @@ class World:
             bg.draw()
         for e in self.layers['object']:
             e.draw()
+        self.layers['player'][0].draw()
         for ui in self.layers['ui']:
             ui.draw()
         update_canvas()

@@ -95,7 +95,7 @@ def init_world():
     for p in portals:
         world.add(p)
     world.add(store, 'ui')
-    world.add(player)
+    world.add(player, 'player')
 
 def update_world():
     world.update()
