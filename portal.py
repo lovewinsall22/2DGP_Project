@@ -2,6 +2,7 @@ from pico2d import load_image, draw_rectangle
 from town import Town
 from npc import NPC
 from hit_objects.dummy import Dummy
+from hit_objects.monster_base import Golem
 
 WIDTH, HEIGHT = 1280, 720
 
@@ -31,6 +32,10 @@ class Portal:
             dungeon.stage_on = True
             dungeon.cur_dungeon = 0
             player.x, player.y = WIDTH // 2, 100
+            fire_golems = [Golem() for _ in range(10)]
+            for golem in fire_golems:
+                world.add(golem, 'object')
+
         elif self.number == 3:
             self.dungeon.stage_on = False
             self.dungeon.cur_dungeon = 99
