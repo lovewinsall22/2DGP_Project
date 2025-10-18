@@ -21,12 +21,21 @@ class Portal:
             self.image.draw(self.x,self.y,64,64)
             draw_rectangle(self.x - 32, self.y - 32, self.x + 32, self.y + 32)
 
-    def goto_dungeon1(self, world, player, dungeon):
-        # 제거 대상 타입
-        remove_types = (Town, NPC, Dummy)
-        # 모든 레이어에서 해당 타입의 오브젝트 제거
-        for layer in world.layers.values():
-            layer[:] = [obj for obj in layer if not isinstance(obj, remove_types)]
-        dungeon.stage_on = True
-        dungeon.cur_dungeon = 0
-        player.x, player.y = WIDTH // 2, 100
+    def enter_portal(self, world, player, dungeon):
+        if self.number ==1 :
+            # 제거 대상 타입
+            remove_types = (Town, NPC, Dummy)
+            # 모든 레이어에서 해당 타입의 오브젝트 제거
+            for layer in world.layers.values():
+                layer[:] = [obj for obj in layer if not isinstance(obj, remove_types)]
+            dungeon.stage_on = True
+            dungeon.cur_dungeon = 0
+            player.x, player.y = WIDTH // 2, 100
+        elif self.number == 3:
+            self.dungeon.stage_on = False
+            self.dungeon.cur_dungeon = 99
+            player.x, player.y = WIDTH // 2 + 15, HEIGHT - 60
+            world.add(Town(), 'background')
+            world.add(NPC())
+            world.add(Dummy())
+
