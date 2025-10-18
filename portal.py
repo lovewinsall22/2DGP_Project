@@ -23,7 +23,7 @@ class Portal:
 
     def goto_dungeon1(self, world, player, dungeon):
         # 제거 대상 타입
-        remove_types = (Town, NPC, Dummy, Portal)
+        remove_types = (Town, NPC, Dummy)
         # 모든 레이어에서 해당 타입의 오브젝트 제거
         for layer in world.layers.values():
             layer[:] = [obj for obj in layer if not isinstance(obj, remove_types)]
