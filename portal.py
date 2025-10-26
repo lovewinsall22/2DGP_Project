@@ -37,6 +37,9 @@ class Portal:
                 world.add(golem, 'object')
 
         elif self.number == 3:
+            remove_types = Golem
+            for layer in world.layers.values():
+                layer[:] = [obj for obj in layer if not isinstance(obj, remove_types)]
             self.dungeon.stage_on = False
             self.dungeon.cur_dungeon = 99
             player.x, player.y = WIDTH // 2 + 15, HEIGHT - 60
