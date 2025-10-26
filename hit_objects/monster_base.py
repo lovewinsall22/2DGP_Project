@@ -63,13 +63,13 @@ class Golem(Monster):
             if self.hit_timer <= 0:
                 self.is_hit = False
                 self.flash_cycle = 0
-
-        dx = self.player.x - self.x
-        dy = self.player.y - self.y
-        distance = sqrt(dx * dx + dy * dy)
-        if distance > self.attack_range:
-            self.x += self.speed * (dx / distance)
-            self.y += self.speed * (dy / distance)
+        else:
+            dx = self.player.x - self.x
+            dy = self.player.y - self.y
+            distance = sqrt(dx * dx + dy * dy)
+            if distance > self.attack_range:
+                self.x += self.speed * (dx / distance)
+                self.y += self.speed * (dy / distance)
 
     def get_bb(self):
         return self.x - 32, self.y - 32, self.x + 32, self.y + 32
