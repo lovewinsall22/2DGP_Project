@@ -24,7 +24,7 @@ class Golem(Monster):
             Golem.image = load_image('resource/l_golem.png')
         self.frame = randint(0,6)
         self.speed = 2
-
+        self.anicount = 0
 
 
     def draw(self):
@@ -32,5 +32,7 @@ class Golem(Monster):
             Golem.image.clip_draw(self.frame * 35, 0, 35, 35, self.x, self.y)
 
     def update(self):
-        if self.alive == True:
+        self.anicount += 1
+        if self.alive == True and self.anicount % 10 == 0:
             self.frame = (self.frame + 1) % 7
+            self.anicount = 0
