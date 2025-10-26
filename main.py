@@ -157,7 +157,7 @@ def handle_events():
                 else:
                     for p in portals:
                         if check_collision(p):
-                            p.enter_portal(world, player, dungeon)
+                            p.enter_portal(world, player, dungeon, monsters)
                             return
 
         elif event.type == SDL_KEYUP:

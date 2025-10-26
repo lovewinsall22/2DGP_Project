@@ -22,7 +22,7 @@ class Portal:
             self.image.draw(self.x,self.y,64,64)
             draw_rectangle(self.x - 32, self.y - 32, self.x + 32, self.y + 32)
 
-    def enter_portal(self, world, player, dungeon):
+    def enter_portal(self, world, player, dungeon,monsters):
         if self.number ==1 :
             # 제거 대상 타입
             remove_types = (Town, NPC, Dummy)
@@ -32,7 +32,8 @@ class Portal:
             dungeon.stage_on = True
             dungeon.cur_dungeon = 0
             player.x, player.y = WIDTH // 2, 100
-            fire_golems = [Golem() for _ in range(10)]
+            fire_golems = [Golem(player) for _ in range(10)]
+            monsters += fire_golems
             for golem in fire_golems:
                 world.add(golem, 'object')
 
