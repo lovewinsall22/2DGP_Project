@@ -75,60 +75,59 @@ def handle_events():
         elif event.type == SDL_KEYDOWN:
             if event.key == SDLK_ESCAPE: #
                 game_framework.change_mode(title_mode)
-            elif event.key == SDLK_d:
-                player.dirX += 1
-                if not player.sword.sword_active: player.ifRight = 1 # 공격중엔 방향전환 X
-            elif event.key == SDLK_a:
-                player.dirX -= 1
-                if not player.sword.sword_active: player.ifRight = 0 # 공격중엔 방향전환 X
-            elif event.key == SDLK_w:  player.dirY += 1
-            elif event.key == SDLK_s:  player.dirY -= 1
-            elif store.IsOpen:
-                if event.key == SDLK_1:  # 체력포션
-                    if player.gold < 100: store.player_no_money = True; return
-                    player.gold -= 100
-                    player.hp_potion_count += 1
-                elif event.key == SDLK_2:  # 공격력 강화
-                    if player.gold < 100: store.player_no_money = True; return
-                    player.gold -= 100
-                    player.damage += 100
-                elif event.key == SDLK_3:  # 이동속도 증가
-                    if player.gold < 100: store.player_no_money = True; return
-                    player.gold -= 100
-                    player.speed += 1
-            elif event.key == SDLK_SPACE and player.sword.sword_active == False:
-                player.sword.sword_active = True
-                player.sword.already_hit.clear() # 충돌 기록 초기화
-                player.sword.sword_frame = 0
-                if player.ifRight == 0: player.sword.sword_angle = 90
-                else: player.sword.sword_angle = 45 # ??
-            if event.key == SDLK_l: # 상점 열기
-                if check_collision(townNpc):
-                    store.IsOpen = not store.IsOpen
-                else:
-                    for p in portals:
-                        if check_collision(p):
-                            p.enter_portal(world, player, dungeon, monsters)
-                            return
+            else: player.handle_event(event)
 
+
+
+
+'''
+elif event.key == SDLK_d:
+player.dirX += 1
+if not player.sword.sword_active:
+    player.ifRight = 1  # 공격중엔 방향전환 X
+elif event.key == SDLK_a:
+    player.dirX -= 1
+if not player.sword.sword_active:
+    player.ifRight = 0  # 공격중엔 방향전환 X
+elif event.key == SDLK_w:
+    player.dirY += 1
+elif event.key == SDLK_s:
+    player.dirY -= 1
+elif store.IsOpen:
+    if event.key == SDLK_1:  # 체력포션
+        if player.gold < 100: store.player_no_money = True; return
+        player.gold -= 100
+        player.hp_potion_count += 1
+    elif event.key == SDLK_2:  # 공격력 강화
+        if player.gold < 100: store.player_no_money = True; return
+        player.gold -= 100
+        player.damage += 100
+    elif event.key == SDLK_3:  # 이동속도 증가
+        if player.gold < 100: store.player_no_money = True; return
+        player.gold -= 100
+        player.speed += 1
+    elif event.key == SDLK_SPACE and player.sword.sword_active == False:
+    player.sword.sword_active = True
+player.sword.already_hit.clear()  # 충돌 기록 초기화
+player.sword.sword_frame = 0
+if player.ifRight == 0:
+    player.sword.sword_angle = 90
+else:
+    player.sword.sword_angle = 45  # ??
+if event.key == SDLK_l:  # 상점 열기
+    if check_collision(townNpc):
+        store.IsOpen = not store.IsOpen
+    else:
+        for p in portals:
+            if check_collision(p):
+                p.enter_portal(world, player, dungeon, monsters)
+                return 
+                
         elif event.type == SDL_KEYUP:
             if event.key == SDLK_d:    player.dirX -= 1
             elif event.key == SDLK_a:  player.dirX += 1
             elif event.key == SDLK_w:  player.dirY -= 1
-            elif event.key == SDLK_s:  player.dirY += 1
-
-
-def check_collision(object):
-    left_a, bottom_a, right_a, top_a = player.x - 20, player.y - 31, player.x + 20, player.y + 31
-    left_b, bottom_b, right_b, top_b = object.x - 32, object.y - 32, object.x + 32, object.y + 32
-
-    if left_a > right_b: return False
-    if right_a < left_b: return False
-    if top_a < bottom_b: return False
-    if bottom_a > top_b: return False
-
-    return True
-
+            elif event.key == SDLK_s:  player.dirY += 1 '''
 
 
 
