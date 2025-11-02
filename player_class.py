@@ -1,6 +1,6 @@
 from pico2d import load_image, draw_rectangle
 
-from main import WIDTH, HEIGHT
+WIDTH, HEIGHT = 1280, 720
 from player_ui import PlayerUI
 from sword import Sword
 
