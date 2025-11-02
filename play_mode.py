@@ -44,7 +44,7 @@ def init():
     world.add(player, 'player')
 
 def finish():
-    pass
+    world.clear()
 
 def update():
     world.update()
