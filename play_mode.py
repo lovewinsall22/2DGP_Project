@@ -1,4 +1,6 @@
 from pico2d import *
+import game_framework
+
 WIDTH, HEIGHT = 1280, 720
 character_size = 64
 from dungeon import Dungeon
@@ -10,7 +12,7 @@ from store import Store
 from town import Town
 from world import World
 
-running = True
+#running = True
 
 def init():
     global world, player, town, dungeon, townNpc, dummy, store, portals, monsters, damage_texts
@@ -63,14 +65,17 @@ def draw():
     update_canvas()
 
 def handle_events():
-    global running
+    #global running
     global player
     events = get_events() # 이벤트 받아오기
     for event in events:
         if event.type == SDL_QUIT: # 창 닫기 버튼
-            running = False
+            #running = False
+            game_framework.quit()
         elif event.type == SDL_KEYDOWN:
-            if event.key == SDLK_ESCAPE: running = False # esc
+            if event.key == SDLK_ESCAPE: #
+                #running = False # esc
+                game_framework.quit()
             elif event.key == SDLK_d:
                 player.dirX += 1
                 if not player.sword.sword_active: player.ifRight = 1 # 공격중엔 방향전환 X
