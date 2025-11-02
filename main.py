@@ -1,15 +1,15 @@
 from pico2d import *
-import play_mode
+import logo_mode
 
 WIDTH, HEIGHT = 1280, 720
 character_size = 64
 
 open_canvas(WIDTH, HEIGHT)
-play_mode.init()
-while play_mode.running:
-    play_mode.handle_events()
-    play_mode.update()
-    play_mode.draw()
+logo_mode.init()
+while logo_mode.running:
+    logo_mode.handle_events()
+    logo_mode.update()
+    logo_mode.draw()
     delay(0.01)
-play_mode.finish()
+logo_mode.finish()
 close_canvas()
