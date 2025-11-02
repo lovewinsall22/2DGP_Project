@@ -7,8 +7,8 @@ class Dungeon:
         self.stage_on = False
         self.cur_dungeon = 99
         self.image0 = load_image('resource/dungeon1.jpg')
-        self.image1 = load_image('resource/dungeon2.jpg')
-        self.dungeon_list = [ self.image0, self.image1 ]
+        #self.image1 = load_image('resource/dungeon2.jpg')
+        self.dungeon_list = [ self.image0]#, self.image1 ]
 
     def draw(self):
         if self.stage_on:
