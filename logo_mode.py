@@ -1,6 +1,5 @@
 from pico2d import *
-import game_framework
-
+import game_framework, title_mode
 WIDTH, HEIGHT = 1280, 720
 
 image = None
@@ -15,7 +14,7 @@ def init():
 
 def update():
     # 시간 체크
-    if get_time() - logo_start_time > 2: game_framework.quit()
+    if get_time() - logo_start_time > 2: game_framework.change_mode(title_mode)
 
 def draw():
     # 로고 이미지 그리기

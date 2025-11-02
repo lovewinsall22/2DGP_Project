@@ -1,5 +1,5 @@
 from pico2d import *
-import game_framework
+import game_framework, title_mode
 
 WIDTH, HEIGHT = 1280, 720
 character_size = 64
@@ -74,8 +74,7 @@ def handle_events():
             game_framework.quit()
         elif event.type == SDL_KEYDOWN:
             if event.key == SDLK_ESCAPE: #
-                #running = False # esc
-                game_framework.quit()
+                game_framework.change_mode(title_mode)
             elif event.key == SDLK_d:
                 player.dirX += 1
                 if not player.sword.sword_active: player.ifRight = 1 # 공격중엔 방향전환 X
