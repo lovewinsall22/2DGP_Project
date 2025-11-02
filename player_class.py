@@ -1,9 +1,9 @@
 from pico2d import load_image, draw_rectangle
+from sdl2 import SDL_KEYDOWN, SDL_KEYUP, SDLK_a, SDLK_d, SDLK_w, SDLK_s, SDLK_SPACE, SDLK_1, SDLK_2, SDLK_3, SDLK_l
 
 WIDTH, HEIGHT = 1280, 720
 from player_ui import PlayerUI
 from sword import Sword
-
 
 class Player:
     def __init__(self):
@@ -25,7 +25,7 @@ class Player:
 
         self.x, self.y = WIDTH / 2, HEIGHT / 2 # 플레이어 초기 좌표
         self.dirX,self.dirY = 0, 0 # 이동 방향
-        self.ifRight = 1 # 1: 오른쪽, 0: 왼쪽
+        self.ifRight = 1 # 1: 오른쪽, -1: 왼쪽
 
         self.ani_count = 0 # 기본 애니메이션 프레임 조절을 위해 ,, 카운트
         self.frame = 0 # 기본 애니메이션 프레임
@@ -41,13 +41,15 @@ class Player:
         self.playerUI = PlayerUI(self)
         self.sword = Sword(self)
 
-    def draw(self):
+        self.pressed = set()
 
+    def draw(self):
         if self.ifRight == 1 : self.rightMove[self.frame].draw(self.x, self.y, 40, 62)
         elif self.ifRight == 0 : self.leftMove[self.frame].draw(self.x, self.y, 40, 62)
         draw_rectangle(self.x - 20, self.y - 31, self.x + 20, self.y + 31)
         self.playerUI.draw()
         self.sword.draw()
+        self.playerUI.draw()
 
     def update(self):
         self.ani_count += 1
@@ -58,3 +60,30 @@ class Player:
         self.x += self.dirX * self.speed
         self.y += self.dirY * self.speed
         self.playerUI.update()
+
+
+    def handle_event(self, event):
+        if event.type == SDL_KEYUP:
+            if event.key == SDLK_d:    self.dirX -= 1
+            elif event.key == SDLK_a:  self.dirX += 1
+            elif event.key == SDLK_w:  self.dirY -= 1
+            elif event.key == SDLK_s:  self.dirY += 1
+        elif event.type == SDL_KEYDOWN:
+            if event.key == SDLK_d:
+                self.dirX += 1
+                if not self.sword.sword_active: self.ifRight = 1  # 공격중엔 방향전환 X
+            elif event.key == SDLK_a:
+                self.dirX -= 1
+                if not self.sword.sword_active: self.ifRight = 0  # 공격중엔 방향전환 X
+            elif event.key == SDLK_w:
+                self.dirY += 1
+            elif event.key == SDLK_s:
+                self.dirY -= 1
+            elif event.key == SDLK_SPACE and self.sword.sword_active == False:
+                self.sword.sword_active = True
+                self.sword.already_hit.clear()  # 충돌 기록 초기
+                self.sword.sword_frame = 0
+                if self.ifRight == 0:
+                    self.sword.sword_angle = 90
+                else:
+                    self.sword.sword_angle = 45  # ??
