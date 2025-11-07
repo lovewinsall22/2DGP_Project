@@ -20,3 +20,7 @@ class NPC:
 
     def get_bb(self):
         return self.x - 32, self.y - 32, self.x + 32, self.y + 32
+
+    def handle_collision(self, group, other):
+        if group == 'player:townNpc':
+            pass
