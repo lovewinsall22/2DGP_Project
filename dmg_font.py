@@ -10,7 +10,7 @@ class DmgText:
         self.timer = 30
 
     def update(self):
-        self.y += 5
+        self.y += 1
         self.timer -= 1
         return self.timer > 0
 
