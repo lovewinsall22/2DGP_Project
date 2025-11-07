@@ -1,7 +1,5 @@
 import math
-
 from pico2d import load_image, draw_rectangle
-
 from dmg_font import DmgText
 
 def check_collision(bb1, bb2):
@@ -26,6 +24,7 @@ class Sword:
         self.sword_active = False # 공격중 처리 => 공격중일시 다시 입력 불가
         self.sword_angle = 90
         self.sword_frame = 0 # 검 애니메이션 프레임
+        self.ani_count = 0
 
     def draw(self):
         if self.sword_active:
@@ -35,25 +34,25 @@ class Sword:
                 if self.player.ifRight == 0: self.L_swordAni[self.sword_frame].draw(sx, sy, 40, 10)
                 else: self.R_swordAni[self.sword_frame].draw(sx, sy, 40, 10)
                 draw_rectangle(sx-20, sy-5, sx+20, sy+5)
-            else:
+            elif self.sword_frame == 0 or self.sword_frame == 2:
                 if self.player.ifRight == 0: self.L_swordAni[self.sword_frame].draw(sx, sy, 32, 32)
                 else: self.R_swordAni[self.sword_frame].draw(sx, sy, 32, 32)
                 draw_rectangle(sx-16, sy-16, sx+16, sy+16)
 
     def update(self):
-        if self.sword_active == True:
-            self.player.speed = 2
-            if self.player.ifRight == 0:
-                self.sword_angle += 45
-                self.sword_frame = (self.sword_frame + 1) % 3
-            elif self.player.ifRight == 1:
-                self.sword_angle -= 45
+        self.ani_count += 1
+        if self.ani_count == 20:
+            self.ani_count = 0
+            if self.sword_active == True:
+                if self.player.ifRight == 0:
+                    self.sword_angle += 45
+                elif self.player.ifRight == 1:
+                    self.sword_angle -= 45
                 self.sword_frame = (self.sword_frame + 1) % 3
 
-            if self.sword_frame == 0:
-                self.sword_active = False
-                self.sword_angle = 90
-                self.player.speed = 5
+                if self.sword_frame == 0:
+                    self.sword_active = False
+                    self.sword_angle = 90
 
     def get_sword_bb(self): # 검 히트박스 얻기
         if self.sword_active:
