@@ -32,8 +32,8 @@ class Player:
         #self.attack_l = load_image('resource/attack_l.png')
 
         self.x, self.y = WIDTH / 2, HEIGHT / 2 # 플레이어 초기 좌표
-        self.dirX,self.dirY = 0, 0 # 이동 방향
-        self.ifRight = 1 # 1: 오른쪽, -1: 왼쪽
+        self.dirX,self.dirY = 0, 0 # 이동 방향 1 <--> -1
+        self.ifRight = 1 # 1: 오른쪽, 0: 왼쪽
 
         self.ani_count = 0 # 기본 애니메이션 프레임 조절을 위해 ,, 카운트
         self.frame = 0 # 기본 애니메이션 프레임
