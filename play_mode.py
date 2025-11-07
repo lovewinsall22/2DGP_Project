@@ -53,9 +53,9 @@ def finish():
 
 def update():
     world.update()
+    world.handle_collisions()
 
     player.sword.attack_check(monsters, damage_texts)
-
     # 데미지 텍스트 갱신
     for t in damage_texts[:]:
         if not t.update():
