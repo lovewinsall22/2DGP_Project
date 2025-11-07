@@ -26,6 +26,7 @@ def init():
     game_world.add_collision_pair('player:townNpc', player, townNpc)
     dummy = Dummy()
     game_world.add_collision_pair('player:dummy', player, dummy)
+    game_world.add_collision_pair('sword:dummy', None , dummy)
     store = Store()
     portals = []
     portals.append(Portal(99,1, WIDTH // 2 + 15, HEIGHT - 60,dungeon))
