@@ -10,52 +10,50 @@ from player_class import Player
 from portal import Portal
 from store import Store
 from town import Town
-from world import World
+from world import game_world
 
 #running = True
+monsters = []
+damage_texts = []
 
 def init():
-    global world, player, town, dungeon, townNpc, dummy, store, portals, monsters, damage_texts
-    world = World()
+    global player, town, dungeon, townNpc, dummy, store, portals, monsters, damage_texts
 
     player = Player()
     town = Town()
     dungeon = Dungeon()
     townNpc = NPC()
-    world.add_collision_pair('player:townNpc', player, townNpc)
+    game_world.add_collision_pair('player:townNpc', player, townNpc)
     dummy = Dummy()
-    world.add_collision_pair('player:dummy', player, dummy)
+    game_world.add_collision_pair('player:dummy', player, dummy)
     store = Store()
     portals = []
     portals.append(Portal(99,1, WIDTH // 2 + 15, HEIGHT - 60,dungeon))
     portals.append(Portal(99,2, WIDTH - 80, HEIGHT - 60,dungeon))
     portals.append(Portal(0,3, WIDTH // 2, 100,dungeon))
     for p in portals:
-        world.add_collision_pair('player:portal', player,p)
+        game_world.add_collision_pair('player:portal', player,p)
 
-    monsters = []
     monsters.append(dummy)
-    damage_texts = []
 
 
-    world.add(town, 'background')
-    world.add(dungeon, 'background')
-    world.add(townNpc)
+    game_world.add(town, 'background')
+    game_world.add(dungeon, 'background')
+    game_world.add(townNpc)
     for m in monsters:
-        world.add(m)
+        game_world.add(m)
     for p in portals:
-        world.add(p)
-    world.add(store, 'ui')
-    world.add(player, 'player')
+        game_world.add(p)
+    game_world.add(store, 'ui')
+    game_world.add(player, 'player')
 
 def finish():
-    world.clear()
+    game_world.clear()
 
 def update():
-    world.update()
-    world.handle_collisions()
+    game_world.update()
+    game_world.handle_collisions()
 
-    player.sword.attack_check(monsters, damage_texts)
     # 데미지 텍스트 갱신
     for t in damage_texts[:]:
         if not t.update():
@@ -63,7 +61,7 @@ def update():
 
 def draw():
     clear_canvas()
-    world.draw()
+    game_world.draw()
 
     for t in damage_texts:
         t.draw()

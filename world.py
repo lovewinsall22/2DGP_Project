@@ -74,3 +74,4 @@ class World:
                         b.handle_collision(group, a)
                         # group으로 충돌 사유를 알려주는것 !!!!
 
+game_world = World()
