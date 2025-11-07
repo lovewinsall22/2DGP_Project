@@ -5,6 +5,7 @@ WIDTH, HEIGHT = 1280, 720
 from player_ui import PlayerUI
 from sword import Sword
 import game_framework
+import world
 
 PIXEL_PER_METER = (1 / 0.04) # 1픽셀당 4cm => 플레이어 대략 120cm
 RUN_SPEED_KMPH = 20.0 # Km / Hour
@@ -52,6 +53,8 @@ class Player:
 
         self.playerUI = PlayerUI(self)
         self.sword = Sword(self)
+        world.add_collision_pair('sword:dummy', self.sword, None)
+        world.add_collision_pair('sword:golem', self.sword, None)
 
         self.pressed = set()
 
