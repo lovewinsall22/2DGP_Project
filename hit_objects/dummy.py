@@ -23,9 +23,6 @@ class Dummy(Monster):
     def get_bb(self):
         return self.x - 32, self.y - 32, self.x + 32, self.y + 32
 
-    def hitted(self, damage):
-        self.hp -= damage
-        print(f"Dummy Hp : {self.hp}")
 
     def handle_collision(self, group, other):
         if group == 'sword:dummy':

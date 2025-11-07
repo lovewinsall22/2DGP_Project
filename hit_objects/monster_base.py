@@ -27,13 +27,11 @@ class Monster:
     def update(self):
         pass
 
-    def hitted(self, damage):
-        if self.alive:
-            self.is_hit = True
-            self.hit_timer = 30  # 약 0.6초간 피격 효과 유지 (30프레임 기준)
-        self.hp -= damage
-        if self.hp <= 0:
-            self.alive = False
+    def handle_collision(self, group, other):
+        if group == 'sword:dummy':
+            self.hp -= other.damage
+        elif group == 'sword:golem':
+            self.hp -= other.damage
 
 
 class Golem(Monster):
