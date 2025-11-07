@@ -37,6 +37,7 @@ class Portal:
             for golem in fire_golems:
                 world.add(golem, 'object')
                 world.add_collision_pair('player:golem', player, golem)
+                world.add_collision_pair('sword:golem', None, golem)
 
         elif self.number == 3:
             remove_types = Golem
@@ -51,4 +52,8 @@ class Portal:
 
     def get_bb(self):
         return self.x - 32, self.y - 32, self.x + 32, self.y + 32
+
+    def handle_collision(self, group, other):
+        if group == 'player:portal':
+            pass
 

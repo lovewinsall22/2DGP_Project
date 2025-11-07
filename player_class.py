@@ -106,4 +106,6 @@ class Player:
     def handle_collision(self, group, other):
         if group == 'player:townNpc':
             pass
+        elif group == 'player:portal':
+            pass
 

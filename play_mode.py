@@ -84,7 +84,7 @@ def handle_events():
             else:
                 for p in portals:
                     if check_collision(p):
-                        p.enter_portal(world, player, dungeon, monsters)
+                        p.enter_portal(game_world, player, dungeon, monsters)
                         return
         elif event.type == SDL_KEYDOWN and SDLK_1 and store.IsOpen:
             if player.gold < 100: store.player_no_money = True; return
