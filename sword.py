@@ -1,11 +1,7 @@
 import math
 from pico2d import load_image, draw_rectangle
-from dmg_font import DmgText
+from dmg_font import DmgText, damage_texts
 
-def check_collision(bb1, bb2):
-    left_a, bottom_a, right_a, top_a = bb1
-    left_b, bottom_b, right_b, top_b = bb2
-    return not (left_a > right_b or right_a < left_b or top_a < bottom_b or bottom_a > top_b)
 
 class Sword:
     def __init__(self, player):
@@ -19,6 +15,7 @@ class Sword:
         self.R_swordAni = [self.R_sword1, self.R_sword2, self.R_sword3]
 
         self.player = player
+        self.damage = player.damage
         self.already_hit = set() # 충돌처리된 몬스터 기록
         self.attack_hit = False  # 충돌처리 한번
         self.sword_active = False # 공격중 처리 => 공격중일시 다시 입력 불가
@@ -54,24 +51,19 @@ class Sword:
                     self.sword_active = False
                     self.sword_angle = 90
 
-    def get_sword_bb(self): # 검 히트박스 얻기
-        if self.sword_active:
-            sx = self.player.x + 40 * math.cos(self.sword_angle)
-            sy = self.player.y + 40 * math.sin(self.sword_angle)
+    def get_bb(self): # 검 히트박스 얻기
+        sx = self.player.x + 40 * math.cos(self.sword_angle)
+        sy = self.player.y + 40 * math.sin(self.sword_angle)
 
-            if self.sword_frame == 1:
-                return sx - 20, sy - 5, sx + 20, sy + 5
-            else:
-                return sx - 16, sy - 16, sx + 16, sy + 16
-        return None
+        if self.sword_frame == 1:
+            return sx - 20, sy - 5, sx + 20, sy + 5
+        else:
+            return sx - 16, sy - 16, sx + 16, sy + 16
 
-    def attack_check(self,monsters,dmg_text):
-        if not self.sword_active:
-            return
-        sword_bb = self.get_sword_bb()
-        if sword_bb:
-            for m in monsters:
-                if m not in self.already_hit and check_collision(sword_bb, m.get_bb()):
-                    m.hitted(self.player.damage)
-                    self.already_hit.add(m)
-                    dmg_text.append(DmgText(m.x, m.y + 30, self.player.damage))
+    def handle_collision(self, group, other):
+        if group == 'sword:dummy':
+            if not self.sword_active:
+                return
+            if other not in self.already_hit:
+                self.already_hit.add(other)
+                damage_texts.append(DmgText(other.x, other.y + 30, self.damage))

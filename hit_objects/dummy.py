@@ -26,3 +26,7 @@ class Dummy(Monster):
     def hitted(self, damage):
         self.hp -= damage
         print(f"Dummy Hp : {self.hp}")
+
+    def handle_collision(self, group, other):
+        if group == 'sword:dummy':
+            self.hp -= other.damage
