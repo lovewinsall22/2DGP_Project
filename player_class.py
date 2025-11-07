@@ -5,6 +5,13 @@ WIDTH, HEIGHT = 1280, 720
 from player_ui import PlayerUI
 from sword import Sword
 
+PIXEL_PER_METER = (1 / 0.04) # 1픽셀당 4cm => 플레이어 대략 120cm
+RUN_SPEED_KMPH = 20.0 # Km / Hour
+RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
+RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
+
+
 class Player:
     def __init__(self):
         self.right1 = load_image('resource/white_r_1.png')
