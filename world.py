@@ -40,3 +40,17 @@ class World:
         for ui in self.layers['ui']:
             ui.draw()
         update_canvas()
+
+    def collide(a, b):
+        # 튜플 반환
+        left_a, bottom_a, right_a, top_a = a.get_bb()  # a의 bb
+        left_b, bottom_b, right_b, top_b = b.get_bb()  # b의 bb
+
+        # 충돌되지 않는경우 먼저 검사 후 False반환
+        if left_a > right_b: return False
+        if right_a < left_b: return False
+        if top_a < bottom_b: return False
+        if bottom_a > top_b: return False
+
+        # 위에서 걸러지지 않으면 충돌 발생 !
+        return True
