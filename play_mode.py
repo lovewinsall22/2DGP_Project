@@ -11,13 +11,13 @@ from portal import Portal
 from store import Store
 from town import Town
 from world import game_world
+from dmg_font import DmgText, damage_texts
 
 #running = True
 monsters = []
-damage_texts = []
 
 def init():
-    global player, town, dungeon, townNpc, dummy, store, portals, monsters, damage_texts
+    global player, town, dungeon, townNpc, dummy, store, portals, monsters
 
     player = Player()
     town = Town()

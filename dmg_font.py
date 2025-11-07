@@ -1,5 +1,6 @@
 from pico2d import load_font
 
+damage_texts = []
 
 class DmgText:
     def __init__(self,x,y,damage):
