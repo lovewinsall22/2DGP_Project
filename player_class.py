@@ -4,6 +4,7 @@ from sdl2 import SDL_KEYDOWN, SDL_KEYUP, SDLK_a, SDLK_d, SDLK_w, SDLK_s, SDLK_SP
 WIDTH, HEIGHT = 1280, 720
 from player_ui import PlayerUI
 from sword import Sword
+import game_framework
 
 PIXEL_PER_METER = (1 / 0.04) # 1픽셀당 4cm => 플레이어 대략 120cm
 RUN_SPEED_KMPH = 20.0 # Km / Hour
@@ -40,7 +41,7 @@ class Player:
         self.max_hp = 100 # 최대 체력
         self.hp = 100 # 현재 체력
         self.level = 1 # 현재 레벨
-        self.speed = 5 # 이동 속도
+        #self.speed = 5 # 이동 속도
         self.damage = 1000 # 공격력
         self.gold = 1000 # 골드
         self.hp_potion_count = 0 # 체력포션 개수
@@ -64,28 +65,28 @@ class Player:
             self.sword.update()
             self.frame = (self.frame + 1) % 5
             self.ani_count = 0
-        self.x += self.dirX * self.speed
-        self.y += self.dirY * self.speed
+        self.x += self.dirX * RUN_SPEED_PPS * game_framework.frame_time
+        self.y += self.dirY * RUN_SPEED_PPS * game_framework.frame_time
         self.playerUI.update()
 
 
     def handle_event(self, event):
         if event.type == SDL_KEYUP:
-            if event.key == SDLK_d:    self.dirX -= 1
-            elif event.key == SDLK_a:  self.dirX += 1
-            elif event.key == SDLK_w:  self.dirY -= 1
-            elif event.key == SDLK_s:  self.dirY += 1
+            if event.key == SDLK_d:  self.dirX = 0
+            if event.key == SDLK_a:  self.dirX = 0
+            if event.key == SDLK_w:  self.dirY = 0
+            if event.key == SDLK_s:  self.dirY = 0
         elif event.type == SDL_KEYDOWN:
             if event.key == SDLK_d:
-                self.dirX += 1
+                self.dirX = 1
                 if not self.sword.sword_active: self.ifRight = 1  # 공격중엔 방향전환 X
             elif event.key == SDLK_a:
-                self.dirX -= 1
+                self.dirX = -1
                 if not self.sword.sword_active: self.ifRight = 0  # 공격중엔 방향전환 X
             elif event.key == SDLK_w:
-                self.dirY += 1
+                self.dirY = 1
             elif event.key == SDLK_s:
-                self.dirY -= 1
+                self.dirY = -1
             elif event.key == SDLK_SPACE and self.sword.sword_active == False:
                 self.sword.sword_active = True
                 self.sword.already_hit.clear()  # 충돌 기록 초기
