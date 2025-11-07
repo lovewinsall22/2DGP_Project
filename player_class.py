@@ -12,6 +12,10 @@ RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
+FRAMES_PER_ACTION = 5 # 5개 애니메이션
+TIME_PER_ACTION = 0.5 # #액션 한번당 0.5초
+ACTION_PER_TIME = 1.0 / TIME_PER_ACTION # 초당 2회 액션
+
 
 class Player:
     def __init__(self):
@@ -35,7 +39,7 @@ class Player:
         self.dirX,self.dirY = 0, 0 # 이동 방향 1 <--> -1
         self.ifRight = 1 # 1: 오른쪽, 0: 왼쪽
 
-        self.ani_count = 0 # 기본 애니메이션 프레임 조절을 위해 ,, 카운트
+        #self.ani_count = 0 # 기본 애니메이션 프레임 조절을 위해 ,, 카운트
         self.frame = 0 # 기본 애니메이션 프레임
 
         self.max_hp = 100 # 최대 체력
@@ -52,19 +56,16 @@ class Player:
         self.pressed = set()
 
     def draw(self):
-        if self.ifRight == 1 : self.rightMove[self.frame].draw(self.x, self.y, 40, 62)
-        elif self.ifRight == 0 : self.leftMove[self.frame].draw(self.x, self.y, 40, 62)
+        if self.ifRight == 1 : self.rightMove[int(self.frame)].draw(self.x, self.y, 40, 62)
+        elif self.ifRight == 0 : self.leftMove[int(self.frame)].draw(self.x, self.y, 40, 62)
         draw_rectangle(self.x - 20, self.y - 31, self.x + 20, self.y + 31)
         self.playerUI.draw()
         self.sword.draw()
         self.playerUI.draw()
 
     def update(self):
-        self.ani_count += 1
-        if self.ani_count % 12 == 0:
-            self.sword.update()
-            self.frame = (self.frame + 1) % 5
-            self.ani_count = 0
+        self.sword.update()
+        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 5
         self.x += self.dirX * RUN_SPEED_PPS * game_framework.frame_time
         self.y += self.dirY * RUN_SPEED_PPS * game_framework.frame_time
         self.playerUI.update()
