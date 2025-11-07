@@ -1,7 +1,12 @@
 from random import randint
 from pico2d import load_image
 from math import sqrt
+import game_framework
 WIDTH, HEIGHT = 1280, 720
+
+FRAMES_PER_ACTION = 5 # 5개 애니메이션
+TIME_PER_ACTION = 0.5 # #액션 한번당 0.5초
+ACTION_PER_TIME = 1.0 / TIME_PER_ACTION # 초당 2회 액션
 
 class Monster:
     def __init__(self, x, y, hp, damage,player = None):
@@ -39,7 +44,6 @@ class Golem(Monster):
             Golem.image = load_image('resource/l_golem.png')
         self.frame = randint(0,6)
         self.speed = 2
-        self.anicount = 0
 
         self.attack_range = 50
 
@@ -50,13 +54,11 @@ class Golem(Monster):
                 self.flash_cycle += 1
                 if (self.flash_cycle // 3) % 2 == 0:
                     return  # 3프레임마다 안 보이게
-            Golem.image.clip_draw(self.frame * 35, 0, 35, 35, self.x, self.y)
+            Golem.image.clip_draw(int(self.frame) * 35, 0, 35, 35, self.x, self.y)
 
     def update(self):
-        self.anicount += 1
-        if self.alive == True and self.anicount % 10 == 0:
-            self.frame = (self.frame + 1) % 7
-            self.anicount = 0
+        if self.alive:
+            self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 7
 
         if self.is_hit:
             self.hit_timer -= 1
