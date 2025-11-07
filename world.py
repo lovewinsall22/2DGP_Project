@@ -42,7 +42,7 @@ class World:
             ui.draw()
         update_canvas()
 
-    def collide(a, b):
+    def collide(self,a, b):
         # 튜플 반환
         left_a, bottom_a, right_a, top_a = a.get_bb()  # a의 bb
         left_b, bottom_b, right_b, top_b = b.get_bb()  # b의 bb
@@ -64,4 +64,13 @@ class World:
 
         if a: self.collision_pairs[group][0].append(a)
         if b: self.collision_pairs[group][1].append(b)
+
+    def handle_collisions(self):
+        for group, pairs in self.collision_pairs.items():  # 키 벨류 쌍으로 반환
+            for a in pairs[0]:
+                for b in pairs[1]:
+                    if self.collide(a, b):
+                        a.handle_collision(group, b)
+                        b.handle_collision(group, a)
+                        # group으로 충돌 사유를 알려주는것 !!!!
 
