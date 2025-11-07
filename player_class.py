@@ -77,18 +77,18 @@ class Player:
             if event.key == SDLK_a:  self.dirX = 0
             if event.key == SDLK_w:  self.dirY = 0
             if event.key == SDLK_s:  self.dirY = 0
-        elif event.type == SDL_KEYDOWN:
+        if event.type == SDL_KEYDOWN:
             if event.key == SDLK_d:
                 self.dirX = 1
                 if not self.sword.sword_active: self.ifRight = 1  # 공격중엔 방향전환 X
-            elif event.key == SDLK_a:
+            if event.key == SDLK_a:
                 self.dirX = -1
                 if not self.sword.sword_active: self.ifRight = 0  # 공격중엔 방향전환 X
-            elif event.key == SDLK_w:
+            if event.key == SDLK_w:
                 self.dirY = 1
-            elif event.key == SDLK_s:
+            if event.key == SDLK_s:
                 self.dirY = -1
-            elif event.key == SDLK_SPACE and self.sword.sword_active == False:
+            if event.key == SDLK_SPACE and self.sword.sword_active == False:
                 self.sword.sword_active = True
                 self.sword.already_hit.clear()  # 충돌 기록 초기
                 self.sword.sword_frame = 0
