@@ -58,7 +58,7 @@ class Player:
     def draw(self):
         if self.ifRight == 1 : self.rightMove[int(self.frame)].draw(self.x, self.y, 40, 62)
         elif self.ifRight == 0 : self.leftMove[int(self.frame)].draw(self.x, self.y, 40, 62)
-        draw_rectangle(self.x - 20, self.y - 31, self.x + 20, self.y + 31)
+        draw_rectangle(*self.get_bb())
         self.playerUI.draw()
         self.sword.draw()
         self.playerUI.draw()
@@ -96,3 +96,6 @@ class Player:
                     self.sword.sword_angle = 90
                 else:
                     self.sword.sword_angle = 45  # ??
+
+    def get_bb(self):
+        return self.x - 20, self.y - 31, self.x + 20, self.y + 31

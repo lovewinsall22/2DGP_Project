@@ -15,7 +15,7 @@ class Dummy(Monster):
 
     def draw(self):
         self.image.clip_draw(int(self.frame) * 32, 0, 32, 32, self.x, self.y, character_size, character_size)
-        draw_rectangle(self.x - 32, self.y - 32, self.x + 32, self.y + 32)
+        draw_rectangle(*self.get_bb())
 
     def update(self):
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 5

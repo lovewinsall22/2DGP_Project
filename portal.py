@@ -20,7 +20,7 @@ class Portal:
     def draw(self):
         if self.dungeon.cur_dungeon == self.stage:
             self.image.draw(self.x,self.y,64,64)
-            draw_rectangle(self.x - 32, self.y - 32, self.x + 32, self.y + 32)
+            draw_rectangle(*self.get_bb())
 
     def enter_portal(self, world, player, dungeon,monsters):
         if self.number ==1 :
@@ -47,4 +47,7 @@ class Portal:
             world.add(Town(), 'background')
             world.add(NPC())
             world.add(Dummy())
+
+    def get_bb(self):
+        return self.x - 32, self.y - 32, self.x + 32, self.y + 32
 
