@@ -9,6 +9,7 @@ class World:
             'player' : [],
             'ui' : []
         }
+        self.collision_pairs = {}
 
     def add(self, obj, layer='object'):
         self.layers[layer].append(obj)
@@ -54,3 +55,13 @@ class World:
 
         # 위에서 걸러지지 않으면 충돌 발생 !
         return True
+
+
+    def add_collision_pair(self, group,a,b):
+        if group not in self.collision_pairs:
+            print('새로운 그룹 등록')
+            self.collision_pairs[group] = [[], []]
+
+        if a: self.collision_pairs[group][0].append(a)
+        if b: self.collision_pairs[group][1].append(b)
+
