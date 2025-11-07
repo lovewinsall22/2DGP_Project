@@ -36,6 +36,7 @@ class Portal:
             monsters += fire_golems
             for golem in fire_golems:
                 world.add(golem, 'object')
+                world.add_collision_pair('player:golem', player, golem)
 
         elif self.number == 3:
             remove_types = Golem

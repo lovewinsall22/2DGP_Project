@@ -17,16 +17,21 @@ from world import World
 def init():
     global world, player, town, dungeon, townNpc, dummy, store, portals, monsters, damage_texts
     world = World()
+
     player = Player()
     town = Town()
     dungeon = Dungeon()
     townNpc = NPC()
+    world.add_collision_pair('player:townNpc', player, townNpc)
     dummy = Dummy()
+    world.add_collision_pair('player:dummy', player, dummy)
     store = Store()
     portals = []
     portals.append(Portal(99,1, WIDTH // 2 + 15, HEIGHT - 60,dungeon))
     portals.append(Portal(99,2, WIDTH - 80, HEIGHT - 60,dungeon))
     portals.append(Portal(0,3, WIDTH // 2, 100,dungeon))
+    for p in portals:
+        world.add_collision_pair('player:portal', player,p)
 
     monsters = []
     monsters.append(dummy)
@@ -83,17 +88,17 @@ def handle_events():
                         p.enter_portal(world, player, dungeon, monsters)
                         return
         elif event.type == SDL_KEYDOWN and SDLK_1 and store.IsOpen:
-            if self.gold < 100: store.player_no_money = True; return
-            self.gold -= 100
-            self.hp_potion_count += 1
+            if player.gold < 100: store.player_no_money = True; return
+            player.gold -= 100
+            player.hp_potion_count += 1
         elif event.type == SDL_KEYDOWN and SDLK_2 and store.IsOpen:
-            if self.gold < 100: store.player_no_money = True; return
-            self.gold -= 100
-            self.damage += 100
+            if player.gold < 100: store.player_no_money = True; return
+            player.gold -= 100
+            player.damage += 100
         elif event.type == SDL_KEYDOWN and SDLK_3 and store.IsOpen:
-            if self.gold < 100: store.player_no_money = True; return
-            self.gold -= 100
-            self.speed += 1
+            if player.gold < 100: store.player_no_money = True; return
+            player.gold -= 100
+            player.speed += 1
         else:
             player.handle_event(event)
 
