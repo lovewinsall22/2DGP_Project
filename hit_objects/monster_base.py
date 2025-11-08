@@ -1,5 +1,5 @@
 from random import randint
-from pico2d import load_image
+from pico2d import load_image, draw_rectangle
 from math import sqrt
 import game_framework
 WIDTH, HEIGHT = 1280, 720
@@ -16,9 +16,8 @@ class Monster:
         self.alive = True
         self.player = player
 
-        self.hit_timer = 0  # 피격 지속 시간 (프레임 단위)
-        self.is_hit = False  # 현재 피격 상태 여부
-        self.flash_cycle = 0  # 깜빡임용 카운터
+        self.stop_time = 120 # 120프레임 멈춤
+        self.is_hit = False
 
 
     def draw(self):
@@ -28,10 +27,8 @@ class Monster:
         pass
 
     def handle_collision(self, group, other):
-        if group == 'sword:dummy':
-            self.hp -= other.damage
-        elif group == 'sword:golem':
-            self.hp -= other.damage
+        pass
+
 
 
 class Golem(Monster):
@@ -41,36 +38,44 @@ class Golem(Monster):
         if Golem.image == None:
             Golem.image = load_image('resource/l_golem.png')
         self.frame = randint(0,6)
-        self.speed = 2
+        self.speed = 0.3
 
         self.attack_range = 50
 
 
     def draw(self):
-        if self.alive == True:
-            if self.is_hit:
-                self.flash_cycle += 1
-                if (self.flash_cycle // 3) % 2 == 0:
-                    return  # 3프레임마다 안 보이게
-            Golem.image.clip_draw(int(self.frame) * 35, 0, 35, 35, self.x, self.y)
+        if not self.alive:
+            return
+
+        Golem.image.clip_draw(int(self.frame) * 35, 0, 35, 35, self.x, self.y)
+        draw_rectangle(*self.get_bb())
 
     def update(self):
-        if self.alive:
-            self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 7
+        if not self.alive:
+            return
+        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 7
 
         if self.is_hit:
-            self.hit_timer -= 1
-            if self.hit_timer <= 0:
+            self.stop_time -= 1
+            if self.stop_time <= 0:
                 self.is_hit = False
-                self.flash_cycle = 0
-        else:
-            dx = self.player.x - self.x
-            dy = self.player.y - self.y
-            distance = sqrt(dx * dx + dy * dy)
-            if distance > self.attack_range:
-                self.x += self.speed * (dx / distance)
-                self.y += self.speed * (dy / distance)
+                self.stop_time = 10
+            return
+
+        dx = self.player.x - self.x
+        dy = self.player.y - self.y
+        distance = sqrt(dx * dx + dy * dy)
+        if distance > self.attack_range:
+            self.x += self.speed * (dx / distance)
+            self.y += self.speed * (dy / distance)
 
     def get_bb(self):
-        return self.x - 32, self.y - 32, self.x + 32, self.y + 32
+        return self.x - 16, self.y - 16, self.x + 16, self.y + 16
+
+    def handle_collision(self, group, other):
+        if group == 'sword:golem':
+            if other.sword_active:
+                self.hp -= other.damage
+                self.is_hit = True
+
 
