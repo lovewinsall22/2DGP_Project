@@ -9,7 +9,7 @@ TIME_PER_ACTION = 0.5 # #액션 한번당 0.5초
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION # 초당 2회 액션
 
 class Monster:
-    def __init__(self, x, y, hp, damage,player = None):
+    def __init__(self, x, y, hp = 1000, damage = 1 ,player = None):
         self.x, self.y = x, y
         self.hp = hp
         self.damage = damage
@@ -91,5 +91,7 @@ class Golem(Monster):
                 self.hp -= other.damage
                 self.is_hit = True
                 self.flash_timer = 0
+        elif group == 'player:golem':
+            pass
 
 

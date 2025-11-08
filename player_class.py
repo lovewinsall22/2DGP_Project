@@ -42,6 +42,8 @@ class Player:
 
         #self.ani_count = 0 # 기본 애니메이션 프레임 조절을 위해 ,, 카운트
         self.frame = 0 # 기본 애니메이션 프레임
+        self.is_hitted = False
+        self.flash_timer = 0 # 지속시간은 120 프레임
 
         self.max_hp = 100 # 최대 체력
         self.hp = 100 # 현재 체력
@@ -59,6 +61,8 @@ class Player:
         self.pressed = set()
 
     def draw(self):
+        if self.is_hitted and (self.flash_timer // 5) % 2 == 0:
+            return  # 5프레임마다 안 그려짐
         if self.ifRight == 1 : self.rightMove[int(self.frame)].draw(self.x, self.y, 40, 62)
         elif self.ifRight == 0 : self.leftMove[int(self.frame)].draw(self.x, self.y, 40, 62)
         draw_rectangle(*self.get_bb())
@@ -71,6 +75,11 @@ class Player:
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 5
         self.x += self.dirX * RUN_SPEED_PPS * game_framework.frame_time
         self.y += self.dirY * RUN_SPEED_PPS * game_framework.frame_time
+        if self.is_hitted:
+            self.flash_timer += 1
+            if self.flash_timer >= 120:
+                self.is_hitted = False
+                self.flash_timer = 0
         self.playerUI.update()
 
 
@@ -108,4 +117,8 @@ class Player:
             pass
         elif group == 'player:portal':
             pass
+        elif group == 'player:golem':
+            self.hp -= other.damage
+            self.flash_timer = 0
+            self.is_hitted = True
 
