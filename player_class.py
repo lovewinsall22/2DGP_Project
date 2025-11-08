@@ -118,7 +118,8 @@ class Player:
         elif group == 'player:portal':
             pass
         elif group == 'player:golem':
-            self.hp -= other.damage
-            self.flash_timer = 0
-            self.is_hitted = True
+            if not self.is_hitted:
+                self.hp -= other.damage
+                self.flash_timer = 0
+                self.is_hitted = True
 
