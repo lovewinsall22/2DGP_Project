@@ -39,15 +39,17 @@ class Golem(Monster):
             Golem.image = load_image('resource/l_golem.png')
         self.frame = randint(0,6)
         self.speed = 0.3
-
+        self.on_right = True # 캐릭터기준 오른쪽인지 ,,
         self.attack_range = 50
 
 
     def draw(self):
         if not self.alive:
             return
-
-        Golem.image.clip_draw(int(self.frame) * 35, 0, 35, 35, self.x, self.y)
+        if self.on_right:
+            Golem.image.clip_composite_draw(int(self.frame) * 35, 0, 35, 35, 0, 'h', self.x, self.y, 35, 35)
+        else:
+            Golem.image.clip_composite_draw(int(self.frame) * 35, 0, 35, 35, 0, '', self.x, self.y, 35, 35)
         draw_rectangle(*self.get_bb())
 
     def update(self):
@@ -65,6 +67,10 @@ class Golem(Monster):
         dx = self.player.x - self.x
         dy = self.player.y - self.y
         distance = sqrt(dx * dx + dy * dy)
+        if dx >= 0:
+            self.on_right = True
+        else:
+            self.on_right = False
         if distance > self.attack_range:
             self.x += self.speed * (dx / distance)
             self.y += self.speed * (dy / distance)
