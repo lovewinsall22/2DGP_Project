@@ -18,6 +18,7 @@ class Monster:
 
         self.stop_time = 120 # 120프레임 멈춤
         self.is_hit = False
+        self.flash_timer = 0
 
 
     def draw(self):
@@ -46,6 +47,10 @@ class Golem(Monster):
     def draw(self):
         if not self.alive:
             return
+
+        if self.is_hit and (self.flash_timer // 5) % 2 == 0:
+            return  # 5프레임마다 안 그려짐
+
         if self.on_right:
             Golem.image.clip_composite_draw(int(self.frame) * 35, 0, 35, 35, 0, 'h', self.x, self.y, 35, 35)
         else:
@@ -59,9 +64,11 @@ class Golem(Monster):
 
         if self.is_hit:
             self.stop_time -= 1
+            self.flash_timer += 1
             if self.stop_time <= 0:
                 self.is_hit = False
-                self.stop_time = 10
+                self.stop_time = 120
+                self.flash_timer = 0
             return
 
         dx = self.player.x - self.x
@@ -83,5 +90,6 @@ class Golem(Monster):
             if other.sword_active:
                 self.hp -= other.damage
                 self.is_hit = True
+                self.flash_timer = 0
 
 
