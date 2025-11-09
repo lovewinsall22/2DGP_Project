@@ -98,3 +98,68 @@ class Red_Golem(Monster):
             pass
 
 
+class White_Golem(Monster):
+    image = None
+    def __init__(self, player = None):
+        super().__init__(randint(0, WIDTH), randint(0,HEIGHT), 10000, 2,player)
+        if White_Golem.image == None:
+            White_Golem.image = load_image('resource/white_golem.png')
+        self.frame = randint(0,6)
+        self.speed = 0.3
+        self.on_right = randint(0,1) # 캐릭터기준 오른쪽인지 ,,
+        self.attack_range = 50
+
+
+    def draw(self):
+        if not self.alive:
+            return
+
+        if self.is_hit and (self.flash_timer // 5) % 2 == 0:
+            return  # 5프레임마다 안 그려짐
+
+        if self.on_right:
+            White_Golem.image.clip_composite_draw(int(self.frame) * 39, 0, 39, 39, 0, 'h', self.x, self.y, 39, 39)
+        else:
+            White_Golem.image.clip_composite_draw(int(self.frame) * 39, 0, 39, 39, 0, '', self.x, self.y, 39, 39)
+        draw_rectangle(*self.get_bb())
+
+    def update(self):
+        if not self.alive:
+            return
+        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 7
+
+        if self.is_hit:
+            self.stop_time -= 1
+            self.flash_timer += 1
+            if self.stop_time <= 0:
+                self.is_hit = False
+                self.stop_time = 120
+                self.flash_timer = 0
+            return
+
+        if self.trace_on:
+            dx = self.player.x - self.x
+            dy = self.player.y - self.y
+            distance = sqrt(dx * dx + dy * dy)
+            if dx >= 0:
+                self.on_right = True
+            else:
+                self.on_right = False
+            if distance > self.attack_range:
+                self.x += self.speed * (dx / distance)
+                self.y += self.speed * (dy / distance)
+
+    def get_bb(self):
+        return self.x - 19, self.y - 19, self.x + 19, self.y + 19
+
+    def handle_collision(self, group, other):
+        if group == 'sword:golem':
+            if other.sword_active:
+                self.hp -= other.damage
+                self.is_hit = True
+                self.flash_timer = 0
+                self.trace_on = True
+        elif group == 'player:golem':
+            pass
+
+
