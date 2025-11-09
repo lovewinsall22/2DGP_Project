@@ -39,7 +39,7 @@ class Monster:
 class Red_Golem(Monster):
     image = None
     def __init__(self, player = None):
-        super().__init__(randint(0, WIDTH), randint(0,HEIGHT), 10000, 2,player)
+        super().__init__(randint(0, WIDTH), randint(0,HEIGHT), 3000, 2,player)
         if Red_Golem.image == None:
             Red_Golem.image = load_image('resource/red_golem.png')
         self.frame = randint(0,6)
@@ -65,7 +65,6 @@ class Red_Golem(Monster):
     def update(self):
         if not self.alive:
             return
-        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 7
 
         if self.is_hit:
             self.stop_time -= 1
@@ -75,6 +74,7 @@ class Red_Golem(Monster):
                 self.stop_time = 120
                 self.flash_timer = 0
             return
+        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 7
 
         if self.trace_on:
             dx = self.player.x - self.x
@@ -105,7 +105,7 @@ class Red_Golem(Monster):
 class White_Golem(Monster):
     image = None
     def __init__(self, player = None):
-        super().__init__(randint(0, WIDTH), randint(0,HEIGHT), 10000, 2,player)
+        super().__init__(randint(0, WIDTH), randint(0,HEIGHT), 3000, 2,player)
         if White_Golem.image == None:
             White_Golem.image = load_image('resource/white_golem.png')
         self.frame = randint(0,6)
@@ -131,7 +131,6 @@ class White_Golem(Monster):
     def update(self):
         if not self.alive:
             return
-        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 7
 
         if self.is_hit:
             self.stop_time -= 1
@@ -141,6 +140,7 @@ class White_Golem(Monster):
                 self.stop_time = 120
                 self.flash_timer = 0
             return
+        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 7
 
         if self.trace_on:
             dx = self.player.x - self.x
