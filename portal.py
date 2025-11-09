@@ -23,12 +23,13 @@ class Portal:
             draw_rectangle(*self.get_bb())
 
     def enter_portal(self, world, player, dungeon,monsters):
-        if self.number ==1 :
+        if self.number == 1 and dungeon.cur_dungeon == 99 :
             # 제거 대상 타입
             remove_types = (Town, NPC, Dummy)
-            # 모든 레이어에서 해당 타입의 오브젝트 제거
-            for layer in world.layers.values():
-                layer[:] = [obj for obj in layer if not isinstance(obj, remove_types)]
+            for layer in list(world.layers.values()):
+                for obj in list(layer):  # 복사본으로 순회 (삭제 중 오류 방지)
+                    if isinstance(obj, remove_types):
+                        world.remove(obj)  # ← 여기서 remove() 함수 호출!
             dungeon.stage_on = True
             dungeon.cur_dungeon = 0
             player.x, player.y = WIDTH // 2, 100
@@ -38,10 +39,12 @@ class Portal:
                 world.add(golem, 'object')
                 world.add_collision_pair('player:golem', player, golem)
                 world.add_collision_pair('sword:golem', None, golem)
-        elif self.number == 2:
+        elif self.number == 2 and dungeon.cur_dungeon == 99:
             remove_types = (Town, NPC, Dummy)
-            for layer in world.layers.values():
-                layer[:] = [obj for obj in layer if not isinstance(obj, remove_types)]
+            for layer in list(world.layers.values()):
+                for obj in list(layer):  # 복사본으로 순회 (삭제 중 오류 방지)
+                    if isinstance(obj, remove_types):
+                        world.remove(obj)  # ← 여기서 remove() 함수 호출!
                 dungeon.stage_on = True
                 dungeon.cur_dungeon = 1
                 player.x, player.y = WIDTH // 2, 100
@@ -51,18 +54,33 @@ class Portal:
                     world.add(golem, 'object')
                     world.add_collision_pair('player:golem', player, golem)
                     world.add_collision_pair('sword:golem', None, golem)
-
-
-        elif self.number == 3:
+        elif self.number == 3 and dungeon.cur_dungeon == 0:
             remove_types = White_Golem
-            for layer in world.layers.values():
-                layer[:] = [obj for obj in layer if not isinstance(obj, remove_types)]
+            for layer in list(world.layers.values()):
+                for obj in list(layer):  # 복사본으로 순회 (삭제 중 오류 방지)
+                    if isinstance(obj, remove_types):
+                        world.remove(obj)  # ← 여기서 remove() 함수 호출!
             self.dungeon.stage_on = False
             self.dungeon.cur_dungeon = 99
             player.x, player.y = WIDTH // 2 + 15, HEIGHT - 60
             world.add(Town(), 'background')
             world.add(NPC())
             world.add(Dummy())
+        elif self.number == 4 and dungeon.cur_dungeon == 1:
+            remove_types = Red_Golem
+            for layer in list(world.layers.values()):
+                for obj in list(layer):  # 복사본으로 순회 (삭제 중 오류 방지)
+                    if isinstance(obj, remove_types):
+                        world.remove(obj)  # ← 여기서 remove() 함수 호출!
+            self.dungeon.stage_on = False
+            self.dungeon.cur_dungeon = 99
+            player.x, player.y = WIDTH - 80, HEIGHT - 60
+            world.add(Town(), 'background')
+            world.add(NPC())
+            world.add(Dummy())
+            for m in world.layers['object']:
+                print(m)
+
 
     def get_bb(self):
         return self.x - 32, self.y - 32, self.x + 32, self.y + 32

@@ -14,10 +14,19 @@ class World:
     def add(self, obj, layer='object'):
         self.layers[layer].append(obj)
 
+    def remove_collision_object(self,o):
+        for pairs in self.collision_pairs.values():
+            if o in pairs[0]:
+                pairs[0].remove(o)
+            if o in pairs[1]:
+                pairs[1].remove(o)
+
     def remove(self, obj):
         for layer in self.layers.values():
             if obj in layer:
                 layer.remove(obj)
+                # collision_pairs에서도 제거해야함 !!
+                self.remove_collision_object(obj)
                 return True
         return False
 
