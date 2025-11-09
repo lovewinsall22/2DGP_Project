@@ -46,10 +46,11 @@ class Player:
         self.is_hitted = False
         self.flash_timer = 0 # 지속시간은 120 프레임
 
+
         self.max_hp = 100 # 최대 체력
         self.hp = 100 # 현재 체력
         self.level = 1 # 현재 레벨
-        #self.speed = 5 # 이동 속도
+        self.speed = RUN_SPEED_PPS # 이동 속도
         self.damage = 1000 # 공격력
         self.gold = 1000 # 골드
         self.hp_potion_count = 0 # 체력포션 개수
@@ -74,8 +75,8 @@ class Player:
     def update(self):
         self.sword.update()
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 5
-        self.x += self.dirX * RUN_SPEED_PPS * game_framework.frame_time
-        self.y += self.dirY * RUN_SPEED_PPS * game_framework.frame_time
+        self.x += self.dirX * self.speed * game_framework.frame_time
+        self.y += self.dirY * self.speed * game_framework.frame_time
         if self.is_hitted:
             self.flash_timer += 1
             if self.flash_timer >= 120:
