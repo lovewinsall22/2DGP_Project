@@ -16,6 +16,7 @@ class Monster:
         self.alive = True
         self.player = player
 
+        self.trace_on = False # 한번 피격당할시 추적모드
         self.stop_time = 120 # 120프레임 멈춤
         self.is_hit = False
         self.flash_timer = 0
@@ -71,16 +72,17 @@ class Golem(Monster):
                 self.flash_timer = 0
             return
 
-        dx = self.player.x - self.x
-        dy = self.player.y - self.y
-        distance = sqrt(dx * dx + dy * dy)
-        if dx >= 0:
-            self.on_right = True
-        else:
-            self.on_right = False
-        if distance > self.attack_range:
-            self.x += self.speed * (dx / distance)
-            self.y += self.speed * (dy / distance)
+        if self.trace_on:
+            dx = self.player.x - self.x
+            dy = self.player.y - self.y
+            distance = sqrt(dx * dx + dy * dy)
+            if dx >= 0:
+                self.on_right = True
+            else:
+                self.on_right = False
+            if distance > self.attack_range:
+                self.x += self.speed * (dx / distance)
+                self.y += self.speed * (dy / distance)
 
     def get_bb(self):
         return self.x - 16, self.y - 16, self.x + 16, self.y + 16
@@ -91,6 +93,7 @@ class Golem(Monster):
                 self.hp -= other.damage
                 self.is_hit = True
                 self.flash_timer = 0
+                self.trace_on = True
         elif group == 'player:golem':
             pass
 
