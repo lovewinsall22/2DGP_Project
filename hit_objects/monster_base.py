@@ -1,5 +1,5 @@
 from random import randint
-from pico2d import load_image, draw_rectangle
+from pico2d import load_image, draw_rectangle, load_font
 from math import sqrt
 import game_framework
 WIDTH, HEIGHT = 1280, 720
@@ -9,7 +9,8 @@ TIME_PER_ACTION = 0.5 # #액션 한번당 0.5초
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION # 초당 2회 액션
 
 class Monster:
-    def __init__(self, x, y, hp = 1000, damage = 1 ,player = None):
+    font = None
+    def __init__(self, x, y, hp = 10000, damage = 1 ,player = None):
         self.x, self.y = x, y
         self.hp = hp
         self.damage = damage
@@ -20,6 +21,8 @@ class Monster:
         self.stop_time = 120 # 120프레임 멈춤
         self.is_hit = False
         self.flash_timer = 0
+        if Monster.font == None:
+            Monster.font = load_font('DNFBitBitTTF.ttf', 10)
 
 
     def draw(self):
@@ -57,6 +60,7 @@ class Red_Golem(Monster):
         else:
             Red_Golem.image.clip_composite_draw(int(self.frame) * 35, 0, 35, 35, 0, '', self.x, self.y, 35, 35)
         draw_rectangle(*self.get_bb())
+        self.font.draw(self.x, self.y + 15, f'(hp: {self.hp})', (255, 0, 0))
 
     def update(self):
         if not self.alive:
@@ -89,7 +93,7 @@ class Red_Golem(Monster):
 
     def handle_collision(self, group, other):
         if group == 'sword:golem':
-            if other.sword_active:
+            if other.sword_active and not self.is_hit:
                 self.hp -= other.damage
                 self.is_hit = True
                 self.flash_timer = 0
@@ -122,6 +126,7 @@ class White_Golem(Monster):
         else:
             White_Golem.image.clip_composite_draw(int(self.frame) * 39, 0, 39, 39, 0, '', self.x, self.y, 39, 39)
         draw_rectangle(*self.get_bb())
+        self.font.draw(self.x, self.y + 15, f'(hp: {self.hp})', (255, 0, 0))
 
     def update(self):
         if not self.alive:
@@ -154,7 +159,7 @@ class White_Golem(Monster):
 
     def handle_collision(self, group, other):
         if group == 'sword:golem':
-            if other.sword_active:
+            if other.sword_active and not self.is_hit:
                 self.hp -= other.damage
                 self.is_hit = True
                 self.flash_timer = 0
