@@ -1,5 +1,6 @@
 from pico2d import load_image, draw_rectangle
 from sdl2 import SDL_KEYDOWN, SDL_KEYUP, SDLK_a, SDLK_d, SDLK_w, SDLK_s, SDLK_SPACE, SDLK_1, SDLK_2, SDLK_3, SDLK_l
+from input_helper import get_keys
 
 WIDTH, HEIGHT = 1280, 720
 from player_ui import PlayerUI
@@ -85,10 +86,30 @@ class Player:
 
     def handle_event(self, event):
         if event.type == SDL_KEYUP:
-            if event.key == SDLK_d:  self.dirX = 0
-            if event.key == SDLK_a:  self.dirX = 0
-            if event.key == SDLK_w:  self.dirY = 0
-            if event.key == SDLK_s:  self.dirY = 0
+            if event.key == SDLK_d:
+                keys = get_keys()
+                if not keys[SDLK_a]:
+                    self.dirX = 0
+                else:
+                    self.dirX = -1
+            if event.key == SDLK_a:
+                keys = get_keys()
+                if not keys[SDLK_d]:
+                    self.dirX = 0
+                else:
+                    self.dirX = 1
+            if event.key == SDLK_w:
+                keys = get_keys()
+                if not keys[SDLK_s]:
+                    self.dirY = 0
+                else:
+                    self.dirY = -1
+            if event.key == SDLK_s:
+                keys = get_keys()
+                if not keys[SDLK_w]:
+                    self.dirY = 0
+                else:
+                    self.dirY = 1
         if event.type == SDL_KEYDOWN:
             if event.key == SDLK_d:
                 self.dirX = 1
