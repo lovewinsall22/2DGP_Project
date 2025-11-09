@@ -45,15 +45,15 @@ class Portal:
                 for obj in list(layer):  # 복사본으로 순회 (삭제 중 오류 방지)
                     if isinstance(obj, remove_types):
                         world.remove(obj)  # ← 여기서 remove() 함수 호출!
-                dungeon.stage_on = True
-                dungeon.cur_dungeon = 1
-                player.x, player.y = WIDTH // 2, 100
-                fire_golems = [Red_Golem(player) for _ in range(20)]
-                monsters += fire_golems
-                for golem in fire_golems:
-                    world.add(golem, 'object')
-                    world.add_collision_pair('player:golem', player, golem)
-                    world.add_collision_pair('sword:golem', None, golem)
+            dungeon.stage_on = True
+            dungeon.cur_dungeon = 1
+            player.x, player.y = WIDTH // 2, HEIGHT // 2
+            fire_golems = [Red_Golem(player) for _ in range(20)]
+            monsters += fire_golems
+            for golem in fire_golems:
+                world.add(golem, 'object')
+                world.add_collision_pair('player:golem', player, golem)
+                world.add_collision_pair('sword:golem', None, golem)
         elif self.number == 3 and dungeon.cur_dungeon == 0:
             remove_types = White_Golem
             for layer in list(world.layers.values()):
@@ -66,6 +66,7 @@ class Portal:
             world.add(Town(), 'background')
             world.add(NPC())
             world.add(Dummy())
+            print(f'[DEBUG] Portal {self.number} triggered, cur_dungeon={dungeon.cur_dungeon}')
         elif self.number == 4 and dungeon.cur_dungeon == 1:
             remove_types = Red_Golem
             for layer in list(world.layers.values()):
@@ -78,8 +79,7 @@ class Portal:
             world.add(Town(), 'background')
             world.add(NPC())
             world.add(Dummy())
-            for m in world.layers['object']:
-                print(m)
+            print(f'[DEBUG] Portal {self.number} triggered, cur_dungeon={dungeon.cur_dungeon}')
 
 
     def get_bb(self):
