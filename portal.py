@@ -2,7 +2,7 @@ from pico2d import load_image, draw_rectangle
 from town import Town
 from npc import NPC
 from hit_objects.dummy import Dummy
-from hit_objects.monster_base import Golem
+from hit_objects.monster_base import Red_Golem
 
 WIDTH, HEIGHT = 1280, 720
 
@@ -32,7 +32,7 @@ class Portal:
             dungeon.stage_on = True
             dungeon.cur_dungeon = 0
             player.x, player.y = WIDTH // 2, 100
-            fire_golems = [Golem(player) for _ in range(20)]
+            fire_golems = [Red_Golem(player) for _ in range(20)]
             monsters += fire_golems
             for golem in fire_golems:
                 world.add(golem, 'object')
@@ -40,7 +40,7 @@ class Portal:
                 world.add_collision_pair('sword:golem', None, golem)
 
         elif self.number == 3:
-            remove_types = Golem
+            remove_types = Red_Golem
             for layer in world.layers.values():
                 layer[:] = [obj for obj in layer if not isinstance(obj, remove_types)]
             self.dungeon.stage_on = False

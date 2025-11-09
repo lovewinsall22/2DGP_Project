@@ -33,12 +33,12 @@ class Monster:
 
 
 
-class Golem(Monster):
+class Red_Golem(Monster):
     image = None
     def __init__(self, player = None):
         super().__init__(randint(0, WIDTH), randint(0,HEIGHT), 10000, 2,player)
-        if Golem.image == None:
-            Golem.image = load_image('resource/l_golem.png')
+        if Red_Golem.image == None:
+            Red_Golem.image = load_image('resource/red_golem.png')
         self.frame = randint(0,6)
         self.speed = 0.3
         self.on_right = randint(0,1) # 캐릭터기준 오른쪽인지 ,,
@@ -53,9 +53,9 @@ class Golem(Monster):
             return  # 5프레임마다 안 그려짐
 
         if self.on_right:
-            Golem.image.clip_composite_draw(int(self.frame) * 35, 0, 35, 35, 0, 'h', self.x, self.y, 35, 35)
+            Red_Golem.image.clip_composite_draw(int(self.frame) * 35, 0, 35, 35, 0, 'h', self.x, self.y, 35, 35)
         else:
-            Golem.image.clip_composite_draw(int(self.frame) * 35, 0, 35, 35, 0, '', self.x, self.y, 35, 35)
+            Red_Golem.image.clip_composite_draw(int(self.frame) * 35, 0, 35, 35, 0, '', self.x, self.y, 35, 35)
         draw_rectangle(*self.get_bb())
 
     def update(self):
