@@ -32,12 +32,26 @@ class Portal:
             dungeon.stage_on = True
             dungeon.cur_dungeon = 0
             player.x, player.y = WIDTH // 2, 100
-            fire_golems = [White_Golem(player) for _ in range(20)]
-            monsters += fire_golems
-            for golem in fire_golems:
+            white_golems = [White_Golem(player) for _ in range(20)]
+            monsters += white_golems
+            for golem in white_golems:
                 world.add(golem, 'object')
                 world.add_collision_pair('player:golem', player, golem)
                 world.add_collision_pair('sword:golem', None, golem)
+        elif self.number == 2:
+            remove_types = (Town, NPC, Dummy)
+            for layer in world.layers.values():
+                layer[:] = [obj for obj in layer if not isinstance(obj, remove_types)]
+                dungeon.stage_on = True
+                dungeon.cur_dungeon = 1
+                player.x, player.y = WIDTH // 2, 100
+                fire_golems = [Red_Golem(player) for _ in range(20)]
+                monsters += fire_golems
+                for golem in fire_golems:
+                    world.add(golem, 'object')
+                    world.add_collision_pair('player:golem', player, golem)
+                    world.add_collision_pair('sword:golem', None, golem)
+
 
         elif self.number == 3:
             remove_types = White_Golem
