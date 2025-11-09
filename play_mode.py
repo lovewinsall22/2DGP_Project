@@ -29,9 +29,9 @@ def init():
     game_world.add_collision_pair('sword:dummy', None , dummy)
     store = Store()
     portals = []
-    portals.append(Portal(99,1, WIDTH // 2 + 15, HEIGHT - 60,dungeon))
-    portals.append(Portal(99,2, WIDTH - 80, HEIGHT - 60,dungeon))
-    portals.append(Portal(0,3, WIDTH // 2, 100,dungeon))
+    portals.append(Portal(99,1, WIDTH // 2 + 15, HEIGHT - 60,dungeon)) # 마을에 있는 포탈 1
+    portals.append(Portal(99,2, WIDTH - 80, HEIGHT - 60,dungeon)) # 마을에 있는 포탈 2
+    portals.append(Portal(0,3, WIDTH // 2, 100,dungeon)) # 흰 골렘 던전에 있는 포탈 ( 마을로 돌아오는 포탈 )
     for p in portals:
         game_world.add_collision_pair('player:portal', player,p)
 
