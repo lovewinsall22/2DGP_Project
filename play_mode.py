@@ -32,7 +32,7 @@ def init():
     portals.append(Portal(99,1, WIDTH // 2 + 15, HEIGHT - 60,dungeon)) # 마을에 있는 포탈 1
     portals.append(Portal(99,2, WIDTH - 80, HEIGHT - 60,dungeon)) # 마을에 있는 포탈 2
     portals.append(Portal(0,3, WIDTH // 2, 100,dungeon)) # 흰 골렘 던전에 있는 포탈 ( 마을로 돌아오는 포탈 )
-    portals.append(Portal(1,4, WIDTH // 2, 100,dungeon)) # 불 골렘 던전에 있는 포탈 ( 마을로 돌아오는 포탈 )
+    portals.append(Portal(1,4, WIDTH // 2, HEIGHT // 2,dungeon)) # 불 골렘 던전에 있는 포탈 ( 마을로 돌아오는 포탈 )
     for p in portals:
         game_world.add_collision_pair('player:portal', player,p)
 
@@ -85,6 +85,7 @@ def handle_events():
             else:
                 for p in portals:
                     if check_collision(p):
+                        print(f'[DEBUG] Portal {p.number} triggered, cur_dungeon={dungeon.cur_dungeon}')
                         p.enter_portal(game_world, player, dungeon, monsters)
                         return
         elif event.type == SDL_KEYDOWN and event.key == SDLK_1 and store.IsOpen:
