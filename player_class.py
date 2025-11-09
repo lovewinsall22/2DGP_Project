@@ -33,7 +33,7 @@ class Player:
         self.left5 = load_image('resource/white_l_5.png')
         self.rightMove = [self.right1, self.right2, self.right3, self.right4, self.right5]
         self.leftMove = [self.left1, self.left2, self.left3, self.left4, self.left5]
-
+        self.money = load_image('resource/money.png')
         #self.attack_r = load_image('resource/attack_r.png')
         #self.attack_l = load_image('resource/attack_l.png')
 
@@ -54,13 +54,15 @@ class Player:
         self.damage = 1000 # 공격력
         self.gold = 1000 # 골드
         self.hp_potion_count = 0 # 체력포션 개수
+        self.get_money_animation = False
+        self.money_animation_count = 0
 
         self.playerUI = PlayerUI(self)
         self.sword = Sword(self)
         game_world.add_collision_pair('sword:dummy', self.sword, None)
         game_world.add_collision_pair('sword:golem', self.sword, None)
 
-        self.pressed = set()
+
 
     def draw(self):
         if self.is_hitted and (self.flash_timer // 5) % 2 == 0:
@@ -71,6 +73,8 @@ class Player:
         self.playerUI.draw()
         self.sword.draw()
         self.playerUI.draw()
+        if self.get_money_animation:
+            self.money.draw(self.x, self.y + self.money_animation_count // 3, 22, 21)
 
     def update(self):
         self.sword.update()
@@ -83,6 +87,11 @@ class Player:
                 self.is_hitted = False
                 self.flash_timer = 0
         self.playerUI.update()
+        if self.get_money_animation:
+            self.money_animation_count += 1
+            if self.money_animation_count >= 120:
+                self.get_money_animation = False
+                self.money_animation_count = 0
 
 
     def handle_event(self, event):

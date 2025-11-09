@@ -77,6 +77,8 @@ class Red_Golem(Monster):
                 if self.hp <= 0:
                     self.alive = False
                     game_world.remove(self)
+                    self.player.get_money_animation = True
+                    self.player.gold += randint(10,50)
             return
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 7
 
@@ -146,6 +148,8 @@ class White_Golem(Monster):
                 if self.hp <= 0:
                     self.alive = False
                     game_world.remove(self)
+                    self.player.get_money_animation = True
+                    self.player.gold += randint(10,50)
             return
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 7
 
