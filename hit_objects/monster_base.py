@@ -2,6 +2,7 @@ from random import randint
 from pico2d import load_image, draw_rectangle, load_font
 from math import sqrt
 import game_framework
+from world import game_world
 WIDTH, HEIGHT = 1280, 720
 
 FRAMES_PER_ACTION = 5 # 5개 애니메이션
@@ -73,6 +74,9 @@ class Red_Golem(Monster):
                 self.is_hit = False
                 self.stop_time = 120
                 self.flash_timer = 0
+                if self.hp <= 0:
+                    self.alive = False
+                    game_world.remove(self)
             return
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 7
 
@@ -139,6 +143,9 @@ class White_Golem(Monster):
                 self.is_hit = False
                 self.stop_time = 120
                 self.flash_timer = 0
+                if self.hp <= 0:
+                    self.alive = False
+                    game_world.remove(self)
             return
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 7
 
