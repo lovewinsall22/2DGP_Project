@@ -32,7 +32,7 @@ class Portal:
             dungeon.stage_on = True
             dungeon.cur_dungeon = 0
             player.x, player.y = WIDTH // 2, 100
-            fire_golems = [Golem(player) for _ in range(10)]
+            fire_golems = [Golem(player) for _ in range(20)]
             monsters += fire_golems
             for golem in fire_golems:
                 world.add(golem, 'object')

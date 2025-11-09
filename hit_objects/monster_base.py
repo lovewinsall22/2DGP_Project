@@ -41,7 +41,7 @@ class Golem(Monster):
             Golem.image = load_image('resource/l_golem.png')
         self.frame = randint(0,6)
         self.speed = 0.3
-        self.on_right = True # 캐릭터기준 오른쪽인지 ,,
+        self.on_right = randint(0,1) # 캐릭터기준 오른쪽인지 ,,
         self.attack_range = 50
 
 
