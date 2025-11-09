@@ -1,10 +1,11 @@
-from pico2d import load_font, draw_rectangle
+from pico2d import load_font, draw_rectangle, load_image
 WIDTH, HEIGHT = 1280, 720
 
 class PlayerUI:
     def __init__(self,player):
         self.player = player
         self.font = load_font('DNFBitBitTTF.ttf', 20)
+        self.hp_potion = load_image('resource/heart.png')
 
     def draw(self):
         x1, y1 = WIDTH - 500, 20
@@ -20,9 +21,11 @@ class PlayerUI:
 
         self.font.draw(WIDTH - 500, y1 + 50, f'HP: {int(self.player.hp)}/{self.player.max_hp}', (255, 255, 255))
 
-        self.font.draw(WIDTH - 500, y1 + 80,
-                       f'GOLD: {int(self.player.gold)}G',
-                       (255, 215, 0))  # 노란색
+        self.font.draw(WIDTH - 500, y1 + 80, f'GOLD: {int(self.player.gold)}G', (255, 215, 0))  # 노란색
+        self.hp_potion.draw(WIDTH - 320, y1 + 50, 21, 17)
+        self.font.draw(WIDTH - 300, y1 + 50, f'x {self.player.hp_potion_count}', (255, 255, 255))
+
+
 
     def update(self):
         pass
