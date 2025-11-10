@@ -92,6 +92,7 @@ class Player:
             if self.money_animation_count >= 120:
                 self.get_money_animation = False
                 self.money_animation_count = 0
+        self.boundary_check()
 
 
     def handle_event(self, event):
@@ -153,4 +154,14 @@ class Player:
                 self.hp -= other.damage
                 self.flash_timer = 0
                 self.is_hitted = True
+
+    def boundary_check(self):
+        if self.x < 20:
+            self.x = 20
+        elif self.x > WIDTH - 20:
+            self.x = WIDTH - 20
+        if self.y < 31:
+            self.y = 31
+        elif self.y > HEIGHT - 31:
+            self.y = HEIGHT - 31
 
