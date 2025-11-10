@@ -93,12 +93,12 @@ def handle_events():
             player.gold -= 100
             player.hp_potion_count += 1
         elif event.type == SDL_KEYDOWN and event.key == SDLK_2 and store.IsOpen:
-            if player.gold < 100: store.player_no_money = True; return
+            if player.gold < 200: store.player_no_money = True; return
             player.gold -= 200
             player.damage += 100
             player.sword.damage = player.damage
         elif event.type == SDL_KEYDOWN and event.key == SDLK_3 and store.IsOpen:
-            if player.gold < 100: store.player_no_money = True; return
+            if player.gold < 200: store.player_no_money = True; return
             player.gold -= 200
             player.speed += 10
         else:
