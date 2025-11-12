@@ -44,7 +44,7 @@ class Red_Golem(Monster):
         if Red_Golem.image == None:
             Red_Golem.image = load_image('resource/red_golem.png')
         self.frame = randint(0,6)
-        self.speed = 0.3
+        self.speed = 0.7
         self.on_right = randint(0,1) # 캐릭터기준 오른쪽인지 ,,
         self.attack_range = 50
 
@@ -57,9 +57,9 @@ class Red_Golem(Monster):
             return  # 5프레임마다 안 그려짐
 
         if self.on_right:
-            Red_Golem.image.clip_composite_draw(int(self.frame) * 35, 0, 35, 35, 0, 'h', self.x, self.y, 35, 35)
+            Red_Golem.image.clip_composite_draw(int(self.frame) * 35, 0, 35, 35, 0, 'h', self.x, self.y, 70, 70)
         else:
-            Red_Golem.image.clip_composite_draw(int(self.frame) * 35, 0, 35, 35, 0, '', self.x, self.y, 35, 35)
+            Red_Golem.image.clip_composite_draw(int(self.frame) * 35, 0, 35, 35, 0, '', self.x, self.y, 70, 70)
         draw_rectangle(*self.get_bb())
         self.font.draw(self.x, self.y + 15, f'(hp: {self.hp})', (255, 0, 0))
 
@@ -95,7 +95,7 @@ class Red_Golem(Monster):
                 self.y += self.speed * (dy / distance)
 
     def get_bb(self):
-        return self.x - 16, self.y - 16, self.x + 16, self.y + 16
+        return self.x - 16*2, self.y - 16*2, self.x + 16*2, self.y + 16*2
 
     def handle_collision(self, group, other):
         if group == 'sword:golem':
@@ -115,7 +115,7 @@ class White_Golem(Monster):
         if White_Golem.image == None:
             White_Golem.image = load_image('resource/white_golem.png')
         self.frame = randint(0,6)
-        self.speed = 0.3
+        self.speed = 0.7
         self.on_right = randint(0,1) # 캐릭터기준 오른쪽인지 ,,
         self.attack_range = 50
 
@@ -128,9 +128,9 @@ class White_Golem(Monster):
             return  # 5프레임마다 안 그려짐
 
         if self.on_right:
-            White_Golem.image.clip_composite_draw(int(self.frame) * 39, 0, 39, 39, 0, 'h', self.x, self.y, 39, 39)
+            White_Golem.image.clip_composite_draw(int(self.frame) * 39, 0, 39, 39, 0, 'h', self.x, self.y, 78, 78)
         else:
-            White_Golem.image.clip_composite_draw(int(self.frame) * 39, 0, 39, 39, 0, '', self.x, self.y, 39, 39)
+            White_Golem.image.clip_composite_draw(int(self.frame) * 39, 0, 39, 39, 0, '', self.x, self.y, 78, 78)
         draw_rectangle(*self.get_bb())
         self.font.draw(self.x, self.y + 15, f'(hp: {self.hp})', (255, 0, 0))
 
@@ -166,7 +166,7 @@ class White_Golem(Monster):
                 self.y += self.speed * (dy / distance)
 
     def get_bb(self):
-        return self.x - 19, self.y - 19, self.x + 19, self.y + 19
+        return self.x - 19*2, self.y - 19*2, self.x + 19*2, self.y + 19*2
 
     def handle_collision(self, group, other):
         if group == 'sword:golem':
