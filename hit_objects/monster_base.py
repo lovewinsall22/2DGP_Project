@@ -15,8 +15,9 @@ class Monster:
         self.x, self.y = x, y
         self.hp = hp
         self.damage = damage
-        self.alive = True
+        self.alive = False
         self.player = player
+        self.respawn_timer = 0
 
         self.trace_on = False # 한번 피격당할시 추적모드
         self.stop_time = 120 # 120프레임 멈춤
@@ -136,6 +137,10 @@ class White_Golem(Monster):
 
     def update(self):
         if not self.alive:
+            self.respawn_timer += 1
+            if self.respawn_timer >= 300:
+                self.alive = True
+                self.respawn_timer = 0
             return
 
         if self.is_hit:
