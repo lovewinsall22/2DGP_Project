@@ -26,6 +26,10 @@ class Monster:
         if Monster.font == None:
             Monster.font = load_font('DNFBitBitTTF.ttf', 10)
 
+        self.scale = 0.1              # 처음 크기
+        self.scale_target = 1.0       # 최종 크기
+        self.scale_speed = 0.02       # 커지는 속도
+        self.spawn_effect = True      # 등장 중인지 여부
 
     def draw(self):
         pass
@@ -128,10 +132,19 @@ class White_Golem(Monster):
         if self.is_hit and (self.flash_timer // 5) % 2 == 0:
             return  # 5프레임마다 안 그려짐
 
+        if self.spawn_effect:
+            if self.scale < self.scale_target:
+                self.scale += self.scale_speed
+            else:
+                self.scale = self.scale_target
+                self.spawn_effect = False  # 등장 완료
+
+        size = int(78 * self.scale)
+
         if self.on_right:
-            White_Golem.image.clip_composite_draw(int(self.frame) * 39, 0, 39, 39, 0, 'h', self.x, self.y, 78, 78)
+            White_Golem.image.clip_composite_draw(int(self.frame) * 39, 0, 39, 39, 0, 'h', self.x, self.y, size, size)
         else:
-            White_Golem.image.clip_composite_draw(int(self.frame) * 39, 0, 39, 39, 0, '', self.x, self.y, 78, 78)
+            White_Golem.image.clip_composite_draw(int(self.frame) * 39, 0, 39, 39, 0, '', self.x, self.y, size, size)
         draw_rectangle(*self.get_bb())
         self.font.draw(self.x, self.y + 15, f'(hp: {self.hp})', (255, 0, 0))
 
