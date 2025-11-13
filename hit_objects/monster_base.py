@@ -150,6 +150,13 @@ class White_Golem(Monster):
                     game_world.remove(self)
                     self.player.get_money_animation = True
                     self.player.gold += randint(10,50)
+
+                    # 골렘 리스폰
+                    respawn_golem = White_Golem(self.player)
+                    game_world.add(respawn_golem, 'object')
+                    game_world.add_collision_pair('player:golem', self.player, respawn_golem)
+                    game_world.add_collision_pair('sword:golem', self.player.sword, respawn_golem)
+                    print(f'[DEBUG] White Golem Respawned')
             return
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 7
 
