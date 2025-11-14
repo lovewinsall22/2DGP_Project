@@ -7,6 +7,7 @@ from player_ui import PlayerUI
 from sword import Sword
 import game_framework
 from world import game_world
+from town import block
 
 PIXEL_PER_METER = (1 / 0.04) # 1픽셀당 4cm => 플레이어 대략 120cm
 RUN_SPEED_KMPH = 20.0 # Km / Hour
@@ -77,6 +78,7 @@ class Player:
             self.money.draw(self.x, self.y + self.money_animation_count // 3, 22, 21)
 
     def update(self):
+        old_x, old_y = self.x, self.y
         self.sword.update()
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 5
         self.x += self.dirX * self.speed * game_framework.frame_time
@@ -93,6 +95,11 @@ class Player:
                 self.get_money_animation = False
                 self.money_animation_count = 0
         self.boundary_check()
+
+        for rect in block:
+            if self.collide_block(self, rect):
+                self.x, self.y = old_x, old_y
+                break
 
 
     def handle_event(self, event):
@@ -165,4 +172,15 @@ class Player:
             self.y = 31
         elif self.y > HEIGHT - 31:
             self.y = HEIGHT - 31
+
+    def collide_block(self,a, b):
+        left_a, bottom_a, right_a, top_a = a.get_bb()  # a의 bb
+        left_b, bottom_b, right_b, top_b = b
+
+        if left_a > right_b: return False
+        if right_a < left_b: return False
+        if top_a < bottom_b: return False
+        if bottom_a > top_b: return False
+
+        return True
 
