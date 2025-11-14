@@ -61,15 +61,28 @@ class Red_Golem(Monster):
         if self.is_hit and (self.flash_timer // 5) % 2 == 0:
             return  # 5프레임마다 안 그려짐
 
+        if self.spawn_effect:
+            if self.scale < self.scale_target:
+                self.scale += self.scale_speed
+            else:
+                self.scale = self.scale_target
+                self.spawn_effect = False  # 등장 완료
+
+        size = int(70 * self.scale)
+
         if self.on_right:
-            Red_Golem.image.clip_composite_draw(int(self.frame) * 35, 0, 35, 35, 0, 'h', self.x, self.y, 70, 70)
+            Red_Golem.image.clip_composite_draw(int(self.frame) * 35, 0, 35, 35, 0, 'h', self.x, self.y, size, size)
         else:
-            Red_Golem.image.clip_composite_draw(int(self.frame) * 35, 0, 35, 35, 0, '', self.x, self.y, 70, 70)
+            Red_Golem.image.clip_composite_draw(int(self.frame) * 35, 0, 35, 35, 0, '', self.x, self.y, size, size)
         draw_rectangle(*self.get_bb())
         self.font.draw(self.x, self.y + 15, f'(hp: {self.hp})', (255, 0, 0))
 
     def update(self):
         if not self.alive:
+            self.respawn_timer += 1
+            if self.respawn_timer >= 300:
+                self.alive = True
+                self.respawn_timer = 0
             return
 
         if self.is_hit:
@@ -84,6 +97,13 @@ class Red_Golem(Monster):
                     game_world.remove(self)
                     self.player.get_money_animation = True
                     self.player.gold += randint(10,50)
+
+                    # 골렘 리스폰
+                    respawn_golem = Red_Golem(self.player)
+                    game_world.add(respawn_golem, 'object')
+                    game_world.add_collision_pair('player:golem', self.player, respawn_golem)
+                    game_world.add_collision_pair('sword:golem', self.player.sword, respawn_golem)
+                    print(f'[DEBUG] Red Golem Respawned')
             return
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 7
 
