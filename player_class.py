@@ -151,9 +151,10 @@ class Player:
             pass
         elif group == 'player:golem':
             if not self.is_hitted:
-                self.hp -= other.damage
-                self.flash_timer = 0
-                self.is_hitted = True
+                if not other.spawn_effect:
+                    self.hp -= other.damage
+                    self.flash_timer = 0
+                    self.is_hitted = True
 
     def boundary_check(self):
         if self.x < 20:
