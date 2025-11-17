@@ -96,10 +96,12 @@ class Player:
                 self.money_animation_count = 0
         self.boundary_check()
 
-        for rect in block:
-            if self.collide_block(self, rect):
-                self.x, self.y = old_x, old_y
-                break
+        from play_mode import dungeon
+        if dungeon.cur_dungeon == 99:
+            for rect in block:
+                if self.collide_block(self, rect):
+                    self.x, self.y = old_x, old_y
+                    break
 
 
     def handle_event(self, event):
