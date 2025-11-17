@@ -50,6 +50,7 @@ class Player:
 
         self.max_hp = 100 # 최대 체력
         self.hp = 10 # 현재 체력
+        self.dead_timer = 0
         self.level = 1 # 현재 레벨
         self.speed = RUN_SPEED_PPS # 이동 속도
         self.damage = 1000 # 공격력
@@ -68,6 +69,8 @@ class Player:
     def draw(self):
         if self.is_hitted and (self.flash_timer // 5) % 2 == 0:
             return  # 5프레임마다 안 그려짐
+        if self.hp <= 0 and (self.dead_timer // 10) % 2 == 0:
+            return
         if self.ifRight == 1 : self.rightMove[int(self.frame)].draw(self.x, self.y, 40, 62)
         elif self.ifRight == 0 : self.leftMove[int(self.frame)].draw(self.x, self.y, 40, 62)
         draw_rectangle(*self.get_bb())
@@ -102,6 +105,12 @@ class Player:
                 if self.collide_block(self, rect):
                     self.x, self.y = old_x, old_y
                     break
+
+        if self.hp <= 0:
+            self.sword.sword_active = False
+            self.dead_timer += 1
+            if self.dead_timer >= 120:
+                game_framework.quit()
 
 
     def handle_event(self, event):
