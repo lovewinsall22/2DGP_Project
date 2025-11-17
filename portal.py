@@ -7,8 +7,13 @@ from hit_objects.monster_base import Red_Golem, White_Golem
 WIDTH, HEIGHT = 1280, 720
 
 class Portal:
+    image = None
+    boss_dungeon_portal = None
     def __init__(self,stage,number,x,y,dungeon):
-        self.image = load_image('resource/portal.png')
+        if Portal.image == None:
+            Portal.image = load_image('resource/portal.png')
+        if Portal.boss_dungeon_portal == None:
+            Portal.boss_dungeon_portal = load_image('resource/boss_portal.png')
         self.stage = stage
         self.number = number
         self.x, self.y = x, y
@@ -19,7 +24,10 @@ class Portal:
 
     def draw(self):
         if self.dungeon.cur_dungeon == self.stage:
-            self.image.draw(self.x,self.y,64,64)
+            if self.number == 6:
+                self.boss_dungeon_portal.draw(self.x,self.y,64,64)
+            else:
+                self.image.draw(self.x,self.y,64,64)
             draw_rectangle(*self.get_bb())
 
     def enter_portal(self, world, player, dungeon,monsters):
