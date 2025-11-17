@@ -2,7 +2,7 @@ from pico2d import load_image, draw_rectangle
 from town import Town
 from npc import NPC
 from hit_objects.dummy import Dummy
-from hit_objects.monster_base import Red_Golem, White_Golem
+from hit_objects.monster_base import Red_Golem, White_Golem, Boss
 
 WIDTH, HEIGHT = 1280, 720
 
@@ -101,6 +101,8 @@ class Portal:
         elif self.number == 6 and dungeon.cur_dungeon == 2:
             self.dungeon.cur_dungeon = 3
             player.x, player.y = WIDTH // 2, 100
+
+            world.add(Boss(player), 'object')
 
 
     def get_bb(self):
