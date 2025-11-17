@@ -80,6 +80,16 @@ class Portal:
             world.add(NPC())
             world.add(Dummy())
             print(f'[DEBUG] Portal {self.number} triggered, cur_dungeon={dungeon.cur_dungeon}')
+        elif self.number == 5 and dungeon.cur_dungeon == 0:
+            removes_types = White_Golem
+            for layer in list(world.layers.values()):
+                for obj in list(layer):
+                    if isinstance(obj, removes_types):
+                        world.remove(obj)
+
+            self.dungeon.cur_dungeon = 2
+            player.x, player.y = WIDTH // 2, 100
+
 
 
     def get_bb(self):

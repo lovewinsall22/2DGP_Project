@@ -15,6 +15,7 @@ from dmg_font import DmgText, damage_texts
 
 #running = True
 monsters = []
+global dungeon
 
 def init():
     global player, town, dungeon, townNpc, dummy, store, portals, monsters
