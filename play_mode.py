@@ -35,6 +35,7 @@ def init():
     portals.append(Portal(0,3, WIDTH // 2, 100,dungeon)) # 흰 골렘 던전에 있는 포탈 ( 마을로 돌아오는 포탈 )
     portals.append(Portal(1,4, WIDTH // 2, HEIGHT // 2,dungeon)) # 불 골렘 던전에 있는 포탈 ( 마을로 돌아오는 포탈 )
     portals.append(Portal(0,5, WIDTH // 2 + 100, HEIGHT - 110, dungeon)) # 최종 보스 던전으로 들어가는 입구 포탈
+    portals.append(Portal(2,6, WIDTH // 2, HEIGHT - 90, dungeon)) # 최종 보스 던전으로 들어가는 입구 포탈
     for p in portals:
         game_world.add_collision_pair('player:portal', player,p)
 
