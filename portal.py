@@ -98,6 +98,9 @@ class Portal:
             self.dungeon.cur_dungeon = 2
             player.x, player.y = WIDTH // 2, 100
 
+        elif self.number == 6 and dungeon.cur_dungeon == 2:
+            self.dungeon.cur_dungeon = 3
+            player.x, player.y = WIDTH // 2, 100
 
 
     def get_bb(self):
