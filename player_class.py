@@ -1,5 +1,5 @@
 from pico2d import load_image, draw_rectangle
-from sdl2 import SDL_KEYDOWN, SDL_KEYUP, SDLK_a, SDLK_d, SDLK_w, SDLK_s, SDLK_SPACE, SDLK_1, SDLK_2, SDLK_3, SDLK_l
+from sdl2 import SDL_KEYDOWN, SDL_KEYUP, SDLK_a, SDLK_d, SDLK_w, SDLK_s, SDLK_SPACE, SDLK_x
 from input_helper import get_keys
 
 WIDTH, HEIGHT = 1280, 720
@@ -49,7 +49,7 @@ class Player:
 
 
         self.max_hp = 100 # 최대 체력
-        self.hp = 100 # 현재 체력
+        self.hp = 10 # 현재 체력
         self.level = 1 # 현재 레벨
         self.speed = RUN_SPEED_PPS # 이동 속도
         self.damage = 1000 # 공격력
@@ -147,6 +147,13 @@ class Player:
                     self.sword.sword_angle = 90
                 else:
                     self.sword.sword_angle = 45  # ??
+            if event.key == SDLK_x:
+                if self.hp_potion_count > 0:# 체력포션 사용
+                    self.hp_potion_count -= 1
+                    self.hp += 10
+                    if self.hp > self.max_hp:
+                        self.hp = self.max_hp
+
 
     def get_bb(self):
         return self.x - 20, self.y - 31, self.x + 20, self.y + 31
