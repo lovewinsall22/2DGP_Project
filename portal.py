@@ -52,18 +52,20 @@ class Portal:
             self.ask_you = False
 
     def draw(self):
-        if self.ask_you:
-            self.textbar.draw(WIDTH // 2, HEIGHT // 2 + 100, 600, 200)
-            self.font.draw(WIDTH // 2 - 30, HEIGHT // 2 + 160, '경고', (255, 0, 0))
-            self.font.draw(WIDTH // 2 - 80, HEIGHT // 2 + 130, '=최종보스 던전 입구=', (255, 255, 0))
-            self.font.draw(WIDTH // 2 - 120, HEIGHT // 2 + 100, '들어가면 다시 나올 수 없습니다', (255, 255, 0))
-            self.font.draw(WIDTH // 2 - 120, HEIGHT // 2 + 70, '그래도 들어가시겠습니까 ? (Y/N)', (255, 255, 0))
         if self.dungeon.cur_dungeon == self.stage:
             if self.number == 6:
                 self.boss_dungeon_portal.draw(self.x,self.y,64,64)
             else:
                 self.image.draw(self.x,self.y,64,64)
             draw_rectangle(*self.get_bb())
+
+    def draw_ui(self):
+        if self.ask_you:
+            self.textbar.draw(WIDTH // 2, HEIGHT // 2 + 100, 600, 200)
+            self.font.draw(WIDTH // 2 - 30, HEIGHT // 2 + 160, '경고', (255, 0, 0))
+            self.font.draw(WIDTH // 2 - 80, HEIGHT // 2 + 130, '=최종보스 던전 입구=', (255, 255, 0))
+            self.font.draw(WIDTH // 2 - 120, HEIGHT // 2 + 100, '들어가면 다시 나올 수 없습니다', (255, 255, 0))
+            self.font.draw(WIDTH // 2 - 120, HEIGHT // 2 + 70, '그래도 들어가시겠습니까 ? (Y/N)', (255, 255, 0))
 
     def enter_portal(self, world, player, dungeon,monsters):
         if self.number == 1 and dungeon.cur_dungeon == 99 :
