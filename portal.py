@@ -3,6 +3,7 @@ from town import Town
 from npc import NPC
 from hit_objects.dummy import Dummy
 from hit_objects.monster_base import Red_Golem, White_Golem, Boss
+from sdl2 import SDL_KEYDOWN, SDLK_y, SDLK_n
 
 WIDTH, HEIGHT = 1280, 720
 
@@ -19,10 +20,15 @@ class Portal:
         self.x, self.y = x, y
         self.dungeon = dungeon
 
+        self.ask_you = False # 최종 보스 던전 입구에서 물어보는 창 띄울지 여부
+        self.player_answer_yes = -1 # 1: yes , 0: no , -1 : 아직 선택 안함
+
     def update(self):
         pass
 
     def draw(self):
+        if self.ask_you:
+            draw_rectangle(WIDTH // 2 - 200, HEIGHT // 2 - 150, WIDTH // 2 + 200, HEIGHT // 2 + 150)
         if self.dungeon.cur_dungeon == self.stage:
             if self.number == 6:
                 self.boss_dungeon_portal.draw(self.x,self.y,64,64)
@@ -89,14 +95,19 @@ class Portal:
             world.add(Dummy())
             print(f'[DEBUG] Portal {self.number} triggered, cur_dungeon={dungeon.cur_dungeon}')
         elif self.number == 5 and dungeon.cur_dungeon == 0:
-            removes_types = White_Golem
-            for layer in list(world.layers.values()):
-                for obj in list(layer):
-                    if isinstance(obj, removes_types):
-                        world.remove(obj)
+            self.ask_you = True
 
-            self.dungeon.cur_dungeon = 2
-            player.x, player.y = WIDTH // 2, 100
+            # 입력 기다리기 ...
+
+            if self.player_answer_yes == 1:
+                removes_types = White_Golem
+                for layer in list(world.layers.values()):
+                    for obj in list(layer):
+                        if isinstance(obj, removes_types):
+                            world.remove(obj)
+
+                self.dungeon.cur_dungeon = 2
+                player.x, player.y = WIDTH // 2, 100
 
         elif self.number == 6 and dungeon.cur_dungeon == 2:
             self.dungeon.cur_dungeon = 3
@@ -111,4 +122,14 @@ class Portal:
     def handle_collision(self, group, other):
         if group == 'player:portal':
             pass
+
+    def handle_event(self,event):
+        if not self.ask_you:
+            return
+        if event.type == SDL_KEYDOWN and event.key == SDLK_y:
+            self.ask_you = False
+            self.player_answer_yes = 1
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_n:
+            self.ask_you = False
+            self.player_answer_yes = 0
 
