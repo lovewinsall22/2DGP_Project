@@ -39,8 +39,10 @@ class Portal:
 
                 self.dungeon.cur_dungeon = 2
                 self.player.x, self.player.y = WIDTH // 2, 100
+                self.ask_you = False
         elif self.player_answer_yes == 0: # no 선택
             self.player_answer_yes = -1
+            self.ask_you = False
 
     def draw(self):
         if self.ask_you:
@@ -134,9 +136,7 @@ class Portal:
         if not self.ask_you:
             return
         if event.type == SDL_KEYDOWN and event.key == SDLK_y:
-            self.ask_you = False
             self.player_answer_yes = 1
         elif event.type == SDL_KEYDOWN and event.key == SDLK_n:
-            self.ask_you = False
             self.player_answer_yes = 0
 
