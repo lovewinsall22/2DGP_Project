@@ -4,13 +4,14 @@ from npc import NPC
 from hit_objects.dummy import Dummy
 from hit_objects.monster_base import Red_Golem, White_Golem, Boss
 from sdl2 import SDL_KEYDOWN, SDLK_y, SDLK_n
+from world import game_world
 
 WIDTH, HEIGHT = 1280, 720
 
 class Portal:
     image = None
     boss_dungeon_portal = None
-    def __init__(self,stage,number,x,y,dungeon):
+    def __init__(self,stage,number,x,y,dungeon, player = None):
         if Portal.image == None:
             Portal.image = load_image('resource/portal.png')
         if Portal.boss_dungeon_portal == None:
@@ -19,12 +20,27 @@ class Portal:
         self.number = number
         self.x, self.y = x, y
         self.dungeon = dungeon
+        self.player = player
 
         self.ask_you = False # 최종 보스 던전 입구에서 물어보는 창 띄울지 여부
         self.player_answer_yes = -1 # 1: yes , 0: no , -1 : 아직 선택 안함
 
     def update(self):
-        pass
+        if not self.ask_you:
+            return
+
+        if self.player_answer_yes == 1: # yes 선택
+            if self.player_answer_yes == 1:
+                removes_types = White_Golem
+                for layer in list(game_world.layers.values()):
+                    for obj in list(layer):
+                        if isinstance(obj, removes_types):
+                            game_world.remove(obj)
+
+                self.dungeon.cur_dungeon = 2
+                self.player.x, self.player.y = WIDTH // 2, 100
+        elif self.player_answer_yes == 0: # no 선택
+            self.player_answer_yes = -1
 
     def draw(self):
         if self.ask_you:
@@ -96,18 +112,9 @@ class Portal:
             print(f'[DEBUG] Portal {self.number} triggered, cur_dungeon={dungeon.cur_dungeon}')
         elif self.number == 5 and dungeon.cur_dungeon == 0:
             self.ask_you = True
-
+            self.player_answer_yes = -1
             # 입력 기다리기 ...
-
-            if self.player_answer_yes == 1:
-                removes_types = White_Golem
-                for layer in list(world.layers.values()):
-                    for obj in list(layer):
-                        if isinstance(obj, removes_types):
-                            world.remove(obj)
-
-                self.dungeon.cur_dungeon = 2
-                player.x, player.y = WIDTH // 2, 100
+            return
 
         elif self.number == 6 and dungeon.cur_dungeon == 2:
             self.dungeon.cur_dungeon = 3
