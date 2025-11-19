@@ -25,6 +25,7 @@ class Monster:
         self.player = player
         self.respawn_timer = 0
 
+        self.trace_wait = randint(500,5000) # 지날시 추적
         self.trace_on = False # 한번 피격당할시 추적모드
         self.stop_time = 120 # 120프레임 멈춤
         self.is_hit = False
@@ -155,6 +156,10 @@ class Red_Golem(Monster):
             if distance > self.attack_range:
                 self.x += self.speed * (dx / distance)
                 self.y += self.speed * (dy / distance)
+        else:
+            self.trace_wait -= 1
+            if self.trace_wait <= 0:
+                self.trace_on = True
 
     def get_bb(self):
         return self.x - 16*2, self.y - 16*2, self.x + 16*2, self.y + 16*2
@@ -246,6 +251,10 @@ class White_Golem(Monster):
             if distance > self.attack_range:
                 self.x += self.speed * (dx / distance)
                 self.y += self.speed * (dy / distance)
+        else:
+            self.trace_wait -= 1
+            if self.trace_wait <= 0:
+                self.trace_on = True
 
     def get_bb(self):
         return self.x - 19*2, self.y - 19*2, self.x + 19*2, self.y + 19*2
