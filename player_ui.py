@@ -22,8 +22,12 @@ class PlayerUI:
         self.font.draw(WIDTH - 500, y1 + 50, f'HP: {int(self.player.hp)}/{self.player.max_hp}', (255, 255, 255))
 
         self.font.draw(WIDTH - 500, y1 + 80, f'GOLD: {int(self.player.gold)}G', (255, 215, 0))  # 노란색
+
         self.hp_potion.draw(WIDTH - 320, y1 + 50, 21, 17)
         self.font.draw(WIDTH - 300, y1 + 50, f'x {self.player.hp_potion_count}', (255, 255, 255))
+
+        self.font.draw(WIDTH - 230, y1 + 80, f'Damage {self.player.damage}', (255, 255, 255))
+        self.font.draw(WIDTH - 230, y1 + 50, f'Speed {self.player.speed:.3f}', (255, 255, 255))
 
 
 
