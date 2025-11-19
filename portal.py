@@ -5,17 +5,24 @@ from hit_objects.dummy import Dummy
 from hit_objects.monster_base import Red_Golem, White_Golem, Boss
 from sdl2 import SDL_KEYDOWN, SDLK_y, SDLK_n
 from world import game_world
+from pico2d import load_font
 
 WIDTH, HEIGHT = 1280, 720
 
 class Portal:
     image = None
     boss_dungeon_portal = None
+    font = None
+    textbar = None
     def __init__(self,stage,number,x,y,dungeon, player = None):
         if Portal.image == None:
             Portal.image = load_image('resource/portal.png')
         if Portal.boss_dungeon_portal == None:
             Portal.boss_dungeon_portal = load_image('resource/boss_portal.png')
+        if Portal.font == None:
+            Portal.font = load_font('DNFBitBitTTF.ttf', 20)
+        if Portal.textbar == None:
+            Portal.textbar = load_image('resource/textbar.png')
         self.stage = stage
         self.number = number
         self.x, self.y = x, y
@@ -46,7 +53,11 @@ class Portal:
 
     def draw(self):
         if self.ask_you:
-            draw_rectangle(WIDTH // 2 - 200, HEIGHT // 2 - 150, WIDTH // 2 + 200, HEIGHT // 2 + 150)
+            self.textbar.draw(WIDTH // 2, HEIGHT // 2 + 100, 600, 200)
+            self.font.draw(WIDTH // 2 - 30, HEIGHT // 2 + 160, '경고', (255, 0, 0))
+            self.font.draw(WIDTH // 2 - 80, HEIGHT // 2 + 130, '=최종보스 던전 입구=', (255, 255, 0))
+            self.font.draw(WIDTH // 2 - 120, HEIGHT // 2 + 100, '들어가면 다시 나올 수 없습니다', (255, 255, 0))
+            self.font.draw(WIDTH // 2 - 120, HEIGHT // 2 + 70, '그래도 들어가시겠습니까 ? (Y/N)', (255, 255, 0))
         if self.dungeon.cur_dungeon == self.stage:
             if self.number == 6:
                 self.boss_dungeon_portal.draw(self.x,self.y,64,64)
