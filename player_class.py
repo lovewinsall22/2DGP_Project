@@ -109,11 +109,13 @@ class Player:
         if self.hp <= 0:
             self.sword.sword_active = False
             self.dead_timer += 1
-            if self.dead_timer >= 120:
+            if self.dead_timer >= 180:
                 game_framework.quit()
 
 
     def handle_event(self, event):
+        if self.hp <= 0:
+            return
         if event.type == SDL_KEYUP:
             if event.key == SDLK_d:
                 keys = get_keys()
