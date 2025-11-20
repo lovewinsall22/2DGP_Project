@@ -17,9 +17,11 @@ class PlayerUI:
 
         fill_w = int(bar_width * hp_ratio)
         for i in range(0, fill_w, 5):  # 5픽셀 단위로 채움
-            draw_rectangle(x1 + i, y1, x1 + i + 5, y1 + bar_height)
-
-        self.font.draw(WIDTH - 500, y1 + 50, f'HP: {int(self.player.hp)}/{self.player.max_hp}', (255, 255, 255))
+            draw_rectangle(x1 + i, y1, x1 + i + 5, y1 + bar_height,255,0,0 ,0,1)
+        if self.player.hp >= 11:
+            self.font.draw(WIDTH - 500, y1 + 50, f'HP: {int(self.player.hp)}/{self.player.max_hp}', (255, 255, 255))
+        else:
+            self.font.draw(WIDTH - 500, y1 + 50, f'HP: {int(self.player.hp)}/{self.player.max_hp}', (255, 0, 0))
 
         self.font.draw(WIDTH - 500, y1 + 80, f'GOLD: {int(self.player.gold)}G', (255, 215, 0))  # 노란색
 
