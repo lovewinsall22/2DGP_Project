@@ -9,7 +9,7 @@ class Store:
 
     def draw(self):
         if self.IsOpen:
-            draw_rectangle(WIDTH // 2 - 200, HEIGHT // 2 - 150, WIDTH // 2 + 200, HEIGHT // 2 + 150)
+            draw_rectangle(WIDTH // 2 - 200, HEIGHT // 2 - 150, WIDTH // 2 + 200, HEIGHT // 2 + 150,0,0,0,0,1)
             self.font.draw(WIDTH // 2 - 20, HEIGHT // 2 + 100, '상점', (255, 255, 0))
             self.font.draw(WIDTH // 2 - 120, HEIGHT // 2 + 50, '1. 체력포션 - 100G', (255, 255, 255))
             self.font.draw(WIDTH // 2 - 120, HEIGHT // 2 + 20, '2. 공격력 강화 - 200G', (255, 255, 255))
