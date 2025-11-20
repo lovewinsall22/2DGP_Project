@@ -6,6 +6,7 @@ class PlayerUI:
         self.player = player
         self.font = load_font('DNFBitBitTTF.ttf', 20)
         self.hp_potion = load_image('resource/heart.png')
+        self.defeat_image = load_image('resource/defeat.png')
 
     def draw(self):
         x1, y1 = WIDTH - 500, 20
@@ -31,6 +32,8 @@ class PlayerUI:
         self.font.draw(WIDTH - 230, y1 + 80, f'Damage {self.player.damage}', (255, 255, 255))
         self.font.draw(WIDTH - 230, y1 + 50, f'Speed {self.player.speed:.3f}', (255, 255, 255))
 
+        if self.player.hp <= 0:
+            self.defeat_image.draw(WIDTH // 2, HEIGHT // 2, 200, 100)
 
 
     def update(self):
