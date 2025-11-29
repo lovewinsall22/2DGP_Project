@@ -97,7 +97,16 @@ class Boss(Monster):
             return BehaviorTree.FAIL
 
     def back_dash(self):
-        pass
+        #self.back_dash_animation = True
+        self.y += game_framework.frame_time * RUN_SPEED_PPS
+
+        marin = 20
+        if self.y + marin > self.player.y:
+            return BehaviorTree.SUCCESS
+            # self.back_dash_animation = False
+        else:
+            return BehaviorTree.RUNNING
+
 
     def distance_less_than(self, range):
         distance = (self.x - self.player.x) ** 2 + (self.y - self.player.y) ** 2
