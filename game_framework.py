@@ -49,14 +49,28 @@ def run(start_mode):
     global frame_time
     frame_time = 0.0
     current_time = time.time() # 현재시각 1970.1.1 이후
+
+    TARGET_FPS = 60
+    TARGET_FRAME_TIME = 1.0 / TARGET_FPS
+
     while running:
         stack[-1].handle_events()
         stack[-1].update()
         stack[-1].draw()
-        frame_time = time.time() - current_time # 로직-렌더링 시간
+        #frame_time = time.time() - current_time # 로직-렌더링 시간
         frame_rate = 1.0 / frame_time # fps 구하기 초당 화면수
-        current_time += frame_time
+        #current_time += frame_time
         #print(f'Frame Time: {frame_time}, Frame_rate: {frame_rate}')
+
+        # 이번 프레임 걸린 시간 계산
+        now = time.time()
+        frame_time = now - current_time
+        current_time = now
+
+        # 프레임이 너무 빨랐을 경우 → 쉬기
+        if frame_time < TARGET_FRAME_TIME:
+            time.sleep(TARGET_FRAME_TIME - frame_time)
+            frame_time = TARGET_FRAME_TIME
 
     # repeatedly delete the top of the stack
     while (len(stack) > 0):
