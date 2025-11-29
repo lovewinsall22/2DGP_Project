@@ -126,6 +126,7 @@ class Boss(Monster):
                     self.player.hp -= 20
                     self.player.flash_timer = 0
                     self.player.is_hitted = True
+                    self.player.stun = True
                 self.attack_hit_applied = True
 
 
