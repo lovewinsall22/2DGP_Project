@@ -63,6 +63,9 @@ class Boss(Monster):
         self.animation3 = load_image('resource/Golem Iron_3.png')
         self.animation4 = load_image('resource/Golem Iron_4.png')
         self.animation_list = [self.animation1, self.animation2, self.animation3, self.animation4]
+        self.attack_animation_sprite = load_image('resource/Golem Boss Attack.png')  # 59x76
+        self.attack_animation = False
+        self.attack_frame = 0
 
         self.alive = True
         self.trace_on = True # 보스는 처음부터 추적모드
@@ -79,14 +82,22 @@ class Boss(Monster):
         if self.is_hit and (self.flash_timer // 5) % 2 == 0:
             return
 
-        self.animation_list[int(self.frame)].draw(self.x, self.y, 108, 102) # 원본 두배 크기로 그리기
+        if self.attack_animation:
+            self.attack_animation_sprite.clip_draw(int(self.attack_frame) * 59, 0, 59, 76, self.x, self.y, 118, 152)
+            if int(self.attack_frame) == 8:
+                self.attack_animation = False
+                self.attack_frame = 0
+        else:
+            self.animation_list[int(self.frame)].draw(self.x, self.y, 108, 102) # 원본 두배 크기로 그리기
+
         draw_rectangle(*self.get_bb())
         self.font.draw(self.x, self.y + 15, f'(hp: {self.hp})', (255, 0, 0))
         draw_circle(self.x, self.y, int(PIXEL_PER_METER * self.attack_range), int(PIXEL_PER_METER * self.attack_range),255,255,0)
 
     def update(self):
-        self.frame = (self.frame + FRAMES_PER_ACTION_BOSS * ACTION_PER_TIME_BOSS * game_framework.frame_time) % 4
         self.bt.run()
+        if self.attack_animation:
+            self.attack_frame = (self.attack_frame + FRAMES_PER_ACTION_BOSS * ACTION_PER_TIME_BOSS * game_framework.frame_time) % 9
 
     def get_bb(self):
         return self.x - 54, self.y - 51, self.x + 54, self.y + 51
@@ -115,18 +126,19 @@ class Boss(Monster):
 
     def is_player_in_boss_attack_range(self, range):
         if self.distance_less_than(range):
+            self.attack_animation = True
             return BehaviorTree.SUCCESS
         else:
             return BehaviorTree.FAIL
 
     def attack(self):
-        # self.attack_animation = True
-        if self.attack_end:
+        if int(self.attack_frame) == 8:
             return BehaviorTree.SUCCESS
         else:
             return BehaviorTree.RUNNING
 
     def move_little_to(self, target_x, target_y):
+        self.frame = (self.frame + FRAMES_PER_ACTION_BOSS * ACTION_PER_TIME_BOSS * game_framework.frame_time) % 4
         self.dir = math.atan2(target_y - self.y, target_x - self.x)  # 탄젠트 역함수
         distance = game_framework.frame_time * self.speed
 
