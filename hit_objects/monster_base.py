@@ -84,7 +84,9 @@ class Boss(Monster):
         return self.x - 54, self.y - 51, self.x + 54, self.y + 51
 
     def build_behavior_tree(self):
-        pass
+
+        root = Selector('백대쉬 or 공격 or 추적', back_dash, attack, trace)
+        self.bt = BehaviorTree(root)
 
 
 class Red_Golem(Monster):
