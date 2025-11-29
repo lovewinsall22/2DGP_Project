@@ -135,7 +135,10 @@ class Portal:
             self.dungeon.cur_dungeon = 3
             player.x, player.y = WIDTH // 2, 100
 
-            world.add(Boss(player), 'object')
+            boss = Boss(player)
+            world.add(boss, 'object')
+            world.add_collision_pair('player:boss', player, boss)
+            world.add_collision_pair('sword:golem', player.sword, boss)
 
 
     def get_bb(self):
