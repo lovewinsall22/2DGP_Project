@@ -114,7 +114,6 @@ class Boss(Monster):
                     self.alive = False
                     game_world.remove(self)
                     # 게임 끝
-            return
         self.bt.run()
         if self.attack_animation:
             self.attack_frame = (self.attack_frame + FRAMES_PER_ACTION_BOSS * ACTION_PER_TIME_BOSS * game_framework.frame_time) % 9
