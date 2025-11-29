@@ -4,6 +4,7 @@ from math import sqrt
 import game_framework
 from world import game_world
 from behavior_tree import BehaviorTree, Action, Sequence, Condition, Selector
+import math
 WIDTH, HEIGHT = 1280, 720
 
 PIXEL_PER_METER = (1 / 0.04) # 1픽셀당 4cm => 플레이어 대략 120cm
@@ -111,6 +112,20 @@ class Boss(Monster):
     def attack(self):
         pass
 
+    def move_little_to(self, target_x, target_y):
+        self.dir = math.atan2(target_y - self.y, target_x - self.x)  # 탄젠트 역함수
+        distance = game_framework.frame_time * RUN_SPEED_PPS
+
+        self.x += distance * math.cos(self.dir)
+        self.y += distance * math.sin(self.dir)
+
+    def trace_player(self):
+        self.move_little_to(self.player.x, self.player.y)
+        if self.distance_less_than(1):
+            return BehaviorTree.SUCCESS
+        else:
+            return BehaviorTree.RUNNING
+
     def build_behavior_tree(self):
 
         c1 = Condition('플레이어가 보스보다 더 위에 있는가?', self.is_boss_y_less_than_player_y)
@@ -120,6 +135,9 @@ class Boss(Monster):
         c2 = Condition('플레이어가 범위 안에 있는가?', self.is_player_in_boss_attack_range , 5)
         a2 = Action('공격', self.attack)
         attack = Sequence('플레이어가 공격범위 안에 있으면 공격', c2, a2)
+
+        a3 = Action('추적', self.trace_player)
+        trace = Sequence('공격범위에 플레이어 없을시 추적', a3)
 
         root = Selector('백대쉬 or 공격 or 추적', back_dash, attack, trace)
         self.bt = BehaviorTree(root)
