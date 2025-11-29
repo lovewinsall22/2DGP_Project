@@ -3,6 +3,7 @@ from pico2d import load_image, draw_rectangle, load_font
 from math import sqrt
 import game_framework
 from world import game_world
+from behavior_tree import BehaviorTree, Action, Sequence, Condition, Selector
 WIDTH, HEIGHT = 1280, 720
 
 # 일반 몬스터
@@ -62,6 +63,8 @@ class Boss(Monster):
         self.speed = 1
         self.attack_range = 70
 
+        self.build_behavior_tree()
+
     def draw(self):
         if not self.alive:
             return
@@ -75,9 +78,13 @@ class Boss(Monster):
 
     def update(self):
         self.frame = (self.frame + FRAMES_PER_ACTION_BOSS * ACTION_PER_TIME_BOSS * game_framework.frame_time) % 4
+        #self.bt.run()
 
     def get_bb(self):
         return self.x - 54, self.y - 51, self.x + 54, self.y + 51
+
+    def build_behavior_tree(self):
+        pass
 
 
 class Red_Golem(Monster):
