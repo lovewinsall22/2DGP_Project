@@ -66,6 +66,9 @@ class Boss(Monster):
         self.attack_animation_sprite = load_image('resource/Golem Boss Attack.png')  # 59x76
         self.attack_animation = False
         self.attack_frame = 0
+        self.back_dash_sprite = load_image('resource/Golem Boss BackRun.png') # 59x76
+        self.back_dash_frame = 0
+        self.back_dash_animation = False
 
         self.alive = True
         self.trace_on = True # 보스는 처음부터 추적모드
@@ -87,6 +90,11 @@ class Boss(Monster):
             if int(self.attack_frame) == 8:
                 self.attack_animation = False
                 self.attack_frame = 0
+        elif self.back_dash_animation:
+            self.back_dash_sprite.clip_draw(int(self.back_dash_frame) * 59, 0, 59, 76, self.x, self.y, 118, 152)
+            if int(self.back_dash_frame) == 4:
+                self.back_dash_animation = False
+                self.back_dash_frame = 0
         else:
             self.animation_list[int(self.frame)].draw(self.x, self.y, 108, 102) # 원본 두배 크기로 그리기
 
@@ -98,24 +106,23 @@ class Boss(Monster):
         self.bt.run()
         if self.attack_animation:
             self.attack_frame = (self.attack_frame + FRAMES_PER_ACTION_BOSS * ACTION_PER_TIME_BOSS * game_framework.frame_time) % 9
+        elif self.back_dash_animation:
+            self.back_dash_frame = (self.back_dash_frame + FRAMES_PER_ACTION_BOSS * ACTION_PER_TIME_BOSS * game_framework.frame_time) % 5
 
     def get_bb(self):
         return self.x - 54, self.y - 51, self.x + 54, self.y + 51
 
     def is_boss_y_less_than_player_y(self):
         if self.y < self.player.y: # 보스가 더 아래시 true 반환
+            self.back_dash_animation = True
             return BehaviorTree.SUCCESS
         else:
             return BehaviorTree.FAIL
 
     def back_dash(self):
-        #self.back_dash_animation = True
-        self.y += game_framework.frame_time * RUN_SPEED_PPS
-
-        marin = 20
-        if self.y + marin > self.player.y:
+        self.y += game_framework.frame_time * RUN_SPEED_PPS * 4 # 백대쉬 속도는 3배
+        if int(self.back_dash_frame) == 4:
             return BehaviorTree.SUCCESS
-            # self.back_dash_animation = False
         else:
             return BehaviorTree.RUNNING
 
