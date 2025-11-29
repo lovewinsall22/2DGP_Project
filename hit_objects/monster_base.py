@@ -119,7 +119,11 @@ class Boss(Monster):
             return BehaviorTree.FAIL
 
     def attack(self):
-        pass
+        # self.attack_animation = True
+        if self.attack_end:
+            return BehaviorTree.SUCCESS
+        else:
+            return BehaviorTree.RUNNING
 
     def move_little_to(self, target_x, target_y):
         self.dir = math.atan2(target_y - self.y, target_x - self.x)  # 탄젠트 역함수
