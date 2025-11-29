@@ -84,7 +84,10 @@ class Boss(Monster):
         return self.x - 54, self.y - 51, self.x + 54, self.y + 51
 
     def is_boss_y_less_than_player_y(self):
-        return self.y < self.player.y # 보스가 더 아래시 true 반환
+        if self.y < self.player.y: # 보스가 더 아래시 true 반환
+            return BehaviorTree.SUCCESS
+        else:
+            return BehaviorTree.FAIL
 
     def back_dash(self):
         pass
