@@ -1,5 +1,5 @@
 from random import randint
-from pico2d import load_image, draw_rectangle, load_font
+from pico2d import load_image, draw_rectangle, load_font, draw_circle
 from math import sqrt
 import game_framework
 from world import game_world
@@ -8,7 +8,7 @@ import math
 WIDTH, HEIGHT = 1280, 720
 
 PIXEL_PER_METER = (1 / 0.04) # 1픽셀당 4cm => 플레이어 대략 120cm
-RUN_SPEED_KMPH = 20.0 # Km / Hour
+RUN_SPEED_KMPH = 8.0 # Km / Hour
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
@@ -67,8 +67,8 @@ class Boss(Monster):
         self.alive = True
         self.trace_on = True # 보스는 처음부터 추적모드
         self.frame = 0
-        self.speed = 1
-        self.attack_range = 70
+        self.speed = RUN_SPEED_PPS
+        self.attack_range = 3
 
         self.build_behavior_tree()
 
@@ -82,10 +82,11 @@ class Boss(Monster):
         self.animation_list[int(self.frame)].draw(self.x, self.y, 108, 102) # 원본 두배 크기로 그리기
         draw_rectangle(*self.get_bb())
         self.font.draw(self.x, self.y + 15, f'(hp: {self.hp})', (255, 0, 0))
+        draw_circle(self.x, self.y, int(PIXEL_PER_METER * self.attack_range), int(PIXEL_PER_METER * self.attack_range),255,255,0)
 
     def update(self):
         self.frame = (self.frame + FRAMES_PER_ACTION_BOSS * ACTION_PER_TIME_BOSS * game_framework.frame_time) % 4
-        #self.bt.run()
+        self.bt.run()
 
     def get_bb(self):
         return self.x - 54, self.y - 51, self.x + 54, self.y + 51
@@ -127,7 +128,7 @@ class Boss(Monster):
 
     def move_little_to(self, target_x, target_y):
         self.dir = math.atan2(target_y - self.y, target_x - self.x)  # 탄젠트 역함수
-        distance = game_framework.frame_time * RUN_SPEED_PPS
+        distance = game_framework.frame_time * self.speed
 
         self.x += distance * math.cos(self.dir)
         self.y += distance * math.sin(self.dir)
@@ -145,7 +146,7 @@ class Boss(Monster):
         a1 = Action('보스 백대쉬', self.back_dash)
         back_dash = Sequence('플레이어가 보스보다 위에 위치시 백대쉬', c1, a1)
 
-        c2 = Condition('플레이어가 범위 안에 있는가?', self.is_player_in_boss_attack_range , 5)
+        c2 = Condition('플레이어가 범위 안에 있는가?', self.is_player_in_boss_attack_range , self.attack_range)
         a2 = Action('공격', self.attack)
         attack = Sequence('플레이어가 공격범위 안에 있으면 공격', c2, a2)
 
