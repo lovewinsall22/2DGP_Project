@@ -120,7 +120,8 @@ class Boss(Monster):
             return BehaviorTree.FAIL
 
     def back_dash(self):
-        self.y += game_framework.frame_time * RUN_SPEED_PPS * 4 # 백대쉬 속도는 3배
+        if int(self.back_dash_frame) >= 2:
+            self.y += game_framework.frame_time * RUN_SPEED_PPS * 4 # 백대쉬 속도는 3배
         if int(self.back_dash_frame) == 4:
             return BehaviorTree.SUCCESS
         else:
