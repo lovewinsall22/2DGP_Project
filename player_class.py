@@ -49,10 +49,10 @@ class Player:
 
 
         self.max_hp = 100 # 최대 체력
-        self.hp = 10 # 현재 체력
+        self.hp = 100 # 현재 체력
         self.dead_timer = 0
         self.level = 1 # 현재 레벨
-        self.speed = RUN_SPEED_PPS # 이동 속도
+        self.speed = RUN_SPEED_PPS + 400 # 이동 속도
         self.damage = 1000 # 공격력
         self.gold = 1000 # 골드
         self.hp_potion_count = 0 # 체력포션 개수
@@ -182,6 +182,11 @@ class Player:
                     self.hp -= other.damage
                     self.flash_timer = 0
                     self.is_hitted = True
+        elif group == 'player:boss':
+            if not self.is_hitted:
+                self.hp -= other.damage
+                self.flash_timer = 0
+                self.is_hitted = True
 
     def boundary_check(self):
         if self.x < 20:
