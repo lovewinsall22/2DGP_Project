@@ -58,7 +58,7 @@ def run(start_mode):
         stack[-1].update()
         stack[-1].draw()
         #frame_time = time.time() - current_time # 로직-렌더링 시간
-        frame_rate = 1.0 / frame_time # fps 구하기 초당 화면수
+        #frame_rate = 1.0 / frame_time # fps 구하기 초당 화면수
         #current_time += frame_time
         #print(f'Frame Time: {frame_time}, Frame_rate: {frame_rate}')
 
