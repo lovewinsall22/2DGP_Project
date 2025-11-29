@@ -37,6 +37,10 @@ class Player:
         self.money = load_image('resource/money.png')
         #self.attack_r = load_image('resource/attack_r.png')
         #self.attack_l = load_image('resource/attack_l.png')
+        self.stun_sprite = load_image('resource/PlayerStun.png') # 42x35
+        self.stun = False
+        self.stun_frame = 0
+        self.stun_count = 0
 
         self.x, self.y = WIDTH / 2, HEIGHT / 2 # 플레이어 초기 좌표
         self.dirX,self.dirY = 0, 0 # 이동 방향 1 <--> -1
@@ -52,7 +56,7 @@ class Player:
         self.hp = 100 # 현재 체력
         self.dead_timer = 0
         self.level = 1 # 현재 레벨
-        self.speed = RUN_SPEED_PPS + 400 # 이동 속도
+        self.speed = RUN_SPEED_PPS # 이동 속도
         self.damage = 1000 # 공격력
         self.gold = 1000 # 골드
         self.hp_potion_count = 0 # 체력포션 개수
@@ -67,6 +71,8 @@ class Player:
 
 
     def draw(self):
+        if self.stun:
+            self.stun_sprite.clip_draw(int(self.stun_frame) * 42, 0, 42, 35, self.x, self.y + 10, 42, 35)
         if self.is_hitted and (self.flash_timer // 5) % 2 == 0:
             return  # 5프레임마다 안 그려짐
         if self.hp <= 0 and (self.dead_timer // 10) % 2 == 0:
@@ -86,6 +92,16 @@ class Player:
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 5
         self.x += self.dirX * self.speed * game_framework.frame_time
         self.y += self.dirY * self.speed * game_framework.frame_time
+        if self.stun:
+            self.speed = 0
+            self.stun_frame = (self.stun_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
+            self.stun_count += 1
+            if self.stun_count > 80:
+                self.stun = False
+                self.stun_count = 0
+                self.stun_frame = 0
+                self.speed = RUN_SPEED_PPS # 수정되어야할 코드 ( speed 업그레이드시 스턴되면 초기화됨 )
+                self. dirX, self.dirY = 0, 0
         if self.is_hitted:
             self.flash_timer += 1
             if self.flash_timer >= 120:
@@ -114,7 +130,7 @@ class Player:
 
 
     def handle_event(self, event):
-        if self.hp <= 0:
+        if self.hp <= 0 or self.stun:
             return
         if event.type == SDL_KEYUP:
             if event.key == SDLK_d:
