@@ -83,8 +83,18 @@ class Boss(Monster):
     def get_bb(self):
         return self.x - 54, self.y - 51, self.x + 54, self.y + 51
 
+    def is_boss_y_less_than_player_y(self):
+        return self.y < self.player.y # 보스가 더 아래시 true 반환
+
+    def back_dash(self):
+        pass
+
     def build_behavior_tree(self):
 
+        c1 = Condition('플레이어가 보스보다 더 위에 있는가?', self.is_boss_y_less_than_player_y)
+        a1 = Action('보스 백대쉬', self.back_dash)
+        back_dash = Sequence('플레이어가 보스보다 위에 위치시 백대쉬', c1, a1)
+        
         root = Selector('백대쉬 or 공격 or 추적', back_dash, attack, trace)
         self.bt = BehaviorTree(root)
 
