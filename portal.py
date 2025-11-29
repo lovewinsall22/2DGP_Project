@@ -138,7 +138,7 @@ class Portal:
             boss = Boss(player)
             world.add(boss, 'object')
             world.add_collision_pair('player:boss', player, boss)
-            world.add_collision_pair('sword:golem', player.sword, boss)
+            world.add_collision_pair('sword:boss', player.sword, boss)
 
 
     def get_bb(self):
