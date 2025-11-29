@@ -103,6 +103,18 @@ class Boss(Monster):
         draw_circle(self.x, self.y, int(PIXEL_PER_METER * self.attack_range), int(PIXEL_PER_METER * self.attack_range),255,255,0)
 
     def update(self):
+        if self.is_hit:
+            self.stop_time -= 1
+            self.flash_timer += 1
+            if self.stop_time <= 0:
+                self.is_hit = False
+                self.stop_time = 120
+                self.flash_timer = 0
+                if self.hp <= 0:
+                    self.alive = False
+                    game_world.remove(self)
+                    # 게임 끝
+            return
         self.bt.run()
         if self.attack_animation:
             self.attack_frame = (self.attack_frame + FRAMES_PER_ACTION_BOSS * ACTION_PER_TIME_BOSS * game_framework.frame_time) % 9
@@ -175,6 +187,16 @@ class Boss(Monster):
 
         root = Selector('백대쉬 or 공격 or 추적', attack, back_dash, trace)
         self.bt = BehaviorTree(root)
+
+    def handle_collision(self, group, other):
+        if group == 'sword:boss':
+            if other.sword_active and not self.is_hit:
+                self.hp -= other.damage
+                self.is_hit = True
+                self.flash_timer = 0
+                self.trace_on = True
+        elif group == 'player:boss':
+            pass
 
 
 class Red_Golem(Monster):
