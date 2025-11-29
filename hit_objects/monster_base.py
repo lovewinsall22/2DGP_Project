@@ -6,6 +6,12 @@ from world import game_world
 from behavior_tree import BehaviorTree, Action, Sequence, Condition, Selector
 WIDTH, HEIGHT = 1280, 720
 
+PIXEL_PER_METER = (1 / 0.04) # 1픽셀당 4cm => 플레이어 대략 120cm
+RUN_SPEED_KMPH = 20.0 # Km / Hour
+RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
+RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
+
 # 일반 몬스터
 FRAMES_PER_ACTION = 7 # 7개 애니메이션
 TIME_PER_ACTION = 0.5 # #액션 한번당 0.5초
@@ -92,12 +98,29 @@ class Boss(Monster):
     def back_dash(self):
         pass
 
+    def distance_less_than(self, range):
+        distance = (self.x - self.player.x) ** 2 + (self.y - self.player.y) ** 2
+        return distance < (PIXEL_PER_METER * range) ** 2
+
+    def is_player_in_boss_attack_range(self, range):
+        if self.distance_less_than(range):
+            return BehaviorTree.SUCCESS
+        else:
+            return BehaviorTree.FAIL
+
+    def attack(self):
+        pass
+
     def build_behavior_tree(self):
 
         c1 = Condition('플레이어가 보스보다 더 위에 있는가?', self.is_boss_y_less_than_player_y)
         a1 = Action('보스 백대쉬', self.back_dash)
         back_dash = Sequence('플레이어가 보스보다 위에 위치시 백대쉬', c1, a1)
-        
+
+        c2 = Condition('플레이어가 범위 안에 있는가?', self.is_player_in_boss_attack_range , 5)
+        a2 = Action('공격', self.attack)
+        attack = Sequence('플레이어가 공격범위 안에 있으면 공격', c2, a2)
+
         root = Selector('백대쉬 or 공격 or 추적', back_dash, attack, trace)
         self.bt = BehaviorTree(root)
 
