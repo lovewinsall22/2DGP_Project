@@ -172,7 +172,7 @@ class Boss(Monster):
         a3 = Action('추적', self.trace_player)
         trace = Sequence('공격범위에 플레이어 없을시 추적', a3)
 
-        root = Selector('백대쉬 or 공격 or 추적', back_dash, attack, trace)
+        root = Selector('백대쉬 or 공격 or 추적', attack, back_dash, trace)
         self.bt = BehaviorTree(root)
 
 
