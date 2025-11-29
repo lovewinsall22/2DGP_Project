@@ -84,17 +84,7 @@ class Boss(Monster):
         return self.x - 54, self.y - 51, self.x + 54, self.y + 51
 
     def build_behavior_tree(self):
-        #Root
-        #└─ Selector
-        #   ├─ Sequence: "플레이어 위에 위치하려고 시도"
-        #   │     ├─ Condition: player.y > boss.y
-        #   │     └─ Action: dash_up_to_player()
-        #   │
-        #   ├─ Sequence: "공격 조건 확인 후 공격"
-        #   │     ├─ Condition: distance_to_player < attack_range
-        #   │     └─ Action: attack()
-        #   │
-        #   └─ Action: chase_player() 기본행동
+        pass
 
 
 class Red_Golem(Monster):
