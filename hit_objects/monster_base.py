@@ -74,7 +74,8 @@ class Boss(Monster):
         self.trace_on = True # 보스는 처음부터 추적모드
         self.frame = 0
         self.speed = RUN_SPEED_PPS
-        self.attack_range = 3
+        self.attack_range = 6 # 땅 내려찍기 범위
+        self.attack_hit_applied = False
 
         self.build_behavior_tree()
 
@@ -90,6 +91,7 @@ class Boss(Monster):
             if int(self.attack_frame) == 8:
                 self.attack_animation = False
                 self.attack_frame = 0
+                self.attack_hit_applied = False
         elif self.back_dash_animation:
             self.back_dash_sprite.clip_draw(int(self.back_dash_frame) * 59, 0, 59, 76, self.x, self.y, 118, 152)
             if int(self.back_dash_frame) == 4:
@@ -117,6 +119,16 @@ class Boss(Monster):
         self.bt.run()
         if self.attack_animation:
             self.attack_frame = (self.attack_frame + FRAMES_PER_ACTION_BOSS * ACTION_PER_TIME_BOSS * game_framework.frame_time) % 9
+
+            # 땅 내려찍을때 범위내에 플레이어 있을시 충돌처리 ,, 사실은 충돌처리 handle에서 해야하지만 원이라 ,,
+            if int(self.attack_frame) == 6 and not self.attack_hit_applied:
+                if self.distance_less_than(self.attack_range):
+                    self.player.hp -= 20
+                    self.player.flash_timer = 0
+                    self.player.is_hitted = True
+                self.attack_hit_applied = True
+
+
         elif self.back_dash_animation:
             self.back_dash_frame = (self.back_dash_frame + FRAMES_PER_ACTION_BOSS * ACTION_PER_TIME_BOSS * game_framework.frame_time) % 5
 
