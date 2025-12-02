@@ -179,10 +179,7 @@ class Boss(Monster):
 
     def trace_player(self):
         self.move_little_to(self.player.x, self.player.y)
-        if self.distance_less_than(1):
-            return BehaviorTree.SUCCESS
-        else:
-            return BehaviorTree.RUNNING
+        return BehaviorTree.RUNNING
 
     def build_behavior_tree(self):
 
@@ -197,7 +194,7 @@ class Boss(Monster):
         a3 = Action('추적', self.trace_player)
         trace = Sequence('공격범위에 플레이어 없을시 추적', a3)
 
-        root = Selector('백대쉬 or 공격 or 추적', attack, back_dash, trace)
+        root = Selector('추적, 공격, 백대쉬', attack, back_dash, trace)
         self.bt = BehaviorTree(root)
 
     def handle_collision(self, group, other):
