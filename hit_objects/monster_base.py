@@ -105,8 +105,8 @@ class Boss(Monster):
         draw_circle(self.x, self.y, int(PIXEL_PER_METER * self.attack_range), int(PIXEL_PER_METER * self.attack_range),255,255,0)
 
     def trace_player(self):
-        if not self.attack_animation and not self.back_dash_animation:
-            self.move_little_to(self.player.x, self.player.y)
+        #if not self.attack_animation and not self.back_dash_animation:
+        self.move_little_to(self.player.x, self.player.y)
 
     def update(self):
         if self.is_hit:
