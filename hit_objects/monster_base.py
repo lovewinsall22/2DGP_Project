@@ -104,6 +104,10 @@ class Boss(Monster):
         self.font.draw(self.x, self.y + 15, f'(hp: {self.hp})', (255, 0, 0))
         draw_circle(self.x, self.y, int(PIXEL_PER_METER * self.attack_range), int(PIXEL_PER_METER * self.attack_range),255,255,0)
 
+    def trace_player(self):
+        if not self.attack_animation and not self.back_dash_animation:
+            self.move_little_to(self.player.x, self.player.y)
+
     def update(self):
         if self.is_hit:
             self.stop_time -= 1
@@ -116,6 +120,7 @@ class Boss(Monster):
                     self.alive = False
                     game_world.remove(self)
                     # 게임 끝
+        self.trace_player()
         self.bt.run()
         if self.attack_animation:
             self.attack_frame = (self.attack_frame + FRAMES_PER_ACTION_BOSS * ACTION_PER_TIME_BOSS * game_framework.frame_time) % 9
@@ -177,9 +182,7 @@ class Boss(Monster):
         self.x += distance * math.cos(self.dir)
         self.y += distance * math.sin(self.dir)
 
-    def trace_player(self):
-        self.move_little_to(self.player.x, self.player.y)
-        return BehaviorTree.RUNNING
+
 
     def build_behavior_tree(self):
 
@@ -191,10 +194,7 @@ class Boss(Monster):
         a2 = Action('공격', self.attack)
         attack = Sequence('플레이어가 공격범위 안에 있으면 공격', c2, a2)
 
-        a3 = Action('추적', self.trace_player)
-        trace = Sequence('공격범위에 플레이어 없을시 추적', a3)
-
-        root = Selector('추적, 공격, 백대쉬', attack, back_dash, trace)
+        root = Selector('공격 or 백대쉬', attack, back_dash)
         self.bt = BehaviorTree(root)
 
     def handle_collision(self, group, other):
