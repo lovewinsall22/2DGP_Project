@@ -79,10 +79,21 @@ class Boss(Monster):
         self.attack_hit_applied = False
         self.attack_timer = 0
 
+        self.die_animation = False
+        self.die_sprite = load_image('resource/die.png')
+        self.die_frame = 0
         self.build_behavior_tree()
 
     def draw(self):
         if not self.alive:
+            if self.die_animation:
+                if self.die_frame < 4:
+                    y = 2
+                elif self.die_frame < 8:
+                    y = 1
+                else:
+                    y = 0
+                self.die_sprite.clip_draw(int(self.die_frame) % 4 * 500, y * 500, 500, 500, self.x, self.y, 100, 100)
             return
 
         if self.is_hit and (self.flash_timer // 5) % 2 == 0:
@@ -126,6 +137,9 @@ class Boss(Monster):
 
 
     def update(self):
+        if not self.alive and self.die_animation:
+            self.die_frame = (self.die_frame + FRAMES_PER_ACTION_BOSS * ACTION_PER_TIME_BOSS * game_framework.frame_time) % 12
+            return
         if self.hp <= 50000 and self.once_spawn_golems == False:
             self.once_spawn_golems = True
             self.spawn_golems()
@@ -138,7 +152,7 @@ class Boss(Monster):
                 self.flash_timer = 0
                 if self.hp <= 0:
                     self.alive = False
-                    game_world.remove(self)
+                    self.die_animation = True
                     # 게임 끝
         self.attack_timer += 1
         self.trace_player()
