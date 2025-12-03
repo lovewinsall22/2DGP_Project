@@ -118,8 +118,10 @@ class Boss(Monster):
                 new_golem = White_Golem(self.player)
             else:
                 new_golem = Ice_Golem(self.player)
+            new_golem.trace_on = True
             game_world.add(new_golem, 'object')
             game_world.add_collision_pair('player:golem', self.player, new_golem)
+            game_world.add_collision_pair('sword:golem', self.player.sword, new_golem)
 
 
     def update(self):
