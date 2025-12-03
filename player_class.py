@@ -96,7 +96,7 @@ class Player:
             self.speed = 0
             self.stun_frame = (self.stun_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
             self.stun_count += 1
-            if self.stun_count > 80:
+            if self.stun_count > 50:
                 self.stun = False
                 self.stun_count = 0
                 self.stun_frame = 0
