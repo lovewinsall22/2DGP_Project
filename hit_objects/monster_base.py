@@ -57,7 +57,7 @@ class Monster:
 
 class Boss(Monster):
     def __init__(self, player = None):
-        super().__init__(WIDTH // 2, HEIGHT - 100, 10000, 10,player)
+        super().__init__(WIDTH // 2, HEIGHT - 100, 100000, 10,player)
         self.animation1 = load_image('resource/Golem Iron_1.png')
         self.animation2 = load_image('resource/Golem Iron_2.png')
         self.animation3 = load_image('resource/Golem Iron_3.png')
@@ -69,6 +69,7 @@ class Boss(Monster):
         self.back_dash_sprite = load_image('resource/Golem Boss BackRun.png') # 59x76
         self.back_dash_frame = 0
         self.back_dash_animation = False
+        self.once_spawn_golems = False
 
         self.alive = True
         self.trace_on = True # 보스는 처음부터 추적모드
@@ -108,7 +109,23 @@ class Boss(Monster):
         #if not self.attack_animation and not self.back_dash_animation:
         self.move_little_to(self.player.x, self.player.y)
 
+    def spawn_golems(self):
+        for _ in range(10):
+            randnum = randint(0,2)
+            if randnum == 0:
+                new_golem = Red_Golem(self.player)
+            elif randnum == 1:
+                new_golem = White_Golem(self.player)
+            else:
+                new_golem = Ice_Golem(self.player)
+            game_world.add(new_golem, 'object')
+            game_world.add_collision_pair('player:golem', self.player, new_golem)
+
+
     def update(self):
+        if self.hp <= 50000 and self.once_spawn_golems == False:
+            self.once_spawn_golems = True
+            self.spawn_golems()
         if self.is_hit:
             self.stop_time -= 1
             self.flash_timer += 1
@@ -124,7 +141,6 @@ class Boss(Monster):
         self.bt.run()
         if self.attack_animation:
             self.attack_frame = (self.attack_frame + FRAMES_PER_ACTION_BOSS * ACTION_PER_TIME_BOSS * game_framework.frame_time) % 9
-
             # 땅 내려찍을때 범위내에 플레이어 있을시 충돌처리 ,, 사실은 충돌처리 handle에서 해야하지만 원이라 ,,
             if int(self.attack_frame) == 6 and not self.attack_hit_applied:
                 if self.distance_less_than(self.attack_range):
@@ -133,8 +149,6 @@ class Boss(Monster):
                     self.player.is_hitted = True
                     self.player.stun = True
                 self.attack_hit_applied = True
-
-
         elif self.back_dash_animation:
             self.back_dash_frame = (self.back_dash_frame + FRAMES_PER_ACTION_BOSS * ACTION_PER_TIME_BOSS * game_framework.frame_time) % 5
 
