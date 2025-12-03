@@ -77,6 +77,7 @@ class Boss(Monster):
         self.speed = RUN_SPEED_PPS
         self.attack_range = 6 # 땅 내려찍기 범위
         self.attack_hit_applied = False
+        self.attack_timer = 0
 
         self.build_behavior_tree()
 
@@ -139,6 +140,7 @@ class Boss(Monster):
                     self.alive = False
                     game_world.remove(self)
                     # 게임 끝
+        self.attack_timer += 1
         self.trace_player()
         self.bt.run()
         if self.attack_animation:
@@ -178,7 +180,8 @@ class Boss(Monster):
         return distance < (PIXEL_PER_METER * range) ** 2
 
     def is_player_in_boss_attack_range(self, range):
-        if self.distance_less_than(range):
+        if self.distance_less_than(range) and self.attack_timer >= 300:
+            self.attack_timer = 0
             self.attack_animation = True
             return BehaviorTree.SUCCESS
         else:
