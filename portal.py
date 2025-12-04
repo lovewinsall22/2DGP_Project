@@ -13,32 +13,25 @@ WIDTH, HEIGHT = 1280, 720
 class Portal:
     image = None
     boss_dungeon_portal = None
-    font = None
-    textbar = None
     def __init__(self,stage,number,x,y,dungeon, player = None):
         if Portal.image == None:
             Portal.image = load_image('resource/portal.png')
         if Portal.boss_dungeon_portal == None:
             Portal.boss_dungeon_portal = load_image('resource/boss_portal.png')
-        if Portal.font == None:
-            Portal.font = load_font('DNFBitBitTTF.ttf', 20)
-        if Portal.textbar == None:
-            Portal.textbar = load_image('resource/textbar.png')
         self.stage = stage
         self.number = number
         self.x, self.y = x, y
         self.dungeon = dungeon
         self.player = player
 
-        self.ask_you = False # 최종 보스 던전 입구에서 물어보는 창 띄울지 여부
-        self.player_answer_yes = -1 # 1: yes , 0: no , -1 : 아직 선택 안함
+
 
     def update(self):
-        if not self.ask_you:
+        if not self.player.playerUI.ask_you:
             return
 
-        if self.player_answer_yes == 1: # yes 선택
-            if self.player_answer_yes == 1:
+        if self.player.playerUI.player_answer_yes == 1: # yes 선택
+            if self.player.playerUI.player_answer_yes == 1:
                 removes_types = White_Golem
                 for layer in list(game_world.layers.values()):
                     for obj in list(layer):
@@ -47,11 +40,11 @@ class Portal:
 
                 self.dungeon.cur_dungeon = 2
                 self.player.x, self.player.y = WIDTH // 2, 100
-                self.ask_you = False
+                self.player.playerUI.ask_you = False
                 cant_move_state.portal_question = False
-        elif self.player_answer_yes == 0: # no 선택
-            self.player_answer_yes = -1
-            self.ask_you = False
+        elif self.player.playerUI.player_answer_yes == 0: # no 선택
+            self.player.playerUI.player_answer_yes = -1
+            self.player.playerUI.ask_you = False
             cant_move_state.portal_question = False
 
     def draw(self):
@@ -61,12 +54,7 @@ class Portal:
             else:
                 self.image.draw(self.x,self.y,64,64)
             draw_rectangle(*self.get_bb())
-        if self.ask_you:
-            self.textbar.draw(WIDTH // 2, HEIGHT // 2 + 100, 600, 200)
-            self.font.draw(WIDTH // 2 - 30, HEIGHT // 2 + 160, '경고', (255, 0, 0))
-            self.font.draw(WIDTH // 2 - 80, HEIGHT // 2 + 130, '=최종보스 던전 입구=', (255, 255, 0))
-            self.font.draw(WIDTH // 2 - 120, HEIGHT // 2 + 100, '들어가면 다시 나올 수 없습니다', (255, 255, 0))
-            self.font.draw(WIDTH // 2 - 120, HEIGHT // 2 + 70, '그래도 들어가시겠습니까 ? (Y/N)', (255, 255, 0))
+
 
 
     def enter_portal(self, world, player, dungeon,monsters):
@@ -128,9 +116,9 @@ class Portal:
             world.add(Dummy())
             print(f'[DEBUG] Portal {self.number} triggered, cur_dungeon={dungeon.cur_dungeon}')
         elif self.number == 5 and dungeon.cur_dungeon == 0:
-            self.ask_you = True
+            self.player.playerUI.ask_you = True
             cant_move_state.portal_question = True
-            self.player_answer_yes = -1
+            self.player.playerUI.player_answer_yes = -1
             # 입력 기다리기 ...
             return
 
@@ -152,10 +140,10 @@ class Portal:
             pass
 
     def handle_event(self,event):
-        if not self.ask_you:
+        if not self.player.playerUI.ask_you:
             return
         if event.type == SDL_KEYDOWN and event.key == SDLK_y:
-            self.player_answer_yes = 1
+            self.player.playerUI.player_answer_yes = 1
         elif event.type == SDL_KEYDOWN and event.key == SDLK_n:
-            self.player_answer_yes = 0
+            self.player.playerUI.player_answer_yes = 0
 
