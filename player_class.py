@@ -1,5 +1,7 @@
 from pico2d import load_image, draw_rectangle
 from sdl2 import SDL_KEYDOWN, SDL_KEYUP, SDLK_a, SDLK_d, SDLK_w, SDLK_s, SDLK_SPACE, SDLK_x
+
+from cant_move_state import cant_move_state
 from input_helper import get_keys
 
 WIDTH, HEIGHT = 1280, 720
@@ -131,7 +133,7 @@ class Player:
 
 
     def handle_event(self, event):
-        if self.hp <= 0 or self.stun:
+        if self.hp <= 0 or self.stun or cant_move_state.store_open or cant_move_state.portal_question:
             return
         if event.type == SDL_KEYUP:
             if event.key == SDLK_d:
