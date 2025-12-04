@@ -85,6 +85,7 @@ def handle_events():
                 game_framework.change_mode(title_mode)
         elif event.type == SDL_KEYDOWN and event.key == SDLK_l:  # 상점 열기
             if check_collision(townNpc):
+                store.player_no_money = False
                 store.IsOpen = not store.IsOpen
                 cant_move_state.store_open = not cant_move_state.store_open
             else:
