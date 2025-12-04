@@ -57,7 +57,7 @@ class Monster:
 
 class Boss(Monster):
     def __init__(self, player = None):
-        super().__init__(WIDTH // 2, HEIGHT - 100, 100000, 10,player)
+        super().__init__(WIDTH // 2, HEIGHT - 100, 1000, 10,player)
         self.animation1 = load_image('resource/Golem Iron_1.png')
         self.animation2 = load_image('resource/Golem Iron_2.png')
         self.animation3 = load_image('resource/Golem Iron_3.png')
@@ -93,7 +93,7 @@ class Boss(Monster):
                     y = 1
                 else:
                     y = 0
-                self.die_sprite.clip_draw(int(self.die_frame) % 4 * 500, y * 500, 500, 500, self.x, self.y, 100, 100)
+                self.die_sprite.clip_draw(int(self.die_frame) % 4 * 500, y * 500, 500, 500, self.x, self.y, 200, 200)
             return
 
         if self.is_hit and (self.flash_timer // 5) % 2 == 0:
@@ -153,6 +153,7 @@ class Boss(Monster):
                 if self.hp <= 0:
                     self.alive = False
                     self.die_animation = True
+                    self.player.CLEAR = True
                     golems =  list(game_world.layers['object'])
                     for golem in golems:
                         if isinstance(golem, Ice_Golem) or isinstance(golem, Red_Golem) or isinstance(golem, White_Golem):

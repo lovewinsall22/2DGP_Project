@@ -52,6 +52,7 @@ class Player:
         self.flash_timer = 0 # 지속시간은 120 프레임
 
 
+        self.CLEAR = False
         self.max_hp = 100 # 최대 체력
         self.hp = 100 # 현재 체력
         self.dead_timer = 0
