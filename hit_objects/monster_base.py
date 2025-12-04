@@ -169,7 +169,7 @@ class Boss(Monster):
         if self.attack_animation:
             self.attack_frame = (self.attack_frame + FRAMES_PER_ACTION_BOSS * ACTION_PER_TIME_BOSS * game_framework.frame_time) % 9
             # 땅 내려찍을때 범위내에 플레이어 있을시 충돌처리 ,, 사실은 충돌처리 handle에서 해야하지만 원이라 ,,
-            if int(self.attack_frame) == 6 and not self.attack_hit_applied:
+            if int(self.attack_frame) == 6 and not self.attack_hit_applied and not self.player.invincible:
                 if self.distance_less_than(self.attack_range):
                     self.player.hp -= 20
                     self.player.flash_timer = 0
