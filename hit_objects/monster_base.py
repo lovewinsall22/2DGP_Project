@@ -153,6 +153,10 @@ class Boss(Monster):
                 if self.hp <= 0:
                     self.alive = False
                     self.die_animation = True
+                    golems =  list(game_world.layers['object'])
+                    for golem in golems:
+                        if isinstance(golem, Ice_Golem) or isinstance(golem, Red_Golem) or isinstance(golem, White_Golem):
+                            game_world.remove(golem)
                     # 게임 끝
         self.attack_timer += 1
         self.trace_player()
