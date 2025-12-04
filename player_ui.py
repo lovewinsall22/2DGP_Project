@@ -10,6 +10,10 @@ class PlayerUI:
         self.defeat_image = load_image('resource/defeat.png')
         self.clear_image = load_image('resource/clear.png')
         self.clear_timer = 0
+        self.textbar = load_image('resource/textbar.png')
+
+        self.ask_you = False # 최종 보스 던전 입구에서 물어보는 창 띄울지 여부
+        self.player_answer_yes = -1 # 1: yes , 0: no , -1 : 아직 선택 안함
 
     def draw(self):
         x1, y1 = WIDTH - 500, 20
@@ -40,6 +44,13 @@ class PlayerUI:
 
         if self.player.CLEAR and self.clear_timer > 200:
             self.clear_image.draw(WIDTH // 2, HEIGHT // 2, 200, 100)
+
+        if self.ask_you:
+            self.textbar.draw(WIDTH // 2, HEIGHT // 2 + 100, 600, 200)
+            self.font.draw(WIDTH // 2 - 30, HEIGHT // 2 + 160, '경고', (255, 0, 0))
+            self.font.draw(WIDTH // 2 - 80, HEIGHT // 2 + 130, '=최종보스 던전 입구=', (255, 255, 0))
+            self.font.draw(WIDTH // 2 - 120, HEIGHT // 2 + 100, '들어가면 다시 나올 수 없습니다', (255, 255, 0))
+            self.font.draw(WIDTH // 2 - 120, HEIGHT // 2 + 70, '그래도 들어가시겠습니까 ? (Y/N)', (255, 255, 0))
 
 
     def update(self):
