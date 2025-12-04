@@ -6,6 +6,7 @@ class PlayerUI:
     def __init__(self,player):
         self.player = player
         self.font = load_font('DNFBitBitTTF.ttf', 20)
+        self.small_font = load_font('DNFBitBitTTF.ttf', 15)
         self.hp_potion = load_image('resource/POTION.png')
         self.invincible_potion = load_image('resource/INVINCIBLE_POTION.png')
         self.defeat_image = load_image('resource/defeat.png')
@@ -54,6 +55,9 @@ class PlayerUI:
             self.font.draw(WIDTH // 2 - 80, HEIGHT // 2 + 130, '=최종보스 던전 입구=', (255, 255, 0))
             self.font.draw(WIDTH // 2 - 120, HEIGHT // 2 + 100, '들어가면 다시 나올 수 없습니다', (255, 255, 0))
             self.font.draw(WIDTH // 2 - 120, HEIGHT // 2 + 70, '그래도 들어가시겠습니까 ? (Y/N)', (255, 255, 0))
+
+        if self.player.invincible:
+            self.small_font.draw(self.player.x - 30, self.player.y + 40, f'무적시간:{self.player.invincible_timer/60:.1f}s', (255, 255, 255))
 
 
     def update(self):
