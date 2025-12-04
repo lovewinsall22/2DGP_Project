@@ -66,7 +66,7 @@ class Player:
         self.hp_potion_count = 0 # 체력포션 개수
         self.invincible_potion_count = 1 # 무적포션 개수
         self.invincible = False
-        self.invincible_timer = 1000
+        self.invincible_timer = 500
         self.get_money_animation = False
         self.money_animation_count = 0
 
@@ -103,7 +103,10 @@ class Player:
         if not self.invincible:
             self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 5
         else:
+            self.invincible_timer -= 1
             self.invincible_frame = (self.invincible_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 7
+            if self.invincible_timer <= 0:
+                self.invincible = False
         self.x += self.dirX * self.speed * game_framework.frame_time
         self.y += self.dirY * self.speed * game_framework.frame_time
         if self.stun:
@@ -200,13 +203,15 @@ class Player:
                 if self.invincible_potion_count > 0:
                     self.invincible_potion_count -= 1
                     self.invincible = True
-                    self.invincible_timer = 1000
+                    self.invincible_timer = 500
 
 
     def get_bb(self):
         return self.x - 20, self.y - 31, self.x + 20, self.y + 31
 
     def handle_collision(self, group, other):
+        if self.invincible:
+            return
         if group == 'player:townNpc':
             pass
         elif group == 'player:portal':
