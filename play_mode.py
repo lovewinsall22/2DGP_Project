@@ -107,6 +107,10 @@ def handle_events():
             player.gold -= 200
             player.speed += 10
             player.update_speed = player.speed
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_4 and store.IsOpen:
+            if player.gold < 1000: store.player_no_money = True; return
+            player.gold -= 1000
+            player.invincible_potion_count += 1
         elif event.type == SDL_KEYDOWN and ( event.key == SDLK_y or event.key == SDLK_n ):
             portals[4].handle_event(event)
         else:
