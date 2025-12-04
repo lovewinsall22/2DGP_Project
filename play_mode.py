@@ -67,7 +67,7 @@ def update():
 def draw():
     clear_canvas()
     game_world.draw()
-    portals[4].draw_ui()
+    #portals[4].draw_ui()
     for t in damage_texts:
         t.draw()
     update_canvas()
