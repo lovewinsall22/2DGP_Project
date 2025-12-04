@@ -26,6 +26,7 @@ ACTION_PER_TIME_BOSS = 1.0 / TIME_PER_ACTION_BOSS # 초당 1회 액션
 class Monster:
     font = None
     spawn_effect = None
+    die_sprite = None
     def __init__(self, x, y, hp = 10000, damage = 1 ,player = None):
         self.x, self.y = x, y
         self.hp = hp
@@ -49,6 +50,11 @@ class Monster:
         self.scale_target = 1.0       # 최종 크기
         self.scale_speed = 0.02       # 커지는 속도
         self.spawn_effect = True      # 등장 중인지 여부
+
+        self.die_animation = False
+        if Monster.die_sprite == None:
+            Monster.die_sprite = load_image('resource/die.png')
+        self.die_frame = 0
 
     def draw(self):
         pass
@@ -83,9 +89,7 @@ class Boss(Monster):
         self.attack_hit_applied = False
         self.attack_timer = 0
 
-        self.die_animation = False
-        self.die_sprite = load_image('resource/die.png')
-        self.die_frame = 0
+
         self.build_behavior_tree()
 
     def draw(self):
@@ -262,6 +266,15 @@ class Ice_Golem(Monster):
 
 
     def draw(self):
+        if self.die_animation:
+            if self.die_frame < 4:
+                y = 2
+            elif self.die_frame < 8:
+                y = 1
+            else:
+                y = 0
+            self.die_sprite.clip_draw(int(self.die_frame) % 4 * 500, y * 500, 500, 500, self.x, self.y, 100, 100)
+            return
         if not self.alive:
             Ice_Golem.spawn_effect.clip_draw(int(self.effect_frame) * 512, 0, 512, 512, self.x, self.y, 100,100)
             return
@@ -286,6 +299,21 @@ class Ice_Golem(Monster):
         self.font.draw(self.x, self.y + 15, f'(hp: {self.hp})', (255, 0, 0))
 
     def update(self):
+        if self.die_animation:
+            self.die_frame = (self.die_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 12
+            if int(self.die_frame) == 11:
+                self.alive = False
+                game_world.remove(self)
+                self.player.get_money_animation = True
+                self.player.gold += randint(100, 300)
+
+                # 골렘 리스폰
+                respawn_golem = White_Golem(self.player)
+                game_world.add(respawn_golem, 'object')
+                game_world.add_collision_pair('player:golem', self.player, respawn_golem)
+                game_world.add_collision_pair('sword:golem', self.player.sword, respawn_golem)
+                print(f'[DEBUG] White Golem Respawned')
+            return
         if not self.alive:
             self.effect_frame = (self.effect_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 4
             self.respawn_timer += 1
@@ -302,17 +330,12 @@ class Ice_Golem(Monster):
                 self.stop_time = 120
                 self.flash_timer = 0
                 if self.hp <= 0:
-                    self.alive = False
-                    game_world.remove(self)
-                    self.player.get_money_animation = True
-                    self.player.gold += randint(100,150)
-
-                    # 골렘 리스폰
-                    respawn_golem = Red_Golem(self.player)
-                    game_world.add(respawn_golem, 'object')
-                    game_world.add_collision_pair('player:golem', self.player, respawn_golem)
-                    game_world.add_collision_pair('sword:golem', self.player.sword, respawn_golem)
-                    print(f'[DEBUG] Red Golem Respawned')
+                    if self.alive:
+                        self.alive = False
+                        self.die_animation = True
+                        self.die_frame = 0
+                        self.dead_timer = 0
+                    return
             return
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 7
 
@@ -358,6 +381,15 @@ class Red_Golem(Monster):
 
 
     def draw(self):
+        if self.die_animation:
+            if self.die_frame < 4:
+                y = 2
+            elif self.die_frame < 8:
+                y = 1
+            else:
+                y = 0
+            self.die_sprite.clip_draw(int(self.die_frame) % 4 * 500, y * 500, 500, 500, self.x, self.y, 100, 100)
+            return
         if not self.alive:
             Red_Golem.spawn_effect.clip_draw(int(self.effect_frame) * 512, 0, 512, 512, self.x, self.y, 100,100)
             return
@@ -382,6 +414,21 @@ class Red_Golem(Monster):
         self.font.draw(self.x, self.y + 15, f'(hp: {self.hp})', (255, 0, 0))
 
     def update(self):
+        if self.die_animation:
+            self.die_frame = (self.die_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 12
+            if int(self.die_frame) == 11:
+                self.alive = False
+                game_world.remove(self)
+                self.player.get_money_animation = True
+                self.player.gold += randint(100, 300)
+
+                # 골렘 리스폰
+                respawn_golem = White_Golem(self.player)
+                game_world.add(respawn_golem, 'object')
+                game_world.add_collision_pair('player:golem', self.player, respawn_golem)
+                game_world.add_collision_pair('sword:golem', self.player.sword, respawn_golem)
+                print(f'[DEBUG] White Golem Respawned')
+            return
         if not self.alive:
             self.effect_frame = (self.effect_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 4
             self.respawn_timer += 1
@@ -398,17 +445,12 @@ class Red_Golem(Monster):
                 self.stop_time = 120
                 self.flash_timer = 0
                 if self.hp <= 0:
-                    self.alive = False
-                    game_world.remove(self)
-                    self.player.get_money_animation = True
-                    self.player.gold += randint(30,70)
-
-                    # 골렘 리스폰
-                    respawn_golem = Red_Golem(self.player)
-                    game_world.add(respawn_golem, 'object')
-                    game_world.add_collision_pair('player:golem', self.player, respawn_golem)
-                    game_world.add_collision_pair('sword:golem', self.player.sword, respawn_golem)
-                    print(f'[DEBUG] Red Golem Respawned')
+                    if self.alive:
+                        self.alive = False
+                        self.die_animation = True
+                        self.die_frame = 0
+                        self.dead_timer = 0
+                    return
             return
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 7
 
@@ -455,6 +497,15 @@ class White_Golem(Monster):
 
 
     def draw(self):
+        if self.die_animation:
+            if self.die_frame < 4:
+                y = 2
+            elif self.die_frame < 8:
+                y = 1
+            else:
+                y = 0
+            self.die_sprite.clip_draw(int(self.die_frame) % 4 * 500, y * 500, 500, 500, self.x, self.y, 100, 100)
+            return
         if not self.alive:
             White_Golem.spawn_effect.clip_draw(int(self.effect_frame) * 512, 0, 512, 512, self.x, self.y, 100,100)
             return
@@ -479,6 +530,21 @@ class White_Golem(Monster):
         self.font.draw(self.x, self.y + 15, f'(hp: {self.hp})', (255, 0, 0))
 
     def update(self):
+        if self.die_animation:
+            self.die_frame = (self.die_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 12
+            if int(self.die_frame) == 11:
+                self.alive = False
+                game_world.remove(self)
+                self.player.get_money_animation = True
+                self.player.gold += randint(100, 300)
+
+                # 골렘 리스폰
+                respawn_golem = White_Golem(self.player)
+                game_world.add(respawn_golem, 'object')
+                game_world.add_collision_pair('player:golem', self.player, respawn_golem)
+                game_world.add_collision_pair('sword:golem', self.player.sword, respawn_golem)
+                print(f'[DEBUG] White Golem Respawned')
+            return
         if not self.alive:
             self.effect_frame = (self.effect_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 4
             self.respawn_timer += 1
@@ -495,17 +561,12 @@ class White_Golem(Monster):
                 self.stop_time = 120
                 self.flash_timer = 0
                 if self.hp <= 0:
-                    self.alive = False
-                    game_world.remove(self)
-                    self.player.get_money_animation = True
-                    self.player.gold += randint(10,50)
-
-                    # 골렘 리스폰
-                    respawn_golem = White_Golem(self.player)
-                    game_world.add(respawn_golem, 'object')
-                    game_world.add_collision_pair('player:golem', self.player, respawn_golem)
-                    game_world.add_collision_pair('sword:golem', self.player.sword, respawn_golem)
-                    print(f'[DEBUG] White Golem Respawned')
+                    if self.alive:
+                        self.alive = False
+                        self.die_animation = True
+                        self.die_frame = 0
+                        self.dead_timer = 0
+                    return
             return
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 7
 
