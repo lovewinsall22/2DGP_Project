@@ -6,7 +6,8 @@ class PlayerUI:
     def __init__(self,player):
         self.player = player
         self.font = load_font('DNFBitBitTTF.ttf', 20)
-        self.hp_potion = load_image('resource/heart.png')
+        self.hp_potion = load_image('resource/POTION.png')
+        self.invincible_potion = load_image('resource/INVINCIBLE_POTION.png')
         self.defeat_image = load_image('resource/defeat.png')
         self.clear_image = load_image('resource/clear.png')
         self.clear_timer = 0
@@ -33,8 +34,10 @@ class PlayerUI:
 
         self.font.draw(WIDTH - 500, y1 + 80, f'GOLD: {int(self.player.gold)}G', (255, 215, 0))  # 노란색
 
-        self.hp_potion.draw(WIDTH - 320, y1 + 50, 21, 17)
+        self.hp_potion.draw(WIDTH - 320, y1 + 50, 30, 30)
         self.font.draw(WIDTH - 300, y1 + 50, f'x {self.player.hp_potion_count}', (255, 255, 255))
+        self.invincible_potion.draw(WIDTH - 320, y1 + 80, 50, 50)
+        self.font.draw(WIDTH - 300, y1 + 80, f'x {self.player.invincible_potion_count}', (255, 255, 255))
 
         self.font.draw(WIDTH - 230, y1 + 80, f'Damage {self.player.damage}', (255, 255, 255))
         self.font.draw(WIDTH - 230, y1 + 50, f'Speed {self.player.speed:.3f}', (255, 255, 255))
