@@ -25,6 +25,7 @@ ACTION_PER_TIME_BOSS = 1.0 / TIME_PER_ACTION_BOSS # 초당 1회 액션
 
 class Monster:
     font = None
+    spawn_effect = None
     def __init__(self, x, y, hp = 10000, damage = 1 ,player = None):
         self.x, self.y = x, y
         self.hp = hp
@@ -40,6 +41,9 @@ class Monster:
         self.flash_timer = 0
         if Monster.font == None:
             Monster.font = load_font('DNFBitBitTTF.ttf', 10)
+        if Monster.spawn_effect == None:
+            Monster.spawn_effect = load_image('resource/spawn_effect.png')
+        self.effect_frame = 0
 
         self.scale = 0.1              # 처음 크기
         self.scale_target = 1.0       # 최종 크기
@@ -57,7 +61,7 @@ class Monster:
 
 class Boss(Monster):
     def __init__(self, player = None):
-        super().__init__(WIDTH // 2, HEIGHT - 100, 1000, 10,player)
+        super().__init__(WIDTH // 2, HEIGHT - 100, 51000, 10,player)
         self.animation1 = load_image('resource/Golem Iron_1.png')
         self.animation2 = load_image('resource/Golem Iron_2.png')
         self.animation3 = load_image('resource/Golem Iron_3.png')
@@ -259,6 +263,7 @@ class Ice_Golem(Monster):
 
     def draw(self):
         if not self.alive:
+            Ice_Golem.spawn_effect.clip_draw(int(self.effect_frame) * 512, 0, 512, 512, self.x, self.y, 100,100)
             return
 
         if self.is_hit and (self.flash_timer // 5) % 2 == 0:
@@ -282,6 +287,7 @@ class Ice_Golem(Monster):
 
     def update(self):
         if not self.alive:
+            self.effect_frame = (self.effect_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 4
             self.respawn_timer += 1
             if self.respawn_timer >= 300:
                 self.alive = True
@@ -353,6 +359,7 @@ class Red_Golem(Monster):
 
     def draw(self):
         if not self.alive:
+            Red_Golem.spawn_effect.clip_draw(int(self.effect_frame) * 512, 0, 512, 512, self.x, self.y, 100,100)
             return
 
         if self.is_hit and (self.flash_timer // 5) % 2 == 0:
@@ -376,6 +383,7 @@ class Red_Golem(Monster):
 
     def update(self):
         if not self.alive:
+            self.effect_frame = (self.effect_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 4
             self.respawn_timer += 1
             if self.respawn_timer >= 300:
                 self.alive = True
@@ -448,6 +456,7 @@ class White_Golem(Monster):
 
     def draw(self):
         if not self.alive:
+            White_Golem.spawn_effect.clip_draw(int(self.effect_frame) * 512, 0, 512, 512, self.x, self.y, 100,100)
             return
 
         if self.is_hit and (self.flash_timer // 5) % 2 == 0:
@@ -471,6 +480,7 @@ class White_Golem(Monster):
 
     def update(self):
         if not self.alive:
+            self.effect_frame = (self.effect_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 4
             self.respawn_timer += 1
             if self.respawn_timer >= 300:
                 self.alive = True
