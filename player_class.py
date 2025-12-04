@@ -1,5 +1,5 @@
 from pico2d import load_image, draw_rectangle
-from sdl2 import SDL_KEYDOWN, SDL_KEYUP, SDLK_a, SDLK_d, SDLK_w, SDLK_s, SDLK_SPACE, SDLK_x
+from sdl2 import SDL_KEYDOWN, SDL_KEYUP, SDLK_a, SDLK_d, SDLK_w, SDLK_s, SDLK_SPACE, SDLK_x, SDLK_v
 
 from cant_move_state import cant_move_state
 from input_helper import get_keys
@@ -37,8 +37,8 @@ class Player:
         self.rightMove = [self.right1, self.right2, self.right3, self.right4, self.right5]
         self.leftMove = [self.left1, self.left2, self.left3, self.left4, self.left5]
         self.money = load_image('resource/money.png')
-        #self.attack_r = load_image('resource/attack_r.png')
-        #self.attack_l = load_image('resource/attack_l.png')
+        self.invincible_sprites = load_image('resource/invincible_sprite.png')
+        self.invincible_frame = 0
         self.stun_sprite = load_image('resource/PlayerStun.png') # 42x35
         self.stun = False
         self.stun_frame = 0
@@ -64,6 +64,9 @@ class Player:
         self.damage = 1000 # 공격력
         self.gold = 1000 # 골드
         self.hp_potion_count = 0 # 체력포션 개수
+        self.invincible_potion_count = 1 # 무적포션 개수
+        self.invincible = False
+        self.invincible_timer = 1000
         self.get_money_animation = False
         self.money_animation_count = 0
 
@@ -81,8 +84,12 @@ class Player:
             return  # 5프레임마다 안 그려짐
         if self.hp <= 0 and (self.dead_timer // 10) % 2 == 0:
             return
-        if self.ifRight == 1 : self.rightMove[int(self.frame)].draw(self.x, self.y, 40, 62)
-        elif self.ifRight == 0 : self.leftMove[int(self.frame)].draw(self.x, self.y, 40, 62)
+        if not self.invincible:
+            if self.ifRight == 1 : self.rightMove[int(self.frame)].draw(self.x, self.y, 40, 62)
+            elif self.ifRight == 0 : self.leftMove[int(self.frame)].draw(self.x, self.y, 40, 62)
+        else:
+            if self.ifRight == 1: self.invincible_sprites.clip_composite_draw(int(self.invincible_frame) * 32, 0, 32, 32, 0, '', self.x, self.y, 62, 62)
+            elif self.ifRight == 0: self.invincible_sprites.clip_composite_draw(int(self.invincible_frame) * 32, 0, 32, 32, 0, 'h', self.x, self.y, 62, 62)
         draw_rectangle(*self.get_bb())
         self.playerUI.draw()
         self.sword.draw()
@@ -93,7 +100,10 @@ class Player:
     def update(self):
         old_x, old_y = self.x, self.y
         self.sword.update()
-        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 5
+        if not self.invincible:
+            self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 5
+        else:
+            self.invincible_frame = (self.invincible_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 7
         self.x += self.dirX * self.speed * game_framework.frame_time
         self.y += self.dirY * self.speed * game_framework.frame_time
         if self.stun:
@@ -186,6 +196,11 @@ class Player:
                     self.hp += 10
                     if self.hp > self.max_hp:
                         self.hp = self.max_hp
+            if event.key == SDLK_v:
+                if self.invincible_potion_count > 0:
+                    self.invincible_potion_count -= 1
+                    self.invincible = True
+                    self.invincible_timer = 1000
 
 
     def get_bb(self):
