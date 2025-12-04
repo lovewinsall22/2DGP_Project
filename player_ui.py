@@ -1,5 +1,6 @@
 from pico2d import load_font, draw_rectangle, load_image
 WIDTH, HEIGHT = 1280, 720
+import game_framework
 
 class PlayerUI:
     def __init__(self,player):
@@ -7,6 +8,8 @@ class PlayerUI:
         self.font = load_font('DNFBitBitTTF.ttf', 20)
         self.hp_potion = load_image('resource/heart.png')
         self.defeat_image = load_image('resource/defeat.png')
+        self.clear_image = load_image('resource/clear.png')
+        self.clear_timer = 0
 
     def draw(self):
         x1, y1 = WIDTH - 500, 20
@@ -35,6 +38,12 @@ class PlayerUI:
         if self.player.hp <= 0:
             self.defeat_image.draw(WIDTH // 2, HEIGHT // 2, 200, 100)
 
+        if self.player.CLEAR and self.clear_timer > 200:
+            self.clear_image.draw(WIDTH // 2, HEIGHT // 2, 200, 100)
+
 
     def update(self):
-        pass
+        if self.player.CLEAR:
+            self.clear_timer += 1
+            if self.clear_timer > 500:
+                game_framework.quit()
