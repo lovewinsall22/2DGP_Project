@@ -61,7 +61,7 @@ class Monster:
 
 class Boss(Monster):
     def __init__(self, player = None):
-        super().__init__(WIDTH // 2, HEIGHT - 100, 51000, 10,player)
+        super().__init__(WIDTH // 2, HEIGHT - 100, 100000, 10,player)
         self.animation1 = load_image('resource/Golem Iron_1.png')
         self.animation2 = load_image('resource/Golem Iron_2.png')
         self.animation3 = load_image('resource/Golem Iron_3.png')
@@ -252,7 +252,7 @@ class Boss(Monster):
 class Ice_Golem(Monster):
     image = None
     def __init__(self, player = None):
-        super().__init__(randint(0, WIDTH), randint(0,HEIGHT), 3000, 2,player)
+        super().__init__(randint(0, WIDTH), randint(0,HEIGHT), 5000, 3,player)
         if Ice_Golem.image == None:
             Ice_Golem.image = load_image('resource/ice_golem.png')
         self.frame = randint(0,6)
@@ -305,7 +305,7 @@ class Ice_Golem(Monster):
                     self.alive = False
                     game_world.remove(self)
                     self.player.get_money_animation = True
-                    self.player.gold += randint(10,50)
+                    self.player.gold += randint(100,150)
 
                     # 골렘 리스폰
                     respawn_golem = Red_Golem(self.player)
@@ -348,7 +348,7 @@ class Ice_Golem(Monster):
 class Red_Golem(Monster):
     image = None
     def __init__(self, player = None):
-        super().__init__(randint(0, WIDTH), randint(0,HEIGHT), 3000, 2,player)
+        super().__init__(randint(0, WIDTH), randint(0,HEIGHT), 4000, 3,player)
         if Red_Golem.image == None:
             Red_Golem.image = load_image('resource/red_golem.png')
         self.frame = randint(0,6)
@@ -401,7 +401,7 @@ class Red_Golem(Monster):
                     self.alive = False
                     game_world.remove(self)
                     self.player.get_money_animation = True
-                    self.player.gold += randint(10,50)
+                    self.player.gold += randint(30,70)
 
                     # 골렘 리스폰
                     respawn_golem = Red_Golem(self.player)
@@ -445,7 +445,7 @@ class Red_Golem(Monster):
 class White_Golem(Monster):
     image = None
     def __init__(self, player = None):
-        super().__init__(randint(0, WIDTH), randint(0,HEIGHT), 3000, 2,player)
+        super().__init__(randint(0, WIDTH), randint(0,HEIGHT), 3000, 3,player)
         if White_Golem.image == None:
             White_Golem.image = load_image('resource/white_golem.png')
         self.frame = randint(0,6)
