@@ -59,7 +59,8 @@ class Player:
         self.hp = 100 # 현재 체력
         self.dead_timer = 0
         self.level = 1 # 현재 레벨
-        self.speed = RUN_SPEED_PPS # 이동 속도
+        self.speed = RUN_SPEED_PPS + 400# 이동 속도
+        self.update_speed = RUN_SPEED_PPS
         self.damage = 1000 # 공격력
         self.gold = 1000 # 골드
         self.hp_potion_count = 0 # 체력포션 개수
@@ -103,7 +104,7 @@ class Player:
                 self.stun = False
                 self.stun_count = 0
                 self.stun_frame = 0
-                self.speed = RUN_SPEED_PPS # 수정되어야할 코드 ( speed 업그레이드시 스턴되면 초기화됨 )
+                self.speed = self.update_speed
                 self. dirX, self.dirY = 0, 0
         if self.is_hitted:
             self.flash_timer += 1

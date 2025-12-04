@@ -106,6 +106,7 @@ def handle_events():
             if player.gold < 200: store.player_no_money = True; return
             player.gold -= 200
             player.speed += 10
+            player.update_speed = player.speed
         elif event.type == SDL_KEYDOWN and ( event.key == SDLK_y or event.key == SDLK_n ):
             portals[4].handle_event(event)
         else:
