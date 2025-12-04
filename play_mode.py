@@ -12,6 +12,7 @@ from store import Store
 from town import Town
 from world import game_world
 from dmg_font import DmgText, damage_texts
+from cant_move_state import cant_move_state
 
 #running = True
 monsters = []
@@ -85,6 +86,7 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_l:  # 상점 열기
             if check_collision(townNpc):
                 store.IsOpen = not store.IsOpen
+                cant_move_state.store_open = not cant_move_state.store_open
             else:
                 for p in portals:
                     if check_collision(p):
