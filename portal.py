@@ -6,6 +6,7 @@ from hit_objects.monster_base import Red_Golem, White_Golem, Boss
 from sdl2 import SDL_KEYDOWN, SDLK_y, SDLK_n
 from world import game_world
 from pico2d import load_font
+from cant_move_state import cant_move_state
 
 WIDTH, HEIGHT = 1280, 720
 
@@ -47,9 +48,11 @@ class Portal:
                 self.dungeon.cur_dungeon = 2
                 self.player.x, self.player.y = WIDTH // 2, 100
                 self.ask_you = False
+                cant_move_state.portal_question = False
         elif self.player_answer_yes == 0: # no 선택
             self.player_answer_yes = -1
             self.ask_you = False
+            cant_move_state.portal_question = False
 
     def draw(self):
         if self.dungeon.cur_dungeon == self.stage:
@@ -126,6 +129,7 @@ class Portal:
             print(f'[DEBUG] Portal {self.number} triggered, cur_dungeon={dungeon.cur_dungeon}')
         elif self.number == 5 and dungeon.cur_dungeon == 0:
             self.ask_you = True
+            cant_move_state.portal_question = True
             self.player_answer_yes = -1
             # 입력 기다리기 ...
             return
