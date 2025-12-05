@@ -1,15 +1,14 @@
-from pico2d import load_image, draw_rectangle
+from pico2d import load_image, draw_rectangle, load_music
 from town import Town
 from npc import NPC
 from hit_objects.dummy import Dummy
 from hit_objects.monster_base import Red_Golem, White_Golem, Boss
 from sdl2 import SDL_KEYDOWN, SDLK_y, SDLK_n
 from world import game_world
-from pico2d import load_font
 from cant_move_state import cant_move_state
 
 WIDTH, HEIGHT = 1280, 720
-
+boss_music = None
 class Portal:
     image = None
     boss_dungeon_portal = None
@@ -31,12 +30,17 @@ class Portal:
             return
 
         if self.player.playerUI.player_answer_yes == 1: # yes 선택
-            if self.player.playerUI.player_answer_yes == 1:
-                removes_types = White_Golem
-                for layer in list(game_world.layers.values()):
-                    for obj in list(layer):
-                        if isinstance(obj, removes_types):
-                            game_world.remove(obj)
+            from title_mode import play_music
+            play_music.stop()
+            global boss_music
+            boss_music = load_music('resource/bgm/boss.wav')
+            boss_music.set_volume(64)
+            boss_music.repeat_play()
+            removes_types = White_Golem
+            for layer in list(game_world.layers.values()):
+                for obj in list(layer):
+                    if isinstance(obj, removes_types):
+                        game_world.remove(obj)
 
                 self.dungeon.cur_dungeon = 2
                 self.player.x, self.player.y = WIDTH // 2, 100
