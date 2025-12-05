@@ -95,13 +95,7 @@ class Boss(Monster):
     def draw(self):
         if not self.alive:
             if self.die_animation:
-                if self.die_frame < 4:
-                    y = 2
-                elif self.die_frame < 8:
-                    y = 1
-                else:
-                    y = 0
-                self.die_sprite.clip_draw(int(self.die_frame) % 4 * 500, y * 500, 500, 500, self.x, self.y, 200, 200)
+                self.die_images[int(self.die_frame)].draw(self.x, self.y, 200, 200)
             return
 
         if self.is_hit and (self.flash_timer // 5) % 2 == 0:
@@ -146,7 +140,7 @@ class Boss(Monster):
 
     def update(self):
         if not self.alive and self.die_animation:
-            self.die_frame = (self.die_frame + FRAMES_PER_ACTION_BOSS * ACTION_PER_TIME_BOSS * game_framework.frame_time) % 12
+            self.die_frame = (self.die_frame + FRAMES_PER_ACTION_BOSS * ACTION_PER_TIME_BOSS * game_framework.frame_time) % 6
             return
         if self.hp <= 50000 and self.once_spawn_golems == False:
             self.once_spawn_golems = True
@@ -267,13 +261,7 @@ class Ice_Golem(Monster):
 
     def draw(self):
         if self.die_animation:
-            if self.die_frame < 4:
-                y = 2
-            elif self.die_frame < 8:
-                y = 1
-            else:
-                y = 0
-            self.die_sprite.clip_draw(int(self.die_frame) % 4 * 500, y * 500, 500, 500, self.x, self.y, 100, 100)
+            self.die_images[int(self.die_frame)].draw(self.x, self.y, 100, 100)
             return
         if not self.alive:
             Ice_Golem.spawn_effect.clip_draw(int(self.effect_frame) * 512, 0, 512, 512, self.x, self.y, 100,100)
@@ -300,8 +288,8 @@ class Ice_Golem(Monster):
 
     def update(self):
         if self.die_animation:
-            self.die_frame = (self.die_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 12
-            if int(self.die_frame) == 11:
+            self.die_frame = (self.die_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 6
+            if int(self.die_frame) == 5:
                 self.alive = False
                 game_world.remove(self)
                 self.player.get_money_animation = True
@@ -382,13 +370,7 @@ class Red_Golem(Monster):
 
     def draw(self):
         if self.die_animation:
-            if self.die_frame < 4:
-                y = 2
-            elif self.die_frame < 8:
-                y = 1
-            else:
-                y = 0
-            self.die_sprite.clip_draw(int(self.die_frame) % 4 * 500, y * 500, 500, 500, self.x, self.y, 100, 100)
+            self.die_images[int(self.die_frame)].draw(self.x, self.y, 100, 100)
             return
         if not self.alive:
             Red_Golem.spawn_effect.clip_draw(int(self.effect_frame) * 512, 0, 512, 512, self.x, self.y, 100,100)
@@ -415,8 +397,8 @@ class Red_Golem(Monster):
 
     def update(self):
         if self.die_animation:
-            self.die_frame = (self.die_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 12
-            if int(self.die_frame) == 11:
+            self.die_frame = (self.die_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 6
+            if int(self.die_frame) == 5:
                 self.alive = False
                 game_world.remove(self)
                 self.player.get_money_animation = True
@@ -498,13 +480,7 @@ class White_Golem(Monster):
 
     def draw(self):
         if self.die_animation:
-            if self.die_frame < 4:
-                y = 2
-            elif self.die_frame < 8:
-                y = 1
-            else:
-                y = 0
-            self.die_sprite.clip_draw(int(self.die_frame) % 4 * 500, y * 500, 500, 500, self.x, self.y, 100, 100)
+            self.die_images[int(self.die_frame)].draw(self.x, self.y, 100, 100)
             return
         if not self.alive:
             White_Golem.spawn_effect.clip_draw(int(self.effect_frame) * 512, 0, 512, 512, self.x, self.y, 100,100)
@@ -531,8 +507,8 @@ class White_Golem(Monster):
 
     def update(self):
         if self.die_animation:
-            self.die_frame = (self.die_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 12
-            if int(self.die_frame) == 11:
+            self.die_frame = (self.die_frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 6
+            if int(self.die_frame) == 5:
                 self.alive = False
                 game_world.remove(self)
                 self.player.get_money_animation = True
