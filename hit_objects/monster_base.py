@@ -26,7 +26,13 @@ ACTION_PER_TIME_BOSS = 1.0 / TIME_PER_ACTION_BOSS # 초당 1회 액션
 class Monster:
     font = None
     spawn_effect = None
-    die_sprite = None
+    die_images = []
+
+    def load_die_images(self):
+        for i in range(1,11,2):
+            img = load_image(f'resource/Fire01_{i}.png')
+            Monster.die_images.append(img)
+
     def __init__(self, x, y, hp = 10000, damage = 1 ,player = None):
         self.x, self.y = x, y
         self.hp = hp
@@ -52,9 +58,10 @@ class Monster:
         self.spawn_effect = True      # 등장 중인지 여부
 
         self.die_animation = False
-        if Monster.die_sprite == None:
-            Monster.die_sprite = load_image('resource/die.png')
         self.die_frame = 0
+        
+        if not Monster.die_images:
+            Monster.load_die_images(self)
 
     def draw(self):
         pass
