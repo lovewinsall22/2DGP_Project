@@ -68,7 +68,7 @@ class Portal:
             dungeon.stage_on = True
             dungeon.cur_dungeon = 0
             player.x, player.y = WIDTH // 2, 100
-            white_golems = [White_Golem(player) for _ in range(20)]
+            white_golems = [White_Golem(player) for _ in range(15)]
             monsters += white_golems
             for golem in white_golems:
                 world.add(golem, 'object')
@@ -83,7 +83,7 @@ class Portal:
             dungeon.stage_on = True
             dungeon.cur_dungeon = 1
             player.x, player.y = WIDTH // 2, HEIGHT // 2
-            fire_golems = [Red_Golem(player) for _ in range(20)]
+            fire_golems = [Red_Golem(player) for _ in range(15)]
             monsters += fire_golems
             for golem in fire_golems:
                 world.add(golem, 'object')
