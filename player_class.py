@@ -59,14 +59,14 @@ class Player:
         self.hp = 100 # 현재 체력
         self.dead_timer = 0
         self.level = 1 # 현재 레벨
-        self.speed = RUN_SPEED_PPS + 400# 이동 속도
+        self.speed = RUN_SPEED_PPS # 이동 속도
         self.update_speed = RUN_SPEED_PPS
         self.damage = 1000 # 공격력
-        self.gold = 1000 # 골드
+        self.gold = 0 # 골드
         self.hp_potion_count = 0 # 체력포션 개수
-        self.invincible_potion_count = 1 # 무적포션 개수
+        self.invincible_potion_count = 0 # 무적포션 개수
         self.invincible = False
-        self.invincible_timer = 500
+        self.invincible_timer = 1000
         self.get_money_animation = False
         self.money_animation_count = 0
 
