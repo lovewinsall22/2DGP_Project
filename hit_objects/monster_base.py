@@ -411,7 +411,7 @@ class Red_Golem(Monster):
                 self.alive = False
                 game_world.remove(self)
                 self.player.get_money_animation = True
-                self.player.gold += randint(100, 300)
+                self.player.gold += randint(1000, 2000)
 
                 # 골렘 리스폰
                 respawn_golem = White_Golem(self.player)
@@ -523,7 +523,7 @@ class White_Golem(Monster):
                 self.alive = False
                 game_world.remove(self)
                 self.player.get_money_animation = True
-                self.player.gold += randint(100, 300)
+                self.player.gold += randint(500, 1500)
 
                 # 골렘 리스폰
                 respawn_golem = White_Golem(self.player)
