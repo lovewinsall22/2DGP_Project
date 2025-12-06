@@ -47,7 +47,7 @@ class Monster:
         self.is_hit = False
         self.flash_timer = 0
         if Monster.font == None:
-            Monster.font = load_font('DNFBitBitTTF.ttf', 10)
+            Monster.font = load_font('DNFBitBitTTF.ttf', 15)
         if Monster.spawn_effect == None:
             Monster.spawn_effect = load_image('resource/spawn_effect.png')
         self.effect_frame = 0
@@ -123,7 +123,7 @@ class Boss(Monster):
             self.animation_list[int(self.frame)].draw(self.x, self.y, 108, 102) # 원본 두배 크기로 그리기
 
         draw_rectangle(*self.get_bb())
-        self.font.draw(self.x, self.y + 15, f'(hp: {self.hp})', (255, 0, 0))
+        self.font.draw(self.x - 40, self.y + 60, f'(hp: {self.hp})', (255, 0, 0))
         draw_circle(self.x, self.y, int(PIXEL_PER_METER * self.attack_range), int(PIXEL_PER_METER * self.attack_range),255,255,0)
 
     def trace_player(self):
@@ -291,7 +291,7 @@ class Ice_Golem(Monster):
         else:
             Ice_Golem.image.clip_composite_draw(int(self.frame) * 42, 0, 35, 35, 0, '', self.x, self.y, size, size)
         draw_rectangle(*self.get_bb())
-        self.font.draw(self.x, self.y + 15, f'(hp: {self.hp})', (255, 0, 0))
+        self.font.draw(self.x -15, self.y + 30, f'(hp: {self.hp})', (255, 0, 0))
 
     def update(self):
         if self.die_animation:
@@ -400,7 +400,7 @@ class Red_Golem(Monster):
         else:
             Red_Golem.image.clip_composite_draw(int(self.frame) * 35, 0, 35, 35, 0, '', self.x, self.y, size, size)
         draw_rectangle(*self.get_bb())
-        self.font.draw(self.x, self.y + 15, f'(hp: {self.hp})', (255, 0, 0))
+        self.font.draw(self.x -15, self.y + 30, f'(hp: {self.hp})', (255, 0, 0))
 
     def update(self):
         if self.die_animation:
@@ -510,7 +510,7 @@ class White_Golem(Monster):
         else:
             White_Golem.image.clip_composite_draw(int(self.frame) * 39, 0, 39, 39, 0, '', self.x, self.y, size, size)
         draw_rectangle(*self.get_bb())
-        self.font.draw(self.x, self.y + 15, f'(hp: {self.hp})', (255, 0, 0))
+        self.font.draw(self.x -15, self.y + 30, f'(hp: {self.hp})', (255, 0, 0))
 
     def update(self):
         if self.die_animation:
