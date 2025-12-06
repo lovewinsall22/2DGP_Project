@@ -69,7 +69,7 @@ class Sword:
                 damage_texts.append(DmgText(other.x, other.y + 30, self.damage))
 
         elif group == 'sword:golem':
-            if not self.sword_active:
+            if not self.sword_active or not other.alive:
                 return
             if other not in self.already_hit:
                 self.already_hit.add(other)

@@ -355,6 +355,8 @@ class Ice_Golem(Monster):
 
     def handle_collision(self, group, other):
         if group == 'sword:golem':
+            if not self.alive:
+                return
             if other.sword_active and not self.is_hit:
                 self.hp -= other.damage
                 self.is_hit = True
@@ -464,6 +466,8 @@ class Red_Golem(Monster):
 
     def handle_collision(self, group, other):
         if group == 'sword:golem':
+            if not self.alive:
+                return
             if other.sword_active and not self.is_hit:
                 self.hp -= other.damage
                 self.is_hit = True
@@ -574,6 +578,8 @@ class White_Golem(Monster):
 
     def handle_collision(self, group, other):
         if group == 'sword:golem':
+            if not self.alive:
+                return
             if other.sword_active and not self.is_hit:
                 self.hp -= other.damage
                 self.is_hit = True
