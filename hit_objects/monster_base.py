@@ -149,7 +149,7 @@ class Boss(Monster):
 
     def update(self):
         if not self.alive and self.die_animation:
-            self.die_frame = (self.die_frame + FRAMES_PER_ACTION_BOSS * ACTION_PER_TIME_BOSS * game_framework.frame_time) % 6
+            self.die_frame = (self.die_frame + FRAMES_PER_ACTION_BOSS * ACTION_PER_TIME_BOSS * game_framework.frame_time) % 5
             return
         if self.hp <= 70000 and self.once_spawn_golems == False:
             self.once_spawn_golems = True
