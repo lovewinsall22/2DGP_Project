@@ -131,7 +131,7 @@ class Portal:
             player.x, player.y = WIDTH // 2, 100
 
             boss = Boss(player)
-            world.add(boss, 'object')
+            world.add(boss, 'boss')
             world.add_collision_pair('player:boss', player, boss)
             world.add_collision_pair('sword:boss', player.sword, boss)
 

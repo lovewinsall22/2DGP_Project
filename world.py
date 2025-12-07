@@ -6,6 +6,7 @@ class World:
         self.layers = {
             'background' : [],
             'object' : [],
+            'boss' : [],
             'player' : [],
             'ui' : []
         }
@@ -45,6 +46,8 @@ class World:
         for bg in self.layers['background']:
             bg.draw()
         for e in self.layers['object']:
+            e.draw()
+        for e in self.layers['boss']:
             e.draw()
         self.layers['player'][0].draw()
         for ui in self.layers['ui']:
