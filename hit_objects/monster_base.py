@@ -141,6 +141,7 @@ class Boss(Monster):
             else:
                 new_golem = Ice_Golem(self.player)
             new_golem.trace_on = True
+            new_golem.hp = 10000
             game_world.add(new_golem, 'object')
             game_world.add_collision_pair('player:golem', self.player, new_golem)
             game_world.add_collision_pair('sword:golem', self.player.sword, new_golem)
@@ -305,6 +306,12 @@ class Ice_Golem(Monster):
 
                 # 골렘 리스폰
                 respawn_golem = Ice_Golem(self.player)
+                boss_list = game_world.layers['boss']
+                if boss_list:
+                    boss = boss_list[0]
+                    if boss.alive:
+                        respawn_golem.trace_on = True
+                        respawn_golem.hp = 10000
                 game_world.add(respawn_golem, 'object')
                 game_world.add_collision_pair('player:golem', self.player, respawn_golem)
                 game_world.add_collision_pair('sword:golem', self.player.sword, respawn_golem)
@@ -416,6 +423,12 @@ class Red_Golem(Monster):
 
                 # 골렘 리스폰
                 respawn_golem = Red_Golem(self.player)
+                boss_list = game_world.layers['boss']
+                if boss_list:
+                    boss = boss_list[0]
+                    if boss.alive:
+                        respawn_golem.trace_on = True
+                        respawn_golem.hp = 10000
                 game_world.add(respawn_golem, 'object')
                 game_world.add_collision_pair('player:golem', self.player, respawn_golem)
                 game_world.add_collision_pair('sword:golem', self.player.sword, respawn_golem)
@@ -528,6 +541,13 @@ class White_Golem(Monster):
 
                 # 골렘 리스폰
                 respawn_golem = White_Golem(self.player)
+
+                boss_list = game_world.layers['boss']
+                if boss_list:
+                    boss = boss_list[0]
+                    if boss.alive:
+                        respawn_golem.trace_on = True
+                        respawn_golem.hp = 10000
                 game_world.add(respawn_golem, 'object')
                 game_world.add_collision_pair('player:golem', self.player, respawn_golem)
                 game_world.add_collision_pair('sword:golem', self.player.sword, respawn_golem)
