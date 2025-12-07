@@ -124,7 +124,8 @@ class Boss(Monster):
 
         draw_rectangle(*self.get_bb())
         self.font.draw(self.x - 40, self.y + 60, f'(hp: {self.hp})', (255, 0, 0))
-        draw_circle(self.x, self.y, int(PIXEL_PER_METER * self.attack_range), int(PIXEL_PER_METER * self.attack_range),255,255,0)
+        if int(self.attack_frame) == 6:
+            draw_circle(self.x, self.y, int(PIXEL_PER_METER * self.attack_range), int(PIXEL_PER_METER * self.attack_range),255,255,0)
 
     def trace_player(self):
         #if not self.attack_animation and not self.back_dash_animation:
