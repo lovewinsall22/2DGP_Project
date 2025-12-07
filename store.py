@@ -4,7 +4,7 @@ WIDTH, HEIGHT = 1280, 720
 class Store:
     def __init__(self):
         self.IsOpen = False
-        self.font = load_font('DNFBitBitTTF.ttf',20)
+        self.font = load_font('resource/DNFBitBitTTF.ttf',20)
         self.player_no_money = False
 
     def draw(self):

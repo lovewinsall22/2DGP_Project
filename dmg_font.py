@@ -4,7 +4,7 @@ damage_texts = []
 
 class DmgText:
     def __init__(self,x,y,damage):
-        self.font = load_font('DNFBitBitTTF.ttf', 20)
+        self.font = load_font('resource/DNFBitBitTTF.ttf', 20)
         self.x, self.y = x,y
         self.damage = damage
         self.timer = 30

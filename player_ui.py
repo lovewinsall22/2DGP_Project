@@ -5,8 +5,8 @@ import game_framework
 class PlayerUI:
     def __init__(self,player):
         self.player = player
-        self.font = load_font('DNFBitBitTTF.ttf', 20)
-        self.small_font = load_font('DNFBitBitTTF.ttf', 15)
+        self.font = load_font('resource/DNFBitBitTTF.ttf', 20)
+        self.small_font = load_font('resource/DNFBitBitTTF.ttf', 15)
         self.hp_potion = load_image('resource/POTION.png')
         self.invincible_potion = load_image('resource/INVINCIBLE_POTION.png')
         self.defeat_image = load_image('resource/defeat.png')

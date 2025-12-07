@@ -47,7 +47,7 @@ class Monster:
         self.is_hit = False
         self.flash_timer = 0
         if Monster.font == None:
-            Monster.font = load_font('DNFBitBitTTF.ttf', 15)
+            Monster.font = load_font('resource/DNFBitBitTTF.ttf', 15)
         if Monster.spawn_effect == None:
             Monster.spawn_effect = load_image('resource/spawn_effect.png')
         self.effect_frame = 0
