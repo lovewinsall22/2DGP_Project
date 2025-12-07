@@ -122,7 +122,7 @@ class Boss(Monster):
         else:
             self.animation_list[int(self.frame)].draw(self.x, self.y, 108, 102) # 원본 두배 크기로 그리기
 
-        draw_rectangle(*self.get_bb())
+        #draw_rectangle(*self.get_bb())
         self.font.draw(self.x - 40, self.y + 60, f'(hp: {self.hp})', (255, 0, 0))
         if int(self.attack_frame) == 6:
             draw_circle(self.x, self.y, int(PIXEL_PER_METER * self.attack_range), int(PIXEL_PER_METER * self.attack_range),255,255,0)
@@ -292,7 +292,7 @@ class Ice_Golem(Monster):
             Ice_Golem.image.clip_composite_draw(int(self.frame) * 42, 0, 35, 35, 0, 'h', self.x, self.y, size, size)
         else:
             Ice_Golem.image.clip_composite_draw(int(self.frame) * 42, 0, 35, 35, 0, '', self.x, self.y, size, size)
-        draw_rectangle(*self.get_bb())
+        #draw_rectangle(*self.get_bb())
         self.font.draw(self.x -15, self.y + 30, f'(hp: {self.hp})', (255, 0, 0))
 
     def update(self):
@@ -409,7 +409,7 @@ class Red_Golem(Monster):
             Red_Golem.image.clip_composite_draw(int(self.frame) * 35, 0, 35, 35, 0, 'h', self.x, self.y, size, size)
         else:
             Red_Golem.image.clip_composite_draw(int(self.frame) * 35, 0, 35, 35, 0, '', self.x, self.y, size, size)
-        draw_rectangle(*self.get_bb())
+        #draw_rectangle(*self.get_bb())
         self.font.draw(self.x -15, self.y + 30, f'(hp: {self.hp})', (255, 0, 0))
 
     def update(self):
@@ -527,7 +527,7 @@ class White_Golem(Monster):
             White_Golem.image.clip_composite_draw(int(self.frame) * 39, 0, 39, 39, 0, 'h', self.x, self.y, size, size)
         else:
             White_Golem.image.clip_composite_draw(int(self.frame) * 39, 0, 39, 39, 0, '', self.x, self.y, size, size)
-        draw_rectangle(*self.get_bb())
+        #draw_rectangle(*self.get_bb())
         self.font.draw(self.x -15, self.y + 30, f'(hp: {self.hp})', (255, 0, 0))
 
     def update(self):

@@ -57,7 +57,7 @@ class Portal:
                 self.boss_dungeon_portal.draw(self.x,self.y,64,64)
             else:
                 self.image.draw(self.x,self.y,64,64)
-            draw_rectangle(*self.get_bb())
+            #draw_rectangle(*self.get_bb())
 
 
 

@@ -20,8 +20,8 @@ class Town:
 
     def draw(self):
         self.image.draw(WIDTH // 2, HEIGHT // 2, WIDTH, HEIGHT)
-        for l, b, r, t in block:
-            draw_rectangle(l, b, r, t)
+        #for l, b, r, t in block:
+            #draw_rectangle(l, b, r, t)
 
     def update(self):
         pass

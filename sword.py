@@ -30,11 +30,11 @@ class Sword:
             if self.sword_frame == 1:
                 if self.player.ifRight == 0: self.L_swordAni[self.sword_frame].draw(sx, sy, 40, 10)
                 else: self.R_swordAni[self.sword_frame].draw(sx, sy, 40, 10)
-                draw_rectangle(sx-20, sy-5, sx+20, sy+5)
+                #draw_rectangle(sx-20, sy-5, sx+20, sy+5)
             elif self.sword_frame == 0 or self.sword_frame == 2:
                 if self.player.ifRight == 0: self.L_swordAni[self.sword_frame].draw(sx, sy, 32, 32)
                 else: self.R_swordAni[self.sword_frame].draw(sx, sy, 32, 32)
-                draw_rectangle(sx-16, sy-16, sx+16, sy+16)
+                #draw_rectangle(sx-16, sy-16, sx+16, sy+16)
 
     def update(self):
         self.ani_count += 1

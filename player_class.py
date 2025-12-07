@@ -61,7 +61,7 @@ class Player:
         self.level = 1 # 현재 레벨
         self.speed = RUN_SPEED_PPS # 이동 속도
         self.update_speed = RUN_SPEED_PPS
-        self.damage = 1000 # 공격력
+        self.damage = 3000 # 공격력
         self.gold = 0 # 골드
         self.hp_potion_count = 0 # 체력포션 개수
         self.invincible_potion_count = 0 # 무적포션 개수
@@ -90,7 +90,7 @@ class Player:
         else:
             if self.ifRight == 1: self.invincible_sprites.clip_composite_draw(int(self.invincible_frame) * 32, 0, 32, 32, 0, '', self.x, self.y, 62, 62)
             elif self.ifRight == 0: self.invincible_sprites.clip_composite_draw(int(self.invincible_frame) * 32, 0, 32, 32, 0, 'h', self.x, self.y, 62, 62)
-        draw_rectangle(*self.get_bb())
+        #draw_rectangle(*self.get_bb())
         self.playerUI.draw()
         self.sword.draw()
         self.playerUI.draw()
