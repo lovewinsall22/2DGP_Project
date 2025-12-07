@@ -41,7 +41,7 @@ class Monster:
         self.player = player
         self.respawn_timer = 0
 
-        self.trace_wait = randint(500,5000) # 지날시 추적
+        self.trace_wait = randint(300,1000) # 지날시 추적
         self.trace_on = False # 한번 피격당할시 추적모드
         self.stop_time = 120 # 120프레임 멈춤
         self.is_hit = False
