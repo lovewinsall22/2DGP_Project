@@ -303,7 +303,7 @@ class Ice_Golem(Monster):
                 self.player.gold += randint(100, 300)
 
                 # 골렘 리스폰
-                respawn_golem = White_Golem(self.player)
+                respawn_golem = Ice_Golem(self.player)
                 game_world.add(respawn_golem, 'object')
                 game_world.add_collision_pair('player:golem', self.player, respawn_golem)
                 game_world.add_collision_pair('sword:golem', self.player.sword, respawn_golem)
@@ -414,7 +414,7 @@ class Red_Golem(Monster):
                 self.player.gold += randint(1000, 2000)
 
                 # 골렘 리스폰
-                respawn_golem = White_Golem(self.player)
+                respawn_golem = Red_Golem(self.player)
                 game_world.add(respawn_golem, 'object')
                 game_world.add_collision_pair('player:golem', self.player, respawn_golem)
                 game_world.add_collision_pair('sword:golem', self.player.sword, respawn_golem)
