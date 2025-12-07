@@ -10,7 +10,7 @@ def init():
     global image, title_music
     image = load_image('resource/title.png')
     title_music = load_music('resource/bgm/title.wav')
-    title_music.set_volume(64)
+    title_music.set_volume(100)
     title_music.repeat_play()
 
 def update():
