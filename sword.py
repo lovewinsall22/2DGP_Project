@@ -51,6 +51,11 @@ class Sword:
                     self.sword_active = False
                     self.sword_angle = 90
 
+                    if self.player.dirX > 0:
+                        self.player.ifRight = 1
+                    elif self.player.dirX < 0:
+                        self.player.ifRight = 0
+
     def get_bb(self): # 검 히트박스 얻기
         sx = self.player.x + 40 * math.cos(self.sword_angle)
         sy = self.player.y + 40 * math.sin(self.sword_angle)
